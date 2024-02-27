@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:safe_connect/bottomNavigationBar.dart';
+import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
+import 'package:safe_connect/screens/SplashScreen/splashScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +14,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'SafeConnect',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(),
+      home: bottomNavigationBar(),
     );
   }
 }
