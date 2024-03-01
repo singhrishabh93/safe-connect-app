@@ -5,7 +5,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/bottomNavigationBar.dart';
-import 'package:safe_connect/theme.dart';
 
 class splashScreen extends StatefulWidget {
   const splashScreen({Key? key}) : super(key: key);
@@ -38,9 +37,9 @@ class _splashScreenState extends State<splashScreen> {
   }
 
   Future<void> _redirectAfterDelay() async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
     // Navigate to home screen
-    Get.to(() => bottomNavigationBar());
+    Get.to(() => const bottomNavigationBar());
   }
 
   void _showNoInternetPopup() {
@@ -49,20 +48,20 @@ class _splashScreenState extends State<splashScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          title: Text("No Internet Connection"),
-          content: Text("Please check your internet connection and try again."),
+          title: const Text("No Internet Connection"),
+          content: const Text("Please check your internet connection and try again."),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             TextButton(
               onPressed: () {
                 _checkInternet();
               },
-              child: Text("Try Again"),
+              child: const Text("Try Again"),
             )
           ],
         );
@@ -76,7 +75,7 @@ class _splashScreenState extends State<splashScreen> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         child: Stack(
@@ -84,10 +83,10 @@ class _splashScreenState extends State<splashScreen> {
             Positioned(
               top: MediaQuery.of(context).size.height - 200,
               left: MediaQuery.of(context).size.width / 2 - 42,
-              child: Container(
+              child: const SizedBox(
                 width: 84,
                 height: 117,
-                child: const Positioned(
+                child: Positioned(
                   top: 87,
                   left: 0,
                   child: Text(
@@ -110,7 +109,7 @@ class _splashScreenState extends State<splashScreen> {
                 child: Container(
                   width: 200,
                   height: 100,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/logo.png'),
                       fit: BoxFit.fitWidth,

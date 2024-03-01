@@ -11,7 +11,7 @@ class firstChild extends StatelessWidget {
         height: 134,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(5)),
-          color: Color.fromRGBO(255, 255, 255, 1),
+          color: const Color.fromRGBO(255, 255, 255, 1),
           border: Border.all(
             color: Colors.grey.shade300,
             width: 1,
@@ -28,9 +28,9 @@ class firstChild extends StatelessWidget {
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    color: Color.fromRGBO(255, 255, 255, 1),
+                    color: const Color.fromRGBO(255, 255, 255, 1),
                     border: Border.all(
-                      color: Color.fromRGBO(13, 70, 122, 1),
+                      color: const Color.fromRGBO(13, 70, 122, 1),
                       width: 1,
                     ),
                   ),
@@ -38,7 +38,7 @@ class firstChild extends StatelessWidget {
                 Container(
                   width: 50,
                   height: 50,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/Image9.png'),
                       fit: BoxFit.fitWidth,
@@ -48,7 +48,7 @@ class firstChild extends StatelessWidget {
                 Container(
                   width: 50,
                   height: 50,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/Image9.png'),
                       fit: BoxFit.fitWidth,
@@ -58,7 +58,7 @@ class firstChild extends StatelessWidget {
                 Container(
                   width: 50,
                   height: 50,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/Image10.png'),
                       fit: BoxFit.fitWidth,
@@ -67,7 +67,7 @@ class firstChild extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Text(

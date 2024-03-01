@@ -12,7 +12,7 @@ class secondChild extends StatelessWidget {
       height: 350,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color.fromRGBO(255, 255, 255, 1),
+        color: const Color.fromRGBO(255, 255, 255, 1),
         border: Border.all(
           color: Colors.grey.shade300,
           width: 1,
@@ -26,12 +26,12 @@ class secondChild extends StatelessWidget {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  Get.to(() => carQr());
+                  Get.to(() => const carQr());
                 },
                 child: Container(
                   width: 50,
                   height: 50,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/Image14.png'),
                       fit: BoxFit.fitWidth,
@@ -42,7 +42,7 @@ class secondChild extends StatelessWidget {
               Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/Image14.png'),
                     fit: BoxFit.fitWidth,
@@ -52,14 +52,14 @@ class secondChild extends StatelessWidget {
               Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/Image15.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 50,
                 height: 50,
                 child: Stack(
@@ -68,7 +68,7 @@ class secondChild extends StatelessWidget {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(133, 156, 216, 1),
+                        color: const Color.fromRGBO(133, 156, 216, 1),
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
@@ -76,10 +76,10 @@ class secondChild extends StatelessWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(19, 33, 86, 1),
+                        color: const Color.fromRGBO(19, 33, 86, 1),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           '₹',
                           textAlign: TextAlign.left,
@@ -188,7 +188,7 @@ class secondChild extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 50,
                 height: 50,
                 child: Stack(
@@ -197,7 +197,7 @@ class secondChild extends StatelessWidget {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(133, 156, 216, 1),
+                        color: const Color.fromRGBO(133, 156, 216, 1),
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
@@ -205,7 +205,7 @@ class secondChild extends StatelessWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(19, 33, 86, 1),
+                        color: const Color.fromRGBO(19, 33, 86, 1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Center(
@@ -228,7 +228,7 @@ class secondChild extends StatelessWidget {
               ),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
@@ -281,7 +281,7 @@ class secondChild extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -290,7 +290,7 @@ class secondChild extends StatelessWidget {
               Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/Image14.png'),
                     fit: BoxFit.fitWidth,
@@ -300,7 +300,7 @@ class secondChild extends StatelessWidget {
               Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/Image14.png'),
                     fit: BoxFit.fitWidth,
@@ -310,14 +310,14 @@ class secondChild extends StatelessWidget {
               Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/Image15.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 50,
                 height: 50,
                 child: Stack(
@@ -326,7 +326,7 @@ class secondChild extends StatelessWidget {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(133, 156, 216, 1),
+                        color: const Color.fromRGBO(133, 156, 216, 1),
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
@@ -334,10 +334,10 @@ class secondChild extends StatelessWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(19, 33, 86, 1),
+                        color: const Color.fromRGBO(19, 33, 86, 1),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           '₹',
                           textAlign: TextAlign.left,
@@ -357,7 +357,7 @@ class secondChild extends StatelessWidget {
               ),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
@@ -410,7 +410,7 @@ class secondChild extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
         ],

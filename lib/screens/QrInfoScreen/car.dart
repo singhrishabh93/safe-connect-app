@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:safe_connect/theme.dart';
 
 class carQr extends StatelessWidget {
   const carQr({super.key});
@@ -21,7 +20,7 @@ class carQr extends StatelessWidget {
           color: Colors.white,
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 40,
                 child: const Center(
@@ -33,7 +32,7 @@ class carQr extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Container(
+              SizedBox(
                 height: 200,
                 child: Image.asset("assets/images/Wallpaper.jpg"),
               ),
@@ -77,7 +76,7 @@ class carQr extends StatelessWidget {
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
           isExtended: true,
-          backgroundColor: Color(0xFF3199E4),
+          backgroundColor: const Color(0xFF3199E4),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

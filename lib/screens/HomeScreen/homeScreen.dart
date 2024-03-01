@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/firstChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/secondChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/servicesContainer.dart';
-import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/thirdChild.dart';
-import 'package:safe_connect/theme.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

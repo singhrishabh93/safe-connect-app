@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/route_manager.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class bottomNavigationBar extends StatefulWidget {
   const bottomNavigationBar({super.key});
@@ -50,34 +47,35 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
 
   int currentTab = 0;
   final List<Widget> screens = [
-    HomeScreen(),
+    const HomeScreen(),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = HomeScreen();
+  Widget currentScreen = const HomeScreen();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageStorage(
-        child: currentScreen,
         bucket: bucket,
+        child: currentScreen,
       ),
       floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.blue.shade100,
           onPressed: () {},
-          child: Icon(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: const Icon(
             Icons.qr_code_scanner_rounded,
             size: 35,
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
-          )),
+          ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
         color: Colors.grey.shade100,
         notchMargin: 10,
-        child: Container(
+        child: SizedBox(
           height: 40,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,7 +87,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = HomeScreen();
+                        currentScreen = const HomeScreen();
                         currentTab = 0;
                       });
                     },
@@ -143,11 +141,11 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             backgroundColor: Colors.grey.shade100,
-                            title: Text(
+                            title: const Text(
                               'Choose the Help option as per your need',
                               textAlign: TextAlign.center,
                             ),
-                            content: Container(
+                            content: SizedBox(
                               width: MediaQuery.of(context).size.width * 0.8,
                               height: MediaQuery.of(context).size.height * 0.2,
                               child: Column(
@@ -167,12 +165,12 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                   return AlertDialog(
                                                     backgroundColor:
                                                         Colors.grey.shade100,
-                                                    title: Text(
+                                                    title: const Text(
                                                       'Helpline Numbers',
                                                       textAlign:
                                                           TextAlign.center,
                                                     ),
-                                                    content: Container(
+                                                    content: SizedBox(
                                                       width:
                                                           MediaQuery.of(context)
                                                                   .size
@@ -207,7 +205,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "Police",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -233,7 +231,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "Ambulance",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -265,7 +263,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "Fire",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -291,7 +289,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "NHAI",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -323,7 +321,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "Road Emergency",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -349,7 +347,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "Women Helpline",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -379,7 +377,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                 children: [
                                                   Image.asset(
                                                       "assets/images/Group 30.png"),
-                                                  Text(
+                                                  const Text(
                                                     "Self",
                                                     style:
                                                         TextStyle(fontSize: 16),
@@ -399,12 +397,12 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                   return AlertDialog(
                                                     backgroundColor:
                                                         Colors.grey.shade100,
-                                                    title: Text(
+                                                    title: const Text(
                                                       'Helpline Numbers',
                                                       textAlign:
                                                           TextAlign.center,
                                                     ),
-                                                    content: Container(
+                                                    content: SizedBox(
                                                       width:
                                                           MediaQuery.of(context)
                                                                   .size
@@ -439,7 +437,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "Police",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -465,7 +463,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "Ambulance",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -497,7 +495,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "Fire",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -523,7 +521,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "NHAI",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -555,7 +553,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "Road Emergency",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -581,7 +579,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image.asset(
                                                                               "assets/images/Group 30.png"),
-                                                                          Text(
+                                                                          const Text(
                                                                             "Women Helpline",
                                                                             style:
                                                                                 TextStyle(fontSize: 16),
@@ -611,7 +609,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                 children: [
                                                   Image.asset(
                                                       "assets/images/Group 30.png"),
-                                                  Text(
+                                                  const Text(
                                                     "Others",
                                                     style:
                                                         TextStyle(fontSize: 16),
@@ -656,11 +654,11 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             backgroundColor: Colors.grey.shade100,
-                            title: Text(
+                            title: const Text(
                               'Select option for SOS',
                               textAlign: TextAlign.center,
                             ),
-                            content: Container(
+                            content: SizedBox(
                               width: MediaQuery.of(context).size.width * 0.8,
                               height: MediaQuery.of(context).size.height * 0.2,
                               child: Column(
@@ -683,7 +681,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                 children: [
                                                   Image.asset(
                                                       "assets/images/Group 30.png"),
-                                                  Text(
+                                                  const Text(
                                                     "Audio",
                                                     style:
                                                         TextStyle(fontSize: 16),
@@ -706,7 +704,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                 children: [
                                                   Image.asset(
                                                       "assets/images/Group 30.png"),
-                                                  Text(
+                                                  const Text(
                                                     "Video",
                                                     style:
                                                         TextStyle(fontSize: 16),

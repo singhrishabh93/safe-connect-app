@@ -5,7 +5,7 @@ class services extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 200,
       width: MediaQuery.of(context).size.width - 50,
       child: Image.asset("assets/images/Wallpaper.jpg"),
