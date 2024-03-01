@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:safe_connect/screens/QrInfoScreen/car.dart';
 
 class secondChild extends StatelessWidget {
   const secondChild({Key? key}) : super(key: key);
@@ -22,13 +24,18 @@ class secondChild extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/Image14.png'),
-                    fit: BoxFit.fitWidth,
+              InkWell(
+                onTap: () {
+                  Get.to(() => carQr());
+                },
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/Image14.png'),
+                      fit: BoxFit.fitWidth,
+                    ),
                   ),
                 ),
               ),
@@ -92,11 +99,11 @@ class secondChild extends StatelessWidget {
               ),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                'Balance & History',
+                'Car Safety',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -108,7 +115,7 @@ class secondChild extends StatelessWidget {
                 ),
               ),
               Text(
-                'Personal Loan',
+                'Bike Safety',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -120,7 +127,7 @@ class secondChild extends StatelessWidget {
                 ),
               ),
               Text(
-                'Paytm Wallet',
+                'Child Safety',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -132,7 +139,7 @@ class secondChild extends StatelessWidget {
                 ),
               ),
               Text(
-                'Paytm Postpaid',
+                'Pet Safety',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -145,7 +152,7 @@ class secondChild extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -154,7 +161,7 @@ class secondChild extends StatelessWidget {
               Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/Image14.png'),
                     fit: BoxFit.fitWidth,
@@ -164,7 +171,7 @@ class secondChild extends StatelessWidget {
               Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/Image14.png'),
                     fit: BoxFit.fitWidth,
@@ -174,7 +181,7 @@ class secondChild extends StatelessWidget {
               Container(
                 width: 50,
                 height: 50,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/Image15.png'),
                     fit: BoxFit.fitWidth,
@@ -201,7 +208,7 @@ class secondChild extends StatelessWidget {
                         color: Color.fromRGBO(19, 33, 86, 1),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           '₹',
                           textAlign: TextAlign.left,

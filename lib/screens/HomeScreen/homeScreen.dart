@@ -23,11 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Colors.grey.shade100,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: true,
       ),
       body: Container(
         color: Colors.white,
-        child: SingleChildScrollView(
+        child: const SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
