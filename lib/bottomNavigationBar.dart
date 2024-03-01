@@ -44,6 +44,10 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
     await FlutterPhoneDirectCaller.callNumber('1091');
   }
 
+  ivrcall() async {
+    await FlutterPhoneDirectCaller.callNumber('9330693306');
+  }
+
   int currentTab = 0;
   final List<Widget> screens = [
     HomeScreen(),
@@ -108,12 +112,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                   ),
                   MaterialButton(
                     minWidth: 40,
-                    onPressed: () {
-                      setState(() {
-                        // currentScreen = HomeScreen();
-                        currentTab = 0;
-                      });
-                    },
+                    onPressed: ivrcall,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -123,7 +122,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                           size: 30,
                         ),
                         Text(
-                          'Home',
+                          'IVR Call',
                           style: TextStyle(
                             color: currentTab == 0 ? Colors.blue : Colors.grey,
                           ),
@@ -145,12 +144,12 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                           return AlertDialog(
                             backgroundColor: Colors.grey.shade100,
                             title: Text(
-                              'Helpline Numbers',
+                              'Choose the Help option as per your need',
                               textAlign: TextAlign.center,
                             ),
                             content: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
-                              height: MediaQuery.of(context).size.height * 0.5,
+                              height: MediaQuery.of(context).size.height * 0.2,
                               child: Column(
                                 children: [
                                   Expanded(
@@ -160,7 +159,216 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                       children: [
                                         Expanded(
                                           child: InkWell(
-                                            onTap: policecall,
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    backgroundColor:
+                                                        Colors.grey.shade100,
+                                                    title: Text(
+                                                      'Helpline Numbers',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    content: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.5,
+                                                      child: Column(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        policecall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "Police",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        ambulancecall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "Ambulance",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        firecall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "Fire",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        nhaicall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "NHAI",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        roadcall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "Road Emergency",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        womencall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "Women Helpline",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
                                             child: Container(
                                               child: Column(
                                                 crossAxisAlignment:
@@ -172,7 +380,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                   Image.asset(
                                                       "assets/images/Group 30.png"),
                                                   Text(
-                                                    "Police",
+                                                    "Self",
                                                     style:
                                                         TextStyle(fontSize: 16),
                                                   ),
@@ -183,7 +391,216 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                         ),
                                         Expanded(
                                           child: InkWell(
-                                            onTap: ambulancecall,
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    backgroundColor:
+                                                        Colors.grey.shade100,
+                                                    title: Text(
+                                                      'Helpline Numbers',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    content: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.5,
+                                                      child: Column(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        policecall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "Police",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        ambulancecall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "Ambulance",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        firecall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "Fire",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        nhaicall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "NHAI",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        roadcall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "Road Emergency",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap:
+                                                                        womencall,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Image.asset(
+                                                                              "assets/images/Group 30.png"),
+                                                                          Text(
+                                                                            "Women Helpline",
+                                                                            style:
+                                                                                TextStyle(fontSize: 16),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
                                             child: Container(
                                               child: Column(
                                                 crossAxisAlignment:
@@ -195,111 +612,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                   Image.asset(
                                                       "assets/images/Group 30.png"),
                                                   Text(
-                                                    "Ambulance",
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: InkWell(
-                                            onTap: firecall,
-                                            child: Container(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Image.asset(
-                                                      "assets/images/Group 30.png"),
-                                                  Text(
-                                                    "Fire",
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: InkWell(
-                                            onTap: nhaicall,
-                                            child: Container(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Image.asset(
-                                                      "assets/images/Group 30.png"),
-                                                  Text(
-                                                    "NHAI",
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: InkWell(
-                                            onTap: roadcall,
-                                            child: Container(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Image.asset(
-                                                      "assets/images/Group 30.png"),
-                                                  Text(
-                                                    "Road Emergency",
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: InkWell(
-                                            onTap: womencall,
-                                            child: Container(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Image.asset(
-                                                      "assets/images/Group 30.png"),
-                                                  Text(
-                                                    "Women Helpline",
+                                                    "Others",
                                                     style:
                                                         TextStyle(fontSize: 16),
                                                   ),
@@ -338,10 +651,80 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                   MaterialButton(
                     minWidth: 40,
                     onPressed: () {
-                      setState(() {
-                        // currentScreen = HomeScreen();
-                        currentTab = 0;
-                      });
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.grey.shade100,
+                            title: Text(
+                              'Select option for SOS',
+                              textAlign: TextAlign.center,
+                            ),
+                            content: Container(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () {},
+                                            child: Container(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Image.asset(
+                                                      "assets/images/Group 30.png"),
+                                                  Text(
+                                                    "Audio",
+                                                    style:
+                                                        TextStyle(fontSize: 16),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () {},
+                                            child: Container(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Image.asset(
+                                                      "assets/images/Group 30.png"),
+                                                  Text(
+                                                    "Video",
+                                                    style:
+                                                        TextStyle(fontSize: 16),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
