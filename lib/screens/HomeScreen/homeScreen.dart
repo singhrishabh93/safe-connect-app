@@ -20,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Colors.grey.shade100,
         elevation: 0,
+        automaticallyImplyLeading: false,
         scrolledUnderElevation: 0,
         centerTitle: true,
       ),
