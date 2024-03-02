@@ -59,42 +59,14 @@ class secondChild extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              Container(
                 width: 50,
                 height: 50,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(133, 156, 216, 1),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(19, 33, 86, 1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '₹',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                            fontFamily: 'Inter',
-                            fontSize: 20,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.normal,
-                            height: 1,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/childQRLogo.png'),
+                    fit: BoxFit.fitWidth,
+                  ),
                 ),
               ),
             ],
@@ -188,42 +160,14 @@ class secondChild extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              Container(
                 width: 50,
                 height: 50,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(133, 156, 216, 1),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(19, 33, 86, 1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '₹',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                            fontFamily: 'Inter',
-                            fontSize: 20,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.normal,
-                            height: 1,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/childQRLogo.png'),
+                    fit: BoxFit.fitWidth,
+                  ),
                 ),
               ),
             ],
@@ -317,42 +261,14 @@ class secondChild extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              Container(
                 width: 50,
                 height: 50,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(133, 156, 216, 1),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(19, 33, 86, 1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '₹',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                            fontFamily: 'Inter',
-                            fontSize: 20,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.normal,
-                            height: 1,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/childQRLogo.png'),
+                    fit: BoxFit.fitWidth,
+                  ),
                 ),
               ),
             ],
