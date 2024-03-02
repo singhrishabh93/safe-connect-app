@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VideoPage extends StatefulWidget {
   final String filePath;
@@ -16,16 +17,29 @@ class _VideoPageState extends State<VideoPage> {
   late VideoPlayerController _videoPlayerController;
 
   @override
+  void initState() {
+    super.initState();
+    _initVideoPlayer();
+  }
+
+  @override
   void dispose() {
     _videoPlayerController.dispose();
     super.dispose();
   }
 
-  Future _initVideoPlayer() async {
+  Future<void> _initVideoPlayer() async {
     _videoPlayerController = VideoPlayerController.file(File(widget.filePath));
     await _videoPlayerController.initialize();
     await _videoPlayerController.setLooping(true);
     await _videoPlayerController.play();
+  }
+
+  void sendVideoToWhatsApp() {
+    String message = "Check out this video!";
+    String url = "https://wa.me/7587136215?text=$message";
+
+    launch(url);
   }
 
   @override
@@ -39,6 +53,12 @@ class _VideoPageState extends State<VideoPage> {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: sendVideoToWhatsApp,
+            icon: Icon(Icons.check),
+          ),
+        ],
       ),
       extendBodyBehindAppBar: true,
       body: FutureBuilder(
