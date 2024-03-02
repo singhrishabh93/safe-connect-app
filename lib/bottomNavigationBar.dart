@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
+import 'package:safe_connect/screens/QrScanner/qrScanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class bottomNavigationBar extends StatefulWidget {
@@ -60,16 +63,18 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
         child: currentScreen,
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.blue.shade100,
-          onPressed: () {},
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: const Icon(
-            Icons.qr_code_scanner_rounded,
-            size: 35,
-          ),
-          ),
+        backgroundColor: Colors.blue.shade100,
+        onPressed: () {
+          Get.to(() => QRCodeScanner());
+        },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: const Icon(
+          Icons.qr_code_scanner_rounded,
+          size: 35,
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
