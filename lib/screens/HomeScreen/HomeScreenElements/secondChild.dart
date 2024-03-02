@@ -33,7 +33,7 @@ class secondChild extends StatelessWidget {
                   height: 50,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/Image14.png'),
+                      image: AssetImage('assets/images/carQRLogo.png'),
                       fit: BoxFit.fitWidth,
                     ),
                   ),
