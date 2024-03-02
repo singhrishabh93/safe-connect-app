@@ -16,8 +16,7 @@ class _QRGeneratorState extends State<QRGenerator> {
   TextEditingController _vehicleNoController = TextEditingController();
   TextEditingController _aadharNoController = TextEditingController();
   TextEditingController _contactNoController = TextEditingController();
-  TextEditingController _emergencyContactNoController =
-      TextEditingController();
+  TextEditingController _emergencyContactNoController = TextEditingController();
   String _qrData = '';
 
   @override
@@ -49,9 +48,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                   controller: _nameController,
                   decoration: const InputDecoration(
                     labelText: 'Name',
-                    border: OutlineInputBorder(
-                      
-                    ),
+                    border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -225,7 +222,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 20.0),
                         child: Text(
-                          'Download this QR code and stick it on your car',
+                          'Download this QR code and stick it on front and back side of your car',
                           style: TextStyle(fontSize: 16.0),
                         ),
                       ),
