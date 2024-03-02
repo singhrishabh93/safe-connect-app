@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:safe_connect/Helpline/audioFunctionality.dart';
+import 'package:safe_connect/Helpline/camera_page.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:safe_connect/screens/QrScanner/qrScanner.dart';
 import 'package:image_picker/image_picker.dart';
@@ -696,7 +698,9 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                       children: [
                                         Expanded(
                                           child: InkWell(
-                                            onTap: () {},
+                                            onTap: () {
+                                              Get.to(() => SimpleRecorder());
+                                            },
                                             child: Container(
                                               child: Column(
                                                 crossAxisAlignment:
@@ -719,7 +723,9 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                         ),
                                         Expanded(
                                           child: InkWell(
-                                            onTap: () {},
+                                            onTap: () {
+                                              Get.to(() => CameraPage());
+                                            },
                                             child: Container(
                                               child: Column(
                                                 crossAxisAlignment:
