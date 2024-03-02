@@ -121,12 +121,12 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.person,
+                          Icons.home_filled,
                           color: currentTab == 0 ? Colors.blue : Colors.grey,
                           size: 30,
                         ),
                         Text(
-                          'Profile',
+                          'Home',
                           style: TextStyle(
                             color: currentTab == 0 ? Colors.blue : Colors.grey,
                           ),
