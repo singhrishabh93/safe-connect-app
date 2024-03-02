@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-
 class QRCodeScanner extends StatefulWidget {
   @override
   _QRCodeScannerState createState() => _QRCodeScannerState();
@@ -31,9 +30,34 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
             flex: 1,
             child: Center(
               child: (result != null)
-                  ? Text(
-                      'Details: ${result!.code}',
-                      style: TextStyle(fontSize: 18),
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Name: ${_parseQRData(result!.code!)["Name"] ?? "N/A"}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        Text(
+                          'Age: ${_parseQRData(result!.code!)["Age"] ?? "N/A"}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        Text(
+                          'Vehicle No.: ${_parseQRData(result!.code!)["Vehicle No."] ?? "N/A"}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        Text(
+                          'Aadhar No.: ${_parseQRData(result!.code!)["Aadhar No."] ?? "N/A"}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        Text(
+                          'Contact No.: ${_parseQRData(result!.code!)["Contact No."] ?? "N/A"}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        Text(
+                          'Emergency Contact No.: ${_parseQRData(result!.code!)["Emergency Contact No."] ?? "N/A"}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
                     )
                   : Text('Scan a QR code to view details'),
             ),
@@ -52,6 +76,18 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         result = scanData;
       });
     });
+  }
+
+  Map<String, String> _parseQRData(String qrData) {
+    Map<String, String> parsedData = {};
+    List<String> fields = qrData.split(', ');
+    for (String field in fields) {
+      List<String> keyValue = field.split(': ');
+      if (keyValue.length == 2) {
+        parsedData[keyValue[0]] = keyValue[1];
+      }
+    }
+    return parsedData;
   }
 
   @override
