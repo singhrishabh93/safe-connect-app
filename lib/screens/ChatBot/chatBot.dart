@@ -87,8 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void _handleButtonPressed(String buttonText) {
     // Respond based on the button pressed
     if (buttonText == "Report an Issue") {
-      _addResponse(
-          "You pressed: Report an Issue\n please briefly describe the issue.");
+      _addResponse("You pressed: Report an Issue");
       // You can add additional logic for handling issue reporting
     } else if (buttonText == "Queries/Feedback") {
       _addResponse("You pressed: Queries/Feedback");

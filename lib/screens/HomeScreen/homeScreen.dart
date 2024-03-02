@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:safe_connect/screens/ChatBot/chatBot.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/firstChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/secondChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/servicesContainer.dart';
@@ -29,7 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 size: 30,
               ),
               tooltip: 'Show Snackbar',
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => ChatScreen());
+              },
             ),
           ]),
       drawer: Drawer(
