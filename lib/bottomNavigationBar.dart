@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:safe_connect/Helpline/audioFunctionality.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:safe_connect/screens/QrScanner/qrScanner.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class bottomNavigationBar extends StatefulWidget {
@@ -16,6 +18,22 @@ class bottomNavigationBar extends StatefulWidget {
 
 class _bottomNavigationBarState extends State<bottomNavigationBar> {
   Uri dialnumber = Uri(scheme: 'tel', path: '100');
+  void policeCallAndSendImage() async {
+    // Capture image using ImagePicker
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      // Launch WhatsApp with the captured image attached
+      final File imageFile = File(pickedFile.path);
+      final whatsappUrl =
+          "whatsapp://send?phone=&attachment=${Uri.file(imageFile.path)}";
+      if (await canLaunchUrl(whatsappUrl as Uri)) {
+        await launchUrl(whatsappUrl as Uri);
+      } else {
+        print('Failed to launch WhatsApp');
+      }
+    }
+  }
 
   callnumber() async {
     await launchUrl(dialnumber);
@@ -199,7 +217,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                   child:
                                                                       InkWell(
                                                                     onTap:
-                                                                        policecall,
+                                                                        policeCallAndSendImage,
                                                                     child:
                                                                         Container(
                                                                       child:
@@ -209,8 +227,10 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
-                                                                          Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                          Image
+                                                                              .asset(
+                                                                            "assets/images/Group 30.png",
+                                                                          ),
                                                                           const Text(
                                                                             "Police",
                                                                             style:
@@ -676,9 +696,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                       children: [
                                         Expanded(
                                           child: InkWell(
-                                            onTap: () {
-                                              Get.to(() => SimpleRecorder());
-                                            },
+                                            onTap: () {},
                                             child: Container(
                                               child: Column(
                                                 crossAxisAlignment:
