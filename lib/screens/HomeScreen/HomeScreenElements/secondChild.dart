@@ -44,7 +44,7 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/Image14.png'),
+                    image: AssetImage('assets/images/bikeQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -54,7 +54,7 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/Image15.png'),
+                    image: AssetImage('assets/images/childQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -163,7 +163,7 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/Image14.png'),
+                    image: AssetImage('assets/images/petQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -173,7 +173,7 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/Image14.png'),
+                    image: AssetImage('assets/images/bagQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -183,7 +183,7 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/Image15.png'),
+                    image: AssetImage('assets/images/keyQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -292,7 +292,7 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/Image14.png'),
+                    image: AssetImage('assets/images/mobileQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -302,7 +302,7 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/Image14.png'),
+                    image: AssetImage('assets/images/laptopQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -312,7 +312,7 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/Image15.png'),
+                    image: AssetImage('assets/images/trolleyQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
