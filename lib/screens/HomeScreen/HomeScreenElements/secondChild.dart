@@ -64,7 +64,7 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/childQRLogo.png'),
+                    image: AssetImage('assets/images/petQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -135,16 +135,6 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/petQRLogo.png'),
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-              ),
-              Container(
-                width: 50,
-                height: 50,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
                     image: AssetImage('assets/images/bagQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
@@ -165,7 +155,17 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/childQRLogo.png'),
+                    image: AssetImage('assets/images/mobileQRLogo.png'),
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+              ),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/laptopQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -176,7 +176,7 @@ class secondChild extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                'Balance & History',
+                'Bag Safety',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -188,7 +188,7 @@ class secondChild extends StatelessWidget {
                 ),
               ),
               Text(
-                'Personal Loan',
+                'Key Safety',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -200,7 +200,7 @@ class secondChild extends StatelessWidget {
                 ),
               ),
               Text(
-                'Paytm Wallet',
+                'Mobile Safety',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -212,7 +212,7 @@ class secondChild extends StatelessWidget {
                 ),
               ),
               Text(
-                'Paytm Postpaid',
+                'Laptop Safety',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -236,26 +236,6 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/mobileQRLogo.png'),
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-              ),
-              Container(
-                width: 50,
-                height: 50,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/laptopQRLogo.png'),
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-              ),
-              Container(
-                width: 50,
-                height: 50,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
                     image: AssetImage('assets/images/trolleyQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
@@ -266,7 +246,27 @@ class secondChild extends StatelessWidget {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/childQRLogo.png'),
+                    image: AssetImage('assets/images/luggageQRLogo.png'),
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+              ),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/bloodQRLogo.png'),
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+              ),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/partnerQRLogo.png'),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -277,7 +277,7 @@ class secondChild extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                'Balance & History',
+                'Trolly Safety',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -289,7 +289,7 @@ class secondChild extends StatelessWidget {
                 ),
               ),
               Text(
-                'Personal Loan',
+                'Luggage Safety',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -301,7 +301,7 @@ class secondChild extends StatelessWidget {
                 ),
               ),
               Text(
-                'Paytm Wallet',
+                'Donate Blood',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
@@ -313,7 +313,7 @@ class secondChild extends StatelessWidget {
                 ),
               ),
               Text(
-                'Paytm Postpaid',
+                'Partner with us',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color.fromRGBO(0, 0, 0, 1),
