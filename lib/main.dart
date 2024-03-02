@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:safe_connect/screens/QrRegistrationScreen/qrCar.dart';
 import 'package:safe_connect/screens/SplashScreen/splashScreen.dart';
 
 void main() {
