@@ -32,17 +32,13 @@ class _VideoPageState extends State<VideoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Preview'),
+        title: Container(
+          child: Image.asset("assets/images/SafeConnect 1.png"),
+        ),
+        backgroundColor: Colors.grey.shade100,
         elevation: 0,
-        backgroundColor: Colors.black26,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.check),
-            onPressed: () {
-              print('do something with the file');
-            },
-          )
-        ],
+        scrolledUnderElevation: 0,
+        centerTitle: true,
       ),
       extendBodyBehindAppBar: true,
       body: FutureBuilder(

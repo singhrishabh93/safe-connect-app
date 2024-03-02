@@ -28,7 +28,8 @@ class _CameraPageState extends State<CameraPage> {
 
   _initCamera() async {
     final cameras = await availableCameras();
-    final front = cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
+    final front = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.front);
     _cameraController = CameraController(front, ResolutionPreset.max);
     await _cameraController.initialize();
     setState(() => _isLoading = false);
@@ -60,20 +61,31 @@ class _CameraPageState extends State<CameraPage> {
         ),
       );
     } else {
-      return Center(
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            CameraPreview(_cameraController),
-            Padding(
-              padding: const EdgeInsets.all(25),
-              child: FloatingActionButton(
-                backgroundColor: Colors.red,
-                child: Icon(_isRecording ? Icons.stop : Icons.circle),
-                onPressed: () => _recordVideo(),
+      return Scaffold(
+        appBar: AppBar(
+          title: Container(
+            child: Image.asset("assets/images/SafeConnect 1.png"),
+          ),
+          backgroundColor: Colors.grey.shade100,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          centerTitle: true,
+        ),
+        body: Center(
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              CameraPreview(_cameraController),
+              Padding(
+                padding: const EdgeInsets.all(25),
+                child: FloatingActionButton(
+                  backgroundColor: Colors.red,
+                  child: Icon(_isRecording ? Icons.stop : Icons.circle),
+                  onPressed: () => _recordVideo(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
