@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class QRCodeScanner extends StatefulWidget {
   @override
@@ -45,13 +46,11 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                           'Vehicle No.: ${_parseQRData(result!.code!)["Vehicle No."] ?? "N/A"}',
                           style: TextStyle(fontSize: 18),
                         ),
-                        Text(
-                          'Aadhar No.: ${_parseQRData(result!.code!)["Aadhar No."] ?? "N/A"}',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        Text(
-                          'Contact No.: ${_parseQRData(result!.code!)["Contact No."] ?? "N/A"}',
-                          style: TextStyle(fontSize: 18),
+                        ElevatedButton(
+                          onPressed: () {
+                            _launchPhoneCall(_parseQRData(result!.code!)["Contact No."]);
+                          },
+                          child: Text('Call Contact'),
                         ),
                         Text(
                           'Emergency Contact No.: ${_parseQRData(result!.code!)["Emergency Contact No."] ?? "N/A"}',
@@ -88,6 +87,23 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
       }
     }
     return parsedData;
+  }
+
+  void _launchPhoneCall(String? phoneNumber) async {
+    if (phoneNumber != null) {
+      String maskedPhoneNumber = maskPhoneNumber(phoneNumber);
+      String uri = 'tel:$maskedPhoneNumber';
+      await launch(uri);
+    }
+  }
+
+  String maskPhoneNumber(String phoneNumber) {
+    if (phoneNumber.length > 4) {
+      String lastFourDigits = phoneNumber.substring(phoneNumber.length - 4);
+      return '********$lastFourDigits';
+    } else {
+      return '********';
+    }
   }
 
   @override
