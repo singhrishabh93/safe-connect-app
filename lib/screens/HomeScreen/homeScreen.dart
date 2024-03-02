@@ -15,14 +15,52 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          child: Image.asset("assets/images/SafeConnect 1.png"),
+          title: Center(
+            child: Container(
+              child: Image.asset("assets/images/SafeConnect 1.png"),
+            ),
+          ),
+          backgroundColor: Colors.grey.shade100,
+          elevation: 0,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                Icons.support_agent_outlined,
+                size: 30,
+              ),
+              tooltip: 'Show Snackbar',
+              onPressed: () {},
+            ),
+          ]),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+              title: const Text("Home"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text("Helpline"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text("About Us"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text("Contact Us"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
-        backgroundColor: Colors.grey.shade100,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
       ),
       body: Container(
         color: Colors.white,
