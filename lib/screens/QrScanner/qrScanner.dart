@@ -16,52 +16,124 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('QR Code Scanner'),
+        title: Container(
+          child: Image.asset("assets/images/SafeConnect 1.png"),
+        ),
+        backgroundColor: Colors.grey.shade100,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 4,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Text(
+              "QR Scanner",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: (result != null)
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Name: ${_parseQRData(result!.code!)["Name"] ?? "N/A"}',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        Text(
-                          'Age: ${_parseQRData(result!.code!)["Age"] ?? "N/A"}',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        Text(
-                          'Vehicle No.: ${_parseQRData(result!.code!)["Vehicle No."] ?? "N/A"}',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        ElevatedButton(
+            Expanded(
+              flex: 2,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+              ),
+            ),
+            if (result != null) ...[
+              Expanded(
+                flex: 1,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Name: ${_parseQRData(result!.code!)["Name"] ?? "N/A"}',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Age: ${_parseQRData(result!.code!)["Age"] ?? "N/A"}',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Vehicle No.: ${_parseQRData(result!.code!)["Vehicle No."] ?? "N/A"}',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 40,
+                        height: 60,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            backgroundColor: Colors.green,
+                          ),
                           onPressed: () {
-                            _launchPhoneCall(_parseQRData(result!.code!)["Contact No."]);
+                            _launchPhoneCall(
+                                _parseQRData(result!.code!)["Contact No."]);
                           },
-                          child: Text('Call Contact'),
+                          child: Text(
+                            'Call Contact',
+                            style: TextStyle(color: Colors.white, fontSize: 25),
+                          ),
                         ),
-                        Text(
-                          'Emergency Contact No.: ${_parseQRData(result!.code!)["Emergency Contact No."] ?? "N/A"}',
-                          style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width / 2 - 40,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                      ],
-                    )
-                  : Text('Scan a QR code to view details'),
-            ),
-          ),
-        ],
+                        backgroundColor: Colors.red,
+                      ),
+                      onPressed: () {
+                        _launchPhoneCall(_parseQRData(
+                            result!.code!)["Emergency Contact No."]);
+                      },
+                      child: Text(
+                        'SOS',
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width / 2 - 40,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        backgroundColor: Color(0xFF3199E4),
+                      ),
+                      onPressed: () {
+                        _openCamera();
+                      },
+                      child: Text(
+                        'Camera',
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -92,7 +164,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
   void _launchPhoneCall(String? phoneNumber) async {
     if (phoneNumber != null) {
       String maskedPhoneNumber = maskPhoneNumber(phoneNumber);
-      String uri = 'tel:$maskedPhoneNumber';
+      String uri = 'tel:$maskedPhoneNumber,,,$phoneNumber';
       await launch(uri);
     }
   }
@@ -104,6 +176,10 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
     } else {
       return '********';
     }
+  }
+
+  void _openCamera() {
+    // Implement camera functionality here
   }
 
   @override

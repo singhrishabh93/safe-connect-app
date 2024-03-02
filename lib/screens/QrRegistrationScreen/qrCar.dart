@@ -140,7 +140,8 @@ class _QRGeneratorState extends State<QRGenerator> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          backgroundColor: Color(0xFF3199E4),
+                          // backgroundColor: Color(0xFF3199E4),
+                          backgroundColor: Colors.green,
                         ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
@@ -172,7 +173,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                         },
                         child: Text(
                           'Generate QR Code',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          style: TextStyle(color: Colors.white, fontSize: 14),
                         ),
                       ),
                     ),
