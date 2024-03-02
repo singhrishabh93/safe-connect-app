@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Container(
-          child: Image.asset("assets/images/appbarlogo.png"),
+          child: Image.asset("assets/images/SafeConnect 1.png"),
         ),
         backgroundColor: Colors.grey.shade100,
         elevation: 0,
