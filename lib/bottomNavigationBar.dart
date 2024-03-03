@@ -231,7 +231,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                         children: [
                                                                           Image
                                                                               .asset(
-                                                                            "assets/images/Group 30.png",
+                                                                            "assets/images/policeQRLogo.png",
                                                                           ),
                                                                           const Text(
                                                                             "Police",
@@ -258,7 +258,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/ambulanceQRLogo.png"),
                                                                           const Text(
                                                                             "Ambulance",
                                                                             style:
@@ -290,7 +290,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/fireQRLogo.png"),
                                                                           const Text(
                                                                             "Fire",
                                                                             style:
@@ -316,7 +316,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/nhaiQRLogo.png"),
                                                                           const Text(
                                                                             "NHAI",
                                                                             style:
@@ -348,7 +348,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/roadQRLogo.png"),
                                                                           const Text(
                                                                             "Road Emergency",
                                                                             style:
@@ -374,7 +374,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/sosQRLogo.png"),
                                                                           const Text(
                                                                             "Women Helpline",
                                                                             style:
@@ -404,7 +404,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                         .spaceEvenly,
                                                 children: [
                                                   Image.asset(
-                                                      "assets/images/Group 30.png"),
+                                                      "assets/images/selfQRLogo.png"),
                                                   const Text(
                                                     "Self",
                                                     style:
@@ -464,7 +464,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/policeQRLogo.png"),
                                                                           const Text(
                                                                             "Police",
                                                                             style:
@@ -490,7 +490,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/ambulanceQRLogo.png"),
                                                                           const Text(
                                                                             "Ambulance",
                                                                             style:
@@ -522,7 +522,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/fireQRLogo.png"),
                                                                           const Text(
                                                                             "Fire",
                                                                             style:
@@ -548,7 +548,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/nhaiQRLogo.png"),
                                                                           const Text(
                                                                             "NHAI",
                                                                             style:
@@ -580,7 +580,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/roadQRLogo.png"),
                                                                           const Text(
                                                                             "Road Emergency",
                                                                             style:
@@ -606,7 +606,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                                             MainAxisAlignment.spaceEvenly,
                                                                         children: [
                                                                           Image.asset(
-                                                                              "assets/images/Group 30.png"),
+                                                                              "assets/images/sosQRLogo.png"),
                                                                           const Text(
                                                                             "Women Helpline",
                                                                             style:
@@ -636,7 +636,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                         .spaceEvenly,
                                                 children: [
                                                   Image.asset(
-                                                      "assets/images/Group 30.png"),
+                                                      "assets/images/otherQRLogo.png"),
                                                   const Text(
                                                     "Others",
                                                     style:
@@ -710,7 +710,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                         .spaceEvenly,
                                                 children: [
                                                   Image.asset(
-                                                      "assets/images/Group 30.png"),
+                                                      "assets/images/audioQRLogo.png"),
                                                   const Text(
                                                     "Audio",
                                                     style:
@@ -735,7 +735,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                                         .spaceEvenly,
                                                 children: [
                                                   Image.asset(
-                                                      "assets/images/Group 30.png"),
+                                                      "assets/images/videoQRLogo.png"),
                                                   const Text(
                                                     "Video",
                                                     style:
