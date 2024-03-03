@@ -16,7 +16,13 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat Bot'),
+        title: Container(
+          child: Image.asset("assets/images/SafeConnect 1.png"),
+        ),
+        backgroundColor: Colors.grey.shade100,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
       ),
       body: Column(
         children: <Widget>[

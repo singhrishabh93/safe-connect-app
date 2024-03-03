@@ -26,21 +26,9 @@ class firstChild extends StatelessWidget {
                 Container(
                   width: 50,
                   height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    color: const Color.fromRGBO(255, 255, 255, 1),
-                    border: Border.all(
-                      color: const Color.fromRGBO(13, 70, 122, 1),
-                      width: 1,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 50,
-                  height: 50,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/Image9.png'),
+                      image: AssetImage('assets/images/Group 47.png'),
                       fit: BoxFit.fitWidth,
                     ),
                   ),
@@ -50,7 +38,7 @@ class firstChild extends StatelessWidget {
                   height: 50,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/Image9.png'),
+                      image: AssetImage('assets/images/Group 48.png'),
                       fit: BoxFit.fitWidth,
                     ),
                   ),
@@ -60,7 +48,17 @@ class firstChild extends StatelessWidget {
                   height: 50,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/Image10.png'),
+                      image: AssetImage('assets/images/Group 49.png'),
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/Group 50.png'),
                       fit: BoxFit.fitWidth,
                     ),
                   ),
@@ -71,7 +69,7 @@ class firstChild extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Text(
-                  'Scan & Pay',
+                  'Logs Prepared',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Color.fromRGBO(0, 0, 0, 1),
@@ -83,7 +81,7 @@ class firstChild extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'To Mobile',
+                  'Coins Earned',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Color.fromRGBO(0, 0, 0, 1),
@@ -95,7 +93,7 @@ class firstChild extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'To Self',
+                  'Share App',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Color.fromRGBO(0, 0, 0, 1),
@@ -107,7 +105,7 @@ class firstChild extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'To bank A/c',
+                  'Rewards Earned',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Color.fromRGBO(0, 0, 0, 1),
