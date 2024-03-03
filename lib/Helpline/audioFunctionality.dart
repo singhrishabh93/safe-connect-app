@@ -208,15 +208,15 @@ class _SimpleRecorderState extends State<SimpleRecorder> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Audio Recorder'),
+        title: Container(
+          child: Image.asset("assets/images/SafeConnect 1.png"),
+        ),
+        backgroundColor: Colors.grey.shade100,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
       ),
       body: makeBody(),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: SimpleRecorder(),
-  ));
 }
