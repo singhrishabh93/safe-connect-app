@@ -93,7 +93,7 @@ class firstChild extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Share App',
+                  'Video Tutorial',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Color.fromRGBO(0, 0, 0, 1),
@@ -105,7 +105,7 @@ class firstChild extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Rewards Earned',
+                  'Share this App',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Color.fromRGBO(0, 0, 0, 1),
