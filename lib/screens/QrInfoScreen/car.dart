@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/screens/QrRegistrationScreen/qrCar.dart';
+import 'package:lottie/lottie.dart';
 
 class carQr extends StatelessWidget {
   const carQr({super.key});
@@ -35,9 +37,10 @@ class carQr extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                height: 200,
-                child: Image.asset("assets/images/Wallpaper.jpg"),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 400,
+                child: Lottie.asset('assets/images/carLottie.json'),
               ),
               const SizedBox(
                 height: 10,
