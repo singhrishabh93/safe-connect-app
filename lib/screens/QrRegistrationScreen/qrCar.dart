@@ -5,18 +5,20 @@ import 'dart:io';
 import 'dart:async';
 
 class QRGenerator extends StatefulWidget {
+  const QRGenerator({super.key});
+
   @override
   _QRGeneratorState createState() => _QRGeneratorState();
 }
 
 class _QRGeneratorState extends State<QRGenerator> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _ageController = TextEditingController();
-  TextEditingController _vehicleNoController = TextEditingController();
-  TextEditingController _aadharNoController = TextEditingController();
-  TextEditingController _contactNoController = TextEditingController();
-  TextEditingController _emergencyContactNoController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _vehicleNoController = TextEditingController();
+  final TextEditingController _aadharNoController = TextEditingController();
+  final TextEditingController _contactNoController = TextEditingController();
+  final TextEditingController _emergencyContactNoController = TextEditingController();
   String _qrData = '';
 
   @override
@@ -34,16 +36,16 @@ class _QRGeneratorState extends State<QRGenerator> {
       body: Container(
         color: Colors.white,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Center(
+                const Center(
                     child: Text("Car Registration",
                         style: TextStyle(fontSize: 15.0))),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 TextFormField(
                   controller: _nameController,
                   decoration: const InputDecoration(
@@ -57,10 +59,10 @@ class _QRGeneratorState extends State<QRGenerator> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   controller: _ageController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Age',
                     border: OutlineInputBorder(),
                   ),
@@ -72,10 +74,10 @@ class _QRGeneratorState extends State<QRGenerator> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   controller: _vehicleNoController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Vehicle No.',
                     border: OutlineInputBorder(),
                   ),
@@ -86,10 +88,10 @@ class _QRGeneratorState extends State<QRGenerator> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   controller: _aadharNoController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Aadhar No.',
                     border: OutlineInputBorder(),
                   ),
@@ -100,10 +102,10 @@ class _QRGeneratorState extends State<QRGenerator> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   controller: _contactNoController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Contact No.',
                     border: OutlineInputBorder(),
                   ),
@@ -115,10 +117,10 @@ class _QRGeneratorState extends State<QRGenerator> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   controller: _emergencyContactNoController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Emergency Contact No.',
                     border: OutlineInputBorder(),
                   ),
@@ -130,7 +132,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -155,15 +157,15 @@ class _QRGeneratorState extends State<QRGenerator> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text("Form Error"),
+                                  title: const Text("Form Error"),
                                   content:
-                                      Text("Please fill the form correctly."),
+                                      const Text("Please fill the form correctly."),
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text("OK"),
+                                      child: const Text("OK"),
                                     ),
                                   ],
                                 );
@@ -171,29 +173,29 @@ class _QRGeneratorState extends State<QRGenerator> {
                             );
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           'Generate QR Code',
                           style: TextStyle(color: Colors.white, fontSize: 14),
                         ),
                       ),
                     ),
-                    SizedBox(width: 10.0),
+                    const SizedBox(width: 10.0),
                     Expanded(
-                      child: Container(
+                      child: SizedBox(
                         height: 40.0,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
-                            backgroundColor: Color(0xFF3199E4),
+                            backgroundColor: const Color(0xFF3199E4),
                           ),
                           onPressed: () async {
                             if (_qrData.isNotEmpty) {
                               await _saveQrImage();
                             }
                           },
-                          child: Text(
+                          child: const Text(
                             'Download QR',
                             style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
@@ -202,14 +204,14 @@ class _QRGeneratorState extends State<QRGenerator> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 Row(
                   children: [
                     Expanded(
                       flex: 2,
                       child: Center(
                         child: Container(
-                          padding: EdgeInsets.all(0.0),
+                          padding: const EdgeInsets.all(0.0),
                           child: QrImageView(
                             data: _qrData,
                             version: QrVersions.auto,
@@ -218,10 +220,10 @@ class _QRGeneratorState extends State<QRGenerator> {
                         ),
                       ),
                     ),
-                    Expanded(
+                    const Expanded(
                       flex: 3,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
+                        padding: EdgeInsets.only(left: 20.0),
                         child: Text(
                           'Download this QR code and stick it on front and back side of your car',
                           style: TextStyle(fontSize: 16.0),
@@ -244,14 +246,14 @@ class _QRGeneratorState extends State<QRGenerator> {
         data: _qrData,
         version: QrVersions.auto,
         gapless: false,
-        color: Color(0xFF000000),
-        emptyColor: Color(0xFFFFFFFF),
+        color: const Color(0xFF000000),
+        emptyColor: const Color(0xFFFFFFFF),
       ).toImageData(300);
       final directory = await getExternalStorageDirectory();
       final imagePath = '${directory!.path}/qr_code.png';
       final File imageFile = File(imagePath);
       imageFile.writeAsBytesSync(image!.buffer.asUint8List());
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('QR Code saved as qr_code.png'),
       ));
     } catch (e) {

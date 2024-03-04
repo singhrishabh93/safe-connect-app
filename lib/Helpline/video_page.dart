@@ -56,7 +56,7 @@ class _VideoPageState extends State<VideoPage> {
         actions: [
           IconButton(
             onPressed: sendVideoToWhatsApp,
-            icon: Icon(Icons.check),
+            icon: const Icon(Icons.check),
           ),
         ],
       ),

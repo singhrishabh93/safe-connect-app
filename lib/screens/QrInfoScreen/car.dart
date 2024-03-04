@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/screens/QrRegistrationScreen/qrCar.dart';
@@ -37,7 +36,7 @@ class carQr extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 400,
                 child: Lottie.asset('assets/images/carLottie.json'),
@@ -77,7 +76,7 @@ class carQr extends StatelessWidget {
         width: MediaQuery.of(context).size.width - 40,
         child: FloatingActionButton.extended(
           onPressed: () {
-            Get.to(() => QRGenerator());
+            Get.to(() => const QRGenerator());
           },
           label: const Text(
             "Register Your Car",

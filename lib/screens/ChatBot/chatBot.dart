@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -32,18 +34,18 @@ class _ChatScreenState extends State<ChatScreen> {
             children: <Widget>[
               ElevatedButton(
                 onPressed: () => _handleButtonPressed("Report an Issue"),
-                child: Text("Report an Issue"),
+                child: const Text("Report an Issue"),
               ),
               ElevatedButton(
                 onPressed: () => _handleButtonPressed("Queries/Feedback"),
-                child: Text("Queries/Feedback"),
+                child: const Text("Queries/Feedback"),
               ),
             ],
           ),
-          Divider(height: 1.0),
+          const Divider(height: 1.0),
           Flexible(
             child: ListView.builder(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               reverse: true,
               itemCount: messages.length,
               itemBuilder: (_, int index) => ListTile(
@@ -51,7 +53,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
           ),
-          Divider(height: 1.0),
+          const Divider(height: 1.0),
           Container(
             decoration: BoxDecoration(color: Theme.of(context).cardColor),
             child: _buildTextComposer(),
@@ -65,22 +67,22 @@ class _ChatScreenState extends State<ChatScreen> {
     return IconTheme(
       data: IconThemeData(color: Theme.of(context).colorScheme.secondary),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           children: <Widget>[
             Flexible(
               child: TextField(
                 controller: _textController,
                 onSubmitted: _handleSubmitted,
-                decoration: InputDecoration.collapsed(
+                decoration: const InputDecoration.collapsed(
                   hintText: "Send a message",
                 ),
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
               child: IconButton(
-                icon: Icon(Icons.send),
+                icon: const Icon(Icons.send),
                 onPressed: () => _handleSubmitted(_textController.text),
               ),
             ),
@@ -134,15 +136,15 @@ class _ChatScreenState extends State<ChatScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Chat Bot"),
+          title: const Text("Chat Bot"),
           content:
-              Text("Thank you for your patience, we've forwarded your query"),
+              const Text("Thank you for your patience, we've forwarded your query"),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         );

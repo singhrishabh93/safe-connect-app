@@ -86,7 +86,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue.shade100,
         onPressed: () {
-          Get.to(() => QRCodeScanner());
+          Get.to(() => const QRCodeScanner());
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
@@ -699,7 +699,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                         Expanded(
                                           child: InkWell(
                                             onTap: () {
-                                              Get.to(() => SimpleRecorder());
+                                              Get.to(() => const SimpleRecorder());
                                             },
                                             child: Container(
                                               child: Column(
@@ -724,7 +724,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
                                         Expanded(
                                           child: InkWell(
                                             onTap: () {
-                                              Get.to(() => CameraPage());
+                                              Get.to(() => const CameraPage());
                                             },
                                             child: Container(
                                               child: Column(

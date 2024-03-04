@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/screens/ChatBot/chatBot.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/firstChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/secondChild.dart';
@@ -34,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               tooltip: 'Show Snackbar',
               onPressed: () {
-                Get.to(() => ChatScreen());
+                Get.to(() => const ChatScreen());
               },
             ),
           ]),

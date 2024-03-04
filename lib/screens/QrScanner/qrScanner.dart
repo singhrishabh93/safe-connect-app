@@ -8,6 +8,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:camera/camera.dart';
 
 class QRCodeScanner extends StatefulWidget {
+  const QRCodeScanner({super.key});
+
   @override
   _QRCodeScannerState createState() => _QRCodeScannerState();
 }
@@ -54,7 +56,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
         color: Colors.white,
         child: Column(
           children: <Widget>[
-            Text(
+            const Text(
               "QR Scanner",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
             ),
@@ -73,13 +75,13 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                     // mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 10),
-                      Text(
+                      const SizedBox(height: 10),
+                      const Text(
                         "Inform with message",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 10),
-                      Container(
+                      const SizedBox(height: 10),
+                      SizedBox(
                         width: MediaQuery.of(context).size.width - 40,
                         height: 25,
                         child: ElevatedButton(
@@ -94,14 +96,14 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                                 _parseQRData(result!.code!)["Contact No."],
                                 "Vehicle is in No Parking Zone");
                           },
-                          child: Text(
+                          child: const Text(
                             'Vehicle is in No Parking Zone',
                             style: TextStyle(color: Colors.red),
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Container(
+                      const SizedBox(height: 10),
+                      SizedBox(
                         width: MediaQuery.of(context).size.width - 40,
                         height: 25,
                         child: ElevatedButton(
@@ -116,12 +118,12 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                                 _parseQRData(result!.code!)["Contact No."],
                                 "Vehicle Lights are ON ");
                           },
-                          child: Text('Vehicle Lights are ON ',
+                          child: const Text('Vehicle Lights are ON ',
                               style: TextStyle(color: Colors.red)),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Container(
+                      const SizedBox(height: 10),
+                      SizedBox(
                         width: MediaQuery.of(context).size.width - 40,
                         height: 25,
                         child: ElevatedButton(
@@ -136,12 +138,12 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                                 _parseQRData(result!.code!)["Contact No."],
                                 "MVehicle is being towed");
                           },
-                          child: Text('Vehicle is being towed',
+                          child: const Text('Vehicle is being towed',
                               style: TextStyle(color: Colors.red)),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Container(
+                      const SizedBox(height: 10),
+                      SizedBox(
                         width: MediaQuery.of(context).size.width - 40,
                         height: 25,
                         child: ElevatedButton(
@@ -156,28 +158,28 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                                 _parseQRData(result!.code!)["Contact No."],
                                 "Some damage has occured to the vehicle");
                           },
-                          child: Text('Some damage has occured to the vehicle',
+                          child: const Text('Some damage has occured to the vehicle',
                               style: TextStyle(color: Colors.red)),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         'Name: ${_parseQRData(result!.code!)["Name"] ?? "N/A"}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Age: ${_parseQRData(result!.code!)["Age"] ?? "N/A"}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Vehicle No.: ${_parseQRData(result!.code!)["Vehicle No."] ?? "N/A"}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 10),
-                      Container(
+                      const SizedBox(height: 10),
+                      SizedBox(
                         width: MediaQuery.of(context).size.width - 40,
                         height: 60,
                         child: ElevatedButton(
@@ -191,7 +193,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                             _launchPhoneCall(
                                 _parseQRData(result!.code!)["Contact No."]);
                           },
-                          child: Text(
+                          child: const Text(
                             'Call Contact',
                             style: TextStyle(color: Colors.white, fontSize: 25),
                           ),
@@ -204,7 +206,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
+                  SizedBox(
                     height: 50,
                     width: MediaQuery.of(context).size.width / 2 - 40,
                     child: ElevatedButton(
@@ -218,13 +220,13 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                         _launchPhoneCall(_parseQRData(
                             result!.code!)["Emergency Contact No."]);
                       },
-                      child: Text(
+                      child: const Text(
                         'SOS',
                         style: TextStyle(color: Colors.white, fontSize: 25),
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     height: 50,
                     width: MediaQuery.of(context).size.width / 2 - 40,
                     child: ElevatedButton(
@@ -232,12 +234,12 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        backgroundColor: Color(0xFF3199E4),
+                        backgroundColor: const Color(0xFF3199E4),
                       ),
                       onPressed: () {
                         _openCamera();
                       },
-                      child: Text(
+                      child: const Text(
                         'Camera',
                         style: TextStyle(color: Colors.white, fontSize: 25),
                       ),
@@ -324,7 +326,7 @@ class _QRCodeScannerState extends State<QRCodeScanner> {
       await launch(uri.toString());
     } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Phone number not available')));
+          .showSnackBar(const SnackBar(content: Text('Phone number not available')));
     }
   }
 
@@ -350,7 +352,7 @@ class _CameraScreenState extends State<CameraScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Camera'),
+        title: const Text('Camera'),
       ),
       body: FutureBuilder<void>(
         future: widget.cameraController.initialize(),
@@ -358,7 +360,7 @@ class _CameraScreenState extends State<CameraScreen> {
           if (snapshot.connectionState == ConnectionState.done) {
             return CameraPreview(widget.cameraController);
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
@@ -376,7 +378,7 @@ class _CameraScreenState extends State<CameraScreen> {
             print(e);
           }
         },
-        child: Icon(Icons.camera_alt),
+        child: const Icon(Icons.camera_alt),
       ),
     );
   }
@@ -394,10 +396,10 @@ class DisplayPictureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Captured Image'),
+        title: const Text('Captured Image'),
         actions: [
           IconButton(
-            icon: Icon(Icons.send),
+            icon: const Icon(Icons.send),
             onPressed: () {
               _sendImageToSOS(context);
             },
@@ -409,12 +411,12 @@ class DisplayPictureScreen extends StatelessWidget {
   }
 
   void _sendImageToSOS(BuildContext context) async {
-    final String phoneNumber = "7587136215";
+    const String phoneNumber = "7587136215";
 
     if (phoneNumber.isNotEmpty) {
-      final String message = 'Sending image to SOS phone number: $phoneNumber';
+      const String message = 'Sending image to SOS phone number: $phoneNumber';
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
+          .showSnackBar(const SnackBar(content: Text(message)));
 
       final File imageFile = File(imagePath);
       final Directory tempDir = await getTemporaryDirectory();
@@ -428,7 +430,7 @@ class DisplayPictureScreen extends StatelessWidget {
       await launch(whatsappUrl);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No SOS phone number available')));
+          const SnackBar(content: Text('No SOS phone number available')));
     }
   }
 }

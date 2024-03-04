@@ -17,8 +17,8 @@ class SimpleRecorder extends StatefulWidget {
 }
 
 class _SimpleRecorderState extends State<SimpleRecorder> {
-  Codec _codec = Codec.aacMP4;
-  String _mPath = 'tau_file.mp4';
+  final Codec _codec = Codec.aacMP4;
+  final String _mPath = 'tau_file.mp4';
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
   FlutterSoundRecorder? _mRecorder = FlutterSoundRecorder();
   bool _mPlayerIsInited = false;
@@ -200,7 +200,7 @@ class _SimpleRecorderState extends State<SimpleRecorder> {
           ),
           ElevatedButton(
             onPressed: sendAudioToWhatsApp,
-            child: Text('Send to WhatsApp'),
+            child: const Text('Send to WhatsApp'),
           ),
         ],
       );

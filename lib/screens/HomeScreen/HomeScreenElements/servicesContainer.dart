@@ -7,7 +7,7 @@ class services extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text("Services",
+        const Text("Services",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         Container(
           height: 155,
