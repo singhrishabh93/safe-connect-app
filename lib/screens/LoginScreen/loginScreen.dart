@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:safe_connect/screens/OtpScreen/otpScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key});
@@ -11,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _isChecked = false;
   bool _isButtonClicked = false;
+  TextEditingController _mobileNumberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               width: MediaQuery.of(context).size.width - 45,
               child: TextFormField(
+                controller: _mobileNumberController,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
                 ], // Only allow digits
@@ -126,7 +130,16 @@ class _LoginScreenState extends State<LoginScreen> {
               width: MediaQuery.of(context).size.width - 45,
               height: 50,
               child: ElevatedButton(
-                onPressed: _isChecked ? () {} : null,
+                onPressed: _isChecked
+                    ? () {
+                        // Navigate to OTP screen
+                        if (_mobileNumberController.text.isNotEmpty) {
+                          Get.to(() => OtpScreen(
+                                mobileNumber: _mobileNumberController.text,
+                              ));
+                        }
+                      }
+                    : null,
                 child: Text(
                   "Continue",
                   style: TextStyle(
