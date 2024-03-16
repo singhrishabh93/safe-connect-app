@@ -5,6 +5,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/bottomNavigationBar.dart';
+import 'package:safe_connect/screens/LoginScreen/loginScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -39,7 +40,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _redirectAfterDelay() async {
     await Future.delayed(const Duration(seconds: 3));
     // Navigate to home screen
-    Get.to(() => const bottomNavigationBar());
+    // Get.to(() => const bottomNavigationBar());
+    Get.to(() => const LoginScreen());
   }
 
   void _showNoInternetPopup() {

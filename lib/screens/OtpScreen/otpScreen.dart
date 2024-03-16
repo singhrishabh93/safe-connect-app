@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 
 class OtpScreen extends StatefulWidget {
   final String mobileNumber;
+  final String verificationId;
 
-  const OtpScreen({Key? key, required this.mobileNumber}) : super(key: key);
+  const OtpScreen(
+      {Key? key, required this.mobileNumber, required this.verificationId})
+      : super(key: key);
 
   @override
   _OtpScreenState createState() => _OtpScreenState();
@@ -11,7 +16,7 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   final List<TextEditingController> _controllers = List.generate(
-    4,
+    6,
     (index) => TextEditingController(),
   );
 
@@ -19,6 +24,33 @@ class _OtpScreenState extends State<OtpScreen> {
   void dispose() {
     _controllers.forEach((controller) => controller.dispose());
     super.dispose();
+  }
+
+  Future<void> _signInWithPhoneNumber(String otp) async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: widget.verificationId,
+        smsCode: otp,
+      );
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (userCredential.user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        );
+      } else {
+        print("Authentication failed");
+      }
+    } catch (e) {
+      print(e.toString());
+      // Handle errors
+      // You can display an error message to the user here
+    }
   }
 
   @override
@@ -65,7 +97,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       DefaultTextStyle(
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: 22,
                           fontFamily: "gilroy",
                         ),
                         child: Text(
@@ -83,7 +115,7 @@ class _OtpScreenState extends State<OtpScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                4,
+                6,
                 (index) => Container(
                   width: 50,
                   height: 50,
@@ -103,7 +135,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       maxLength: 1,
                       onChanged: (value) {
                         if (value.isNotEmpty) {
-                          if (index < 3) {
+                          if (index < 5) {
                             FocusScope.of(context).nextFocus();
                           }
                         } else {
@@ -138,7 +170,9 @@ class _OtpScreenState extends State<OtpScreen> {
                   margin: EdgeInsets.only(right: 5),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Add your logic for OTP verification
+                      String otp = _controllers.fold(
+                          "", (prev, controller) => prev + controller.text);
+                      _signInWithPhoneNumber(otp);
                     },
                     child: Text(
                       "Verify",

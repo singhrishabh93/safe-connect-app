@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:safe_connect/screens/OtpScreen/otpScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,6 +15,32 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isChecked = false;
   bool _isButtonClicked = false;
   TextEditingController _mobileNumberController = TextEditingController();
+
+  Future<void> _verifyPhoneNumber(String phoneNumber) async {
+    // Adding '+91' before the phone number
+    String formattedPhoneNumber = '+91$phoneNumber';
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: formattedPhoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // This callback will be called if verification is done automatically.
+        // You can use the `credential` to sign-in the user.
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        // Handle verification failed
+        print(e.message);
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        // Navigate to OTP screen
+        Get.to(() => OtpScreen(
+              mobileNumber: formattedPhoneNumber, // Send formatted phone number
+              verificationId: verificationId,
+            ));
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       DefaultTextStyle(
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: 22,
                           fontFamily: "gilroy",
                         ),
                         child: Text(
@@ -71,10 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
               width: MediaQuery.of(context).size.width - 45,
               child: TextFormField(
                 controller: _mobileNumberController,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
-                ], // Only allow digits
-                maxLength: 10, // Limit to 10 digits
+                maxLength: 15, // Limit to 15 characters (including '+91')
                 decoration: InputDecoration(
                   labelText: "Mobile Number",
                   labelStyle: TextStyle(
@@ -132,11 +156,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ElevatedButton(
                 onPressed: _isChecked
                     ? () {
-                        // Navigate to OTP screen
+                        // Verify phone number and navigate to OTP screen
                         if (_mobileNumberController.text.isNotEmpty) {
-                          Get.to(() => OtpScreen(
-                                mobileNumber: _mobileNumberController.text,
-                              ));
+                          _verifyPhoneNumber(_mobileNumberController.text);
                         }
                       }
                     : null,
