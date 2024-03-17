@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/bottomNavigationBar.dart';
 import 'package:safe_connect/screens/LoginScreen/loginScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -39,9 +40,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _redirectAfterDelay() async {
     await Future.delayed(const Duration(seconds: 3));
-    // Navigate to home screen
-    // Get.to(() => const bottomNavigationBar());
-    Get.to(() => const LoginScreen());
+    // Check if the user is already logged in
+    if (FirebaseAuth.instance.currentUser != null) {
+      // User is already logged in, redirect to bottom navigation bar
+      Get.offAll(() => bottomNavigationBar()); // Assuming bottomNavigationBar is your bottom navigation bar screen
+    } else {
+      // User is not logged in, redirect to login screen
+      Get.offAll(() => const LoginScreen());
+    }
   }
 
   void _showNoInternetPopup() {
@@ -92,8 +98,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     color: Colors.white,
                     fontFamily: "gilroy")),
           ),
-          ],
-      )
+        ],
+      ),
     );
   }
 }
