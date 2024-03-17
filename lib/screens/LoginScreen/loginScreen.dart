@@ -98,7 +98,11 @@ class _LoginScreenState extends State<LoginScreen> {
               width: MediaQuery.of(context).size.width - 45,
               child: TextFormField(
                 controller: _mobileNumberController,
-                maxLength: 15, // Limit to 15 characters (including '+91')
+                maxLength: 10,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                      RegExp(r'[0-9]')), // Allow only digits
+                ], // Limit to 15 characters (including '+91')
                 decoration: InputDecoration(
                   labelText: "Mobile Number",
                   labelStyle: TextStyle(
