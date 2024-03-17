@@ -5,15 +5,17 @@ import 'package:connectivity/connectivity.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/bottomNavigationBar.dart';
+import 'package:safe_connect/screens/LoginScreen/loginScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 
-class splashScreen extends StatefulWidget {
-  const splashScreen({Key? key}) : super(key: key);
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<splashScreen> createState() => _splashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _splashScreenState extends State<splashScreen> {
+class _SplashScreenState extends State<SplashScreen> {
   bool _hasInternet = false;
 
   @override
@@ -38,8 +40,14 @@ class _splashScreenState extends State<splashScreen> {
 
   Future<void> _redirectAfterDelay() async {
     await Future.delayed(const Duration(seconds: 3));
-    // Navigate to home screen
-    Get.to(() => const bottomNavigationBar());
+    // Check if the user is already logged in
+    if (FirebaseAuth.instance.currentUser != null) {
+      // User is already logged in, redirect to bottom navigation bar
+      Get.offAll(() => bottomNavigationBar()); // Assuming bottomNavigationBar is your bottom navigation bar screen
+    } else {
+      // User is not logged in, redirect to login screen
+      Get.offAll(() => const LoginScreen());
+    }
   }
 
   void _showNoInternetPopup() {
@@ -72,54 +80,25 @@ class _splashScreenState extends State<splashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              top: MediaQuery.of(context).size.height - 200,
-              left: MediaQuery.of(context).size.width / 2 - 42,
-              child: const SizedBox(
-                width: 84,
-                height: 117,
-                child: Positioned(
-                  top: 87,
-                  left: 0,
-                  child: Text(
-                    'MADE WITH FLUTTER ❤️',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Inter',
-                      fontSize: 12,
-                      letterSpacing: 0,
-                      fontWeight: FontWeight.normal,
-                      height: 1,
-                    ),
-                  ),
-                ),
-              ),
+      body: Stack(
+        children: [
+          Center(
+            child: Image.asset(
+              "assets/images/Background-1.gif",
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
             ),
-            Positioned(
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 100,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/SafeConnect.png'),
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+          const Center(
+            child: Text("SafeConnect",
+                style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: "gilroy")),
+          ),
+        ],
       ),
     );
   }

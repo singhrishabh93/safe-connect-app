@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "159443933809",
+    "project_id": "safe-connect-app-1",
+    "storage_bucket": "safe-connect-app-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:159443933809:android:196f5b9e4bb54d63eb99d0",
+        "android_client_info": {
+          "package_name": "com.example.safe_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "159443933809-hc1t91i3pvgol73nlnkte2j09ium3jab.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.safe_connect",
+            "certificate_hash": "581ef937f284d0fcbb6ee0f3ddd099779eeb51fe"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjf31wGfi-tzT1gnuLxzeLi8OhSxpfqnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
