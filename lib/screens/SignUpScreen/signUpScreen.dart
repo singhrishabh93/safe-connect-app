@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_connect/bottomNavigationBar.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  final String mobileNumber;
+
+  const SignUpScreen({Key? key, required this.mobileNumber}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -226,11 +229,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // Add the user details to Firestore
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(_emergencyContactController.text)
+            .doc(widget.mobileNumber) // Using mobileNumber as document ID
             .set({
           'name': _nameController.text,
           'email': _emailController.text,
           'emergencyContact': _emergencyContactController.text,
+          'mobileNumber': widget.mobileNumber, // Include mobileNumber
         });
 
         // Show success message
@@ -243,7 +247,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => bottomNavigationBar(),
+                      ),
+                    );
                   },
                   child: Text('OK'),
                 ),

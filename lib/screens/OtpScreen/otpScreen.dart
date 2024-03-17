@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:safe_connect/bottomNavigationBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:safe_connect/screens/SignUpScreen/signUpScreen.dart';
+import 'package:safe_connect/bottomNavigationBar.dart';
 
 class OtpScreen extends StatefulWidget {
   final String mobileNumber;
@@ -38,19 +39,36 @@ class _OtpScreenState extends State<OtpScreen> {
           await FirebaseAuth.instance.signInWithCredential(credential);
 
       if (userCredential.user != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SignUpScreen(),
-          ),
-        );
+        // Check if the user's mobile number is already registered
+        final userSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.mobileNumber)
+            .get();
+
+        if (userSnapshot.exists) {
+          // User is already registered, navigate to BottomNavigationBar
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => bottomNavigationBar(),
+            ),
+          );
+        } else {
+          // User is not registered, navigate to SignUpScreen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SignUpScreen(
+                mobileNumber: widget.mobileNumber,
+              ),
+            ),
+          );
+        }
       } else {
         print("Authentication failed");
       }
     } catch (e) {
       print(e.toString());
-      // Handle errors
-      // You can display an error message to the user here
     }
   }
 

@@ -17,24 +17,19 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _mobileNumberController = TextEditingController();
 
   Future<void> _verifyPhoneNumber(String phoneNumber) async {
-    // Adding '+91' before the phone number
     String formattedPhoneNumber = '+91$phoneNumber';
 
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: formattedPhoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
-        // This callback will be called if verification is done automatically.
-        // You can use the `credential` to sign-in the user.
         await FirebaseAuth.instance.signInWithCredential(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
-        // Handle verification failed
         print(e.message);
       },
       codeSent: (String verificationId, int? resendToken) {
-        // Navigate to OTP screen
         Get.to(() => OtpScreen(
-              mobileNumber: formattedPhoneNumber, // Send formatted phone number
+              mobileNumber: formattedPhoneNumber,
               verificationId: verificationId,
             ));
       },
@@ -101,8 +96,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 maxLength: 10,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
-                      RegExp(r'[0-9]')), // Allow only digits
-                ], // Limit to 15 characters (including '+91')
+                      RegExp(r'[0-9]')),
+                ],
                 decoration: InputDecoration(
                   labelText: "Mobile Number",
                   labelStyle: TextStyle(
@@ -113,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  counterText: null, // Remove the limit text
+                  counterText: null,
                 ),
                 keyboardType: TextInputType.number,
                 style: TextStyle(
@@ -160,7 +155,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ElevatedButton(
                 onPressed: _isChecked
                     ? () {
-                        // Verify phone number and navigate to OTP screen
                         if (_mobileNumberController.text.isNotEmpty) {
                           _verifyPhoneNumber(_mobileNumberController.text);
                         }
