@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:safe_connect/bottomNavigationBar.dart';
+import 'package:safe_connect/screens/SignUpScreen/signUpScreen.dart';
 
 class OtpScreen extends StatefulWidget {
   final String mobileNumber;
@@ -40,7 +41,7 @@ class _OtpScreenState extends State<OtpScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => bottomNavigationBar(),
+            builder: (context) => SignUpScreen(),
           ),
         );
       } else {
