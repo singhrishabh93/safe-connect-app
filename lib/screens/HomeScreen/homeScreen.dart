@@ -4,6 +4,7 @@ import 'package:safe_connect/screens/ChatBot/chatBot.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/firstChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/secondChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/servicesContainer.dart';
+import 'package:safe_connect/sideNavigationBar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -37,36 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ]),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              title: const Text("Home"),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text("Helpline"),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text("About Us"),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text("Contact Us"),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(),
       body: Container(
         color: Colors.white,
         child: const SingleChildScrollView(

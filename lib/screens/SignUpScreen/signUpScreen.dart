@@ -39,12 +39,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Stack(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height - 800,
+                    height: MediaQuery.of(context).size.height - 760,
                     width: MediaQuery.of(context).size.width,
                     color: Colors.black,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 0, left: 40),
+                    padding: const EdgeInsets.only(top: 25, left: 40),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
