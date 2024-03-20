@@ -12,107 +12,178 @@ class CustomDrawer extends StatelessWidget {
     User? user = FirebaseAuth.instance.currentUser;
 
     return Drawer(
+      backgroundColor:
+          Colors.black, // Set total background color of the Drawer to black
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(user?.phoneNumber)
-                  .get(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                }
-                if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                }
-                if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return Text(
-                    'User Profile',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  );
-                }
-
-                var userData = snapshot.data!.data() as Map<String, dynamic>?;
-
-                String name = userData?['name'] ?? 'Name not found';
-                String mobile = user?.phoneNumber ?? 'Mobile number not found';
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+          SizedBox(
+            height: 160,
+            child: DrawerHeader(
+              decoration: BoxDecoration(
+                color:
+                    Colors.black, // Set background color of the header to black
+              ),
+              child: FutureBuilder<DocumentSnapshot>(
+                future: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user?.phoneNumber)
+                    .get(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+                  if (snapshot.hasError) {
+                    return Text(
+                      'Error: ${snapshot.error}',
+                      style: TextStyle(
+                          color: Colors.white), // Set text color to white
+                    );
+                  }
+                  if (!snapshot.hasData || !snapshot.data!.exists) {
+                    return Text(
                       'User Profile',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.white, // Set text color to white
                         fontSize: 24,
                       ),
+                    );
+                  }
+
+                  var userData = snapshot.data!.data() as Map<String, dynamic>?;
+
+                  String name = userData?['name'] ?? 'Name not found';
+                  String mobile =
+                      user?.phoneNumber ?? 'Mobile number not found';
+
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello,',
+                          style: TextStyle(
+                              color: Colors.grey, // Set text color to white
+                              fontSize: 30,
+                              fontFamily: "gilroy"),
+                        ),
+                        Text(
+                          '$name',
+                          style: TextStyle(
+                            color: Colors.white, // Set text color to white
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Name: $name',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      'Mobile: $mobile',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                );
+                  );
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: ListTile(
+              leading: Icon(
+                Icons.person, // Profile icon
+                color: Colors.white, // Icon color
+              ),
+              title: Text(
+                'Profile',
+                style:
+                    TextStyle(color: Colors.white), // Set text color to white
+              ),
+              tileColor:
+                  Colors.black, // Set background color of ListTile to black
+              onTap: () {
+                Get.to(() => UserProfilePage());
               },
             ),
           ),
-          ListTile(
-            title: Text('Profile'),
-            onTap: () {
-              Get.to(() => UserProfilePage());
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: ListTile(
+              leading: Icon(
+                Icons.phone, // Helpline icon
+                color: Colors.white, // Icon color
+              ),
+              title: Text(
+                'Helpline',
+                style:
+                    TextStyle(color: Colors.white), // Set text color to white
+              ),
+              tileColor:
+                  Colors.black, // Set background color of ListTile to black
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
-          ListTile(
-            title: Text('Helpline'),
-            onTap: () {
-              Navigator.pop(context);
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: ListTile(
+              leading: Icon(
+                Icons.info, // About Us icon
+                color: Colors.white, // Icon color
+              ),
+              title: Text(
+                'About Us',
+                style:
+                    TextStyle(color: Colors.white), // Set text color to white
+              ),
+              tileColor:
+                  Colors.black, // Set background color of ListTile to black
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
-          ListTile(
-            title: Text('About Us'),
-            onTap: () {
-              Navigator.pop(context);
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: ListTile(
+              leading: Icon(
+                Icons.contact_mail, // Contact Us icon
+                color: Colors.white, // Icon color
+              ),
+              title: Text(
+                'Contact Us',
+                style:
+                    TextStyle(color: Colors.white), // Set text color to white
+              ),
+              tileColor:
+                  Colors.black, // Set background color of ListTile to black
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
-          ListTile(
-            title: Text('Contact Us'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Text('Logout'), // Logout button
-            onTap: () {
-              FirebaseAuth.instance.signOut(); // Sign out the user
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        LoginScreen()), // Navigate to login screen
-                (route) =>
-                    false, // Clear all routes except for the login screen
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: ListTile(
+              leading: Icon(
+                Icons.logout, // Logout icon
+                color: Colors.white, // Icon color
+              ),
+              title: Text(
+                'Logout',
+                style:
+                    TextStyle(color: Colors.white), // Set text color to white
+              ), // Logout button
+              tileColor:
+                  Colors.black, // Set background color of ListTile to black
+              onTap: () {
+                FirebaseAuth.instance.signOut(); // Sign out the user
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          LoginScreen()), // Navigate to login screen
+                  (route) =>
+                      false, // Clear all routes except for the login screen
+                );
+              },
+            ),
           ),
         ],
       ),

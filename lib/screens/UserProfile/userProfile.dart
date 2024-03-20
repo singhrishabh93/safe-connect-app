@@ -131,26 +131,50 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Profile'),
+        title: Text(
+          'User Profile',
+          style: TextStyle(color: Colors.white, fontFamily: "gilroy"),
+        ),
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Container(
+        color: Colors.black,
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               'Registered Mobile Number: $mobileNumber',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
             SizedBox(height: 20),
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Name',
+                labelStyle: TextStyle(color: Colors.white),
+                border: OutlineInputBorder(),
+              ),
             ),
             SizedBox(height: 10),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Email',
+                labelStyle: TextStyle(color: Colors.white),
+                border: OutlineInputBorder(),
+              ),
               keyboardType: TextInputType.emailAddress,
               inputFormatters: [
                 FilteringTextInputFormatter.singleLineFormatter,
@@ -159,7 +183,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
             SizedBox(height: 10),
             TextField(
               controller: _emergencyContactController,
-              decoration: InputDecoration(labelText: 'Emergency Contact'),
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Emergency Contact',
+                labelStyle: TextStyle(color: Colors.white),
+                border: OutlineInputBorder(),
+              ),
               keyboardType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -167,17 +196,48 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _updateUserData,
-              child: Text('Update'),
+            Container(
+              width: MediaQuery.of(context).size.width - 45,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _updateUserData,
+                child: Text(
+                  "Update",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontFamily: "gilroy",
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
             ),
             SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _deleteAccount,
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red,
+            Container(
+              width: MediaQuery.of(context).size.width - 45,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _deleteAccount,
+                child: Text(
+                  "Delete my Account",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontFamily: "gilroy",
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
               ),
-              child: Text('Delete Account'),
             ),
           ],
         ),
@@ -185,3 +245,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 }
+// ElevatedButton(
+//               onPressed: _updateUserData,
+//               child: Text('Update'),
+//             ),
