@@ -74,23 +74,58 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   Future<void> _deleteAccount() async {
-    // Delete user document from Firestore
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(mobileNumber)
-        .delete();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Confirm Account Deletion',
+            style: TextStyle(color: Colors.black),
+          ),
+          content: Text(
+            'Are you sure you want to delete your account?',
+            style: TextStyle(color: Colors.black),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Delete user document from Firestore
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(mobileNumber)
+                    .delete();
 
-    // Delete user account from Firebase Auth
-    await user!.delete();
+                // Delete user account from Firebase Auth
+                await user!.delete();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Account deleted successfully!'),
-      ),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Account deleted successfully!'),
+                  ),
+                );
+
+                // Navigate back to login screen
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
     );
-
-    // Navigate back to login screen
-    Navigator.pop(context);
   }
 
   bool isValidEmail(String email) {
@@ -245,7 +280,3 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 }
-// ElevatedButton(
-//               onPressed: _updateUserData,
-//               child: Text('Update'),
-//             ),
