@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:safe_connect/screens/UserProfile/userProfile.dart';
 
-class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
+class bottomNavigationBar extends StatefulWidget {
+  const bottomNavigationBar({Key? key}) : super(key: key);
 
   @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+  State<bottomNavigationBar> createState() => _bottomNavigationBarState();
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget>
+class _bottomNavigationBarState extends State<bottomNavigationBar>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   static List<Widget> _bodyView = <Widget>[
