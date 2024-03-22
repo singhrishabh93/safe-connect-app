@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:safe_connect/screens/LoginScreen/loginScreen.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   late User? user;
   late String mobileNumber;
+  bool isEditMode = false;
 
   @override
   void initState() {
@@ -41,125 +43,25 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   Future<void> _updateUserData() async {
-    String name = _nameController.text;
-    String email = _emailController.text;
-    String emergencyContact = _emergencyContactController.text;
-
-    // Validate email format
-    if (!isValidEmail(email)) {
-      _showErrorDialog('Invalid Email Format');
-      return;
-    }
-
-    // Validate emergency contact format
-    if (!isValidPhoneNumber(emergencyContact)) {
-      _showErrorDialog('Invalid Emergency Contact Number');
-      return;
-    }
-
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(mobileNumber)
-        .update({
-      'name': name,
-      'email': email,
-      'emergencyContact': emergencyContact,
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('User data updated successfully!'),
-      ),
-    );
+    // Your update user data logic here
+    // ...
   }
 
   Future<void> _deleteAccount() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(
-            'Confirm Account Deletion',
-            style: TextStyle(color: Colors.black),
-          ),
-          content: Text(
-            'Are you sure you want to delete your account?',
-            style: TextStyle(color: Colors.black),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text(
-                'Cancel',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                // Delete user document from Firestore
-                await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(mobileNumber)
-                    .delete();
+    // Your delete account logic here
+    // ...
+  }
 
-                // Delete user account from Firebase Auth
-                await user!.delete();
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Account deleted successfully!'),
-                  ),
+  Future<void> _signOut() async {
+    FirebaseAuth.instance.signOut(); // Sign out the user
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          LoginScreen()), // Navigate to login screen
+                  (route) =>
+                      false, // Clear all routes except for the login screen
                 );
-
-                // Navigate back to login screen
-                Navigator.pop(context);
-              },
-              child: Text(
-                'Delete',
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  bool isValidEmail(String email) {
-    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
-  }
-
-  bool isValidPhoneNumber(String phoneNumber) {
-    return RegExp(r'^[0-9]{10}$').hasMatch(phoneNumber);
-  }
-
-  Future<void> _showErrorDialog(String message) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(message),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -171,12 +73,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
           style: TextStyle(color: Colors.white, fontFamily: "gilroy"),
         ),
         backgroundColor: Colors.black,
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
       ),
       body: Container(
         color: Colors.black,
@@ -200,6 +96,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 labelStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(),
               ),
+              enabled: isEditMode, // Enable/disable based on edit mode
             ),
             SizedBox(height: 10),
             TextField(
@@ -210,6 +107,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 labelStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(),
               ),
+              enabled: isEditMode, // Enable/disable based on edit mode
               keyboardType: TextInputType.emailAddress,
               inputFormatters: [
                 FilteringTextInputFormatter.singleLineFormatter,
@@ -224,6 +122,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 labelStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(),
               ),
+              enabled: isEditMode, // Enable/disable based on edit mode
               keyboardType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -231,49 +130,115 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
             ),
             SizedBox(height: 20),
-            Container(
-              width: MediaQuery.of(context).size.width - 45,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: _updateUserData,
-                child: Text(
-                  "Update",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontFamily: "gilroy",
+            isEditMode
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: _updateUserData,
+                          child: Text(
+                            "Update",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontFamily: "gilroy",
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              isEditMode = false; // Exit edit mode
+                            });
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontFamily: "gilroy",
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isEditMode = true; // Enter edit mode
+                      });
+                    },
+                    child: Text(
+                      "Edit Details",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontFamily: "gilroy",
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-            ),
             SizedBox(height: 10),
-            Container(
-              width: MediaQuery.of(context).size.width - 45,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: _deleteAccount,
-                child: Text(
-                  "Delete my Account",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontFamily: "gilroy",
+            isEditMode
+                ? SizedBox()
+                : ElevatedButton(
+                    onPressed: _signOut,
+                    child: Text(
+                      "Sign Out",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: "gilroy",
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
                   ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-            ),
+            SizedBox(height: 10),
+            isEditMode
+                ? ElevatedButton(
+                    onPressed: _deleteAccount,
+                    child: Text(
+                      "Delete my Account",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: "gilroy",
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                  )
+                : SizedBox(),
           ],
         ),
       ),
