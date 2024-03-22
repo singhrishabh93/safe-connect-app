@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/screens/LoginScreen/loginScreen.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -18,6 +20,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   late User? user;
   late String mobileNumber;
   bool isEditMode = false;
+  bool showDeleteButton = false;
 
   @override
   void initState() {
@@ -43,25 +46,125 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   Future<void> _updateUserData() async {
-    // Your update user data logic here
-    // ...
+    String name = _nameController.text;
+    String email = _emailController.text;
+    String emergencyContact = _emergencyContactController.text;
+
+    // Validate email format
+    if (!isValidEmail(email)) {
+      _showErrorDialog(context, 'Invalid Email Format');
+      return;
+    }
+
+    // Validate emergency contact format
+    if (!isValidPhoneNumber(emergencyContact)) {
+      _showErrorDialog(context, 'Invalid Emergency Contact Number');
+      return;
+    }
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(mobileNumber)
+        .update({
+      'name': name,
+      'email': email,
+      'emergencyContact': emergencyContact,
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('User data updated successfully!'),
+      ),
+    );
   }
 
   Future<void> _deleteAccount() async {
-    // Your delete account logic here
-    // ...
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Confirm Account Deletion',
+            style: TextStyle(color: Colors.black),
+          ),
+          content: Text(
+            'Are you sure you want to delete your account?',
+            style: TextStyle(color: Colors.black),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Delete user document from Firestore
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(mobileNumber)
+                    .delete();
+
+                // Delete user account from Firebase Auth
+                await user!.delete();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Account deleted successfully!'),
+                  ),
+                );
+
+                // Navigate back to login screen
+                Get.to(() => LoginScreen());
+              },
+              child: Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  Future<void> _signOut() async {
-    FirebaseAuth.instance.signOut(); // Sign out the user
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          LoginScreen()), // Navigate to login screen
-                  (route) =>
-                      false, // Clear all routes except for the login screen
-                );
+  bool isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  bool isValidPhoneNumber(String phoneNumber) {
+    return RegExp(r'^[0-9]{10}$').hasMatch(phoneNumber);
+  }
+
+  Future<void> _showErrorDialog(BuildContext context, String message) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(message),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -96,7 +199,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 labelStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(),
               ),
-              enabled: isEditMode, // Enable/disable based on edit mode
+              enabled: isEditMode,
             ),
             SizedBox(height: 10),
             TextField(
@@ -107,11 +210,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 labelStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(),
               ),
-              enabled: isEditMode, // Enable/disable based on edit mode
               keyboardType: TextInputType.emailAddress,
               inputFormatters: [
                 FilteringTextInputFormatter.singleLineFormatter,
               ],
+              enabled: isEditMode,
             ),
             SizedBox(height: 10),
             TextField(
@@ -122,12 +225,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 labelStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(),
               ),
-              enabled: isEditMode, // Enable/disable based on edit mode
               keyboardType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(10),
               ],
+              enabled: isEditMode,
             ),
             SizedBox(height: 20),
             isEditMode
@@ -157,7 +260,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              isEditMode = false; // Exit edit mode
+                              isEditMode = false;
+                              showDeleteButton = false;
                             });
                           },
                           child: Text(
@@ -181,7 +285,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 : ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        isEditMode = true; // Enter edit mode
+                        isEditMode = true;
+                        showDeleteButton = true;
                       });
                     },
                     child: Text(
@@ -200,45 +305,52 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     ),
                   ),
             SizedBox(height: 10),
-            isEditMode
-                ? SizedBox()
-                : ElevatedButton(
-                    onPressed: _signOut,
-                    child: Text(
-                      "Sign Out",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: "gilroy",
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
+            if (showDeleteButton)
+              ElevatedButton(
+                onPressed: _deleteAccount,
+                child: Text(
+                  "Delete Account",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontFamily: "gilroy",
                   ),
-            SizedBox(height: 10),
-            isEditMode
-                ? ElevatedButton(
-                    onPressed: _deleteAccount,
-                    child: Text(
-                      "Delete my Account",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: "gilroy",
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                  )
-                : SizedBox(),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              )
+            else
+              ElevatedButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut(); // Sign out the user
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            LoginScreen()), // Navigate to login screen
+                    (route) =>
+                        false, // Clear all routes except for the login screen
+                  );
+                },
+                child: Text(
+                  "Sign Out",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontFamily: "gilroy",
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
