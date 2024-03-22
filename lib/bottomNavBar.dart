@@ -43,21 +43,28 @@ class _bottomNavigationBarState extends State<bottomNavigationBar>
     _tabController = TabController(vsync: this, length: 5);
   }
 
-  Widget _tabItem(Widget child, {bool isSelected = false}) {
-    return AnimatedContainer(
-      margin: EdgeInsets.all(1),
-      alignment: Alignment.center,
-      duration: const Duration(milliseconds: 500),
-      decoration: !isSelected
-          ? null
-          : BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-      padding: const EdgeInsets.all(5),
+ Widget _tabItem(Widget child, {bool isSelected = false}) {
+  double circleSize = MediaQuery.of(context).size.width * 0.07; // Adjust the multiplier as needed
+  
+  return AnimatedContainer(
+    margin: EdgeInsets.all(1),
+    alignment: Alignment.center,
+    duration: const Duration(milliseconds: 500),
+    decoration: !isSelected
+        ? null
+        : BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+          ),
+    padding: EdgeInsets.all(5),
+    child: SizedBox(
+      width: circleSize,
+      height: circleSize,
       child: child,
-    );
-  }
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
