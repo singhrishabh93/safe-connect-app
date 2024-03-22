@@ -171,12 +171,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
           style: TextStyle(color: Colors.white, fontFamily: "gilroy"),
         ),
         backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
       ),
       body: Container(
         color: Colors.black,

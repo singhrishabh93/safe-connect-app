@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/SignUpScreen/signUpScreen.dart';
 import 'package:safe_connect/bottomNavigationBar.dart';
 
