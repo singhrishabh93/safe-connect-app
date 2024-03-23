@@ -65,6 +65,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(mobileNumber)
+        .collection('loginDetails')
+        .doc(mobileNumber)
         .update({
       'name': name,
       'email': email,
@@ -107,6 +109,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 // Delete user document from Firestore
                 await FirebaseFirestore.instance
                     .collection('users')
+                    .doc(mobileNumber)
+                    .collection('loginDetails')
                     .doc(mobileNumber)
                     .delete();
 

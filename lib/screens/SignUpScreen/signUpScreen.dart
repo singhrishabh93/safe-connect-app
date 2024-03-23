@@ -231,6 +231,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         await FirebaseFirestore.instance
             .collection('users')
             .doc(widget.mobileNumber) // Using mobileNumber as document ID
+            .collection('loginDetails')
+            .doc(widget.mobileNumber) // Using mobileNumber as document ID
             .set({
           'name': _nameController.text,
           'email': _emailController.text,

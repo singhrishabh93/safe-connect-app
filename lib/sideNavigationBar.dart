@@ -28,6 +28,8 @@ class CustomDrawer extends StatelessWidget {
                 future: FirebaseFirestore.instance
                     .collection('users')
                     .doc(user?.phoneNumber)
+                    .collection('loginDetails')
+                    .doc(user?.phoneNumber)
                     .get(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
