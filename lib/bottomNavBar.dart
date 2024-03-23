@@ -43,28 +43,28 @@ class _bottomNavigationBarState extends State<bottomNavigationBar>
     _tabController = TabController(vsync: this, length: 5);
   }
 
- Widget _tabItem(Widget child, {bool isSelected = false}) {
-  double circleSize = MediaQuery.of(context).size.width * 0.07; // Adjust the multiplier as needed
-  
-  return AnimatedContainer(
-    margin: EdgeInsets.all(1),
-    alignment: Alignment.center,
-    duration: const Duration(milliseconds: 500),
-    decoration: !isSelected
-        ? null
-        : BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-          ),
-    padding: EdgeInsets.all(5),
-    child: SizedBox(
-      width: circleSize,
-      height: circleSize,
-      child: child,
-    ),
-  );
-}
+  Widget _tabItem(Widget child, {bool isSelected = false}) {
+    double circleSize = MediaQuery.of(context).size.width *
+        0.07; // Adjust the multiplier as needed
 
+    return AnimatedContainer(
+      margin: EdgeInsets.all(1),
+      alignment: Alignment.center,
+      duration: const Duration(milliseconds: 500),
+      decoration: !isSelected
+          ? null
+          : BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+      padding: EdgeInsets.all(5),
+      child: SizedBox(
+        width: circleSize,
+        height: circleSize,
+        child: child,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +106,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar>
               height: 100,
               padding: const EdgeInsets.all(12),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(50.0),
+                borderRadius: BorderRadius.circular(20.0),
                 child: Container(
                   color: Colors.black,
                   child: TabBar(
