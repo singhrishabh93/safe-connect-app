@@ -34,6 +34,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(mobileNumber)
+        .collection('loginDetails')
+        .doc(mobileNumber)
         .get();
 
     Map<String, dynamic>? userData = snapshot.data() as Map<String, dynamic>?;

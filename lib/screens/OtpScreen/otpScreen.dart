@@ -44,6 +44,8 @@ class _OtpScreenState extends State<OtpScreen> {
         final userSnapshot = await FirebaseFirestore.instance
             .collection('users')
             .doc(widget.mobileNumber)
+            .collection('loginDetails')
+            .doc(widget.mobileNumber)
             .get();
 
         if (userSnapshot.exists) {
