@@ -4,9 +4,10 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QRGenerator extends StatefulWidget {
-  const QRGenerator({super.key});
+  const QRGenerator({Key? key}) : super(key: key);
 
   @override
   _QRGeneratorState createState() => _QRGeneratorState();
@@ -175,34 +176,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                           // backgroundColor: Color(0xFF3199E4),
                           backgroundColor: Colors.green,
                         ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              _qrData =
-                                  'Name: ${_nameController.text}, Vehicle Brand & Name: ${_vehicleNameController.text}, Vehicle No.: ${_vehicleNoController.text}, Aadhar No.: ${_emailController.text}, Contact No.: ${_contactNoController.text}, Emergency Contact No.: ${_emergencyContactNoController.text}';
-                            });
-                          } else {
-                            // Show alert
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text("Form Error"),
-                                  content: const Text(
-                                      "Please fill the form correctly."),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text("OK"),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                        },
+                        onPressed: _onGenerateQRPressed,
                         child: const Text(
                           'Generate QR Code',
                           style: TextStyle(color: Colors.white, fontSize: 14),
@@ -255,7 +229,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                       child: Padding(
                         padding: EdgeInsets.only(left: 20.0),
                         child: Text(
-                          'Download this QR code and stick it on front and back side of your car',
+                          'Download this QR code and stick it on the front and backside of your car',
                           style: TextStyle(fontSize: 16.0),
                         ),
                       ),
@@ -268,6 +242,85 @@ class _QRGeneratorState extends State<QRGenerator> {
         ),
       ),
     );
+  }
+
+  Future<void> _onGenerateQRPressed() async {
+    if (_formKey.currentState!.validate()) {
+      _saveDataToFirestore();
+    } else {
+      // Show alert
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Form Error"),
+            content: const Text("Please fill the form correctly."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> _saveDataToFirestore() async {
+    try {
+      final carNumber = _vehicleNoController.text;
+
+      // Check if the car number already exists in Firestore
+      final existingDoc = await FirebaseFirestore.instance
+          .collection('registeredVehicles')
+          .doc(carNumber)
+          .get();
+
+      if (existingDoc.exists) {
+        // Vehicle is already registered
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Vehicle Already Registered"),
+              content: const Text("This vehicle is already registered."),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // Vehicle is not registered, proceed to save data
+        await FirebaseFirestore.instance
+            .collection('registeredVehicles')
+            .doc(carNumber)
+            .set({
+          'name': _nameController.text,
+          'carName': _vehicleNameController.text,
+          'carNumber': _vehicleNoController.text,
+          'email': _emailController.text,
+          'contactNumber': int.parse(_contactNoController.text),
+          'emergencyContactNumber':
+              int.parse(_emergencyContactNoController.text),
+        });
+
+        setState(() {
+          _qrData =
+              'Name: ${_nameController.text}, Vehicle Brand & Name: ${_vehicleNameController.text}, Vehicle No.: ${_vehicleNoController.text}, Email: ${_emailController.text}, Contact No.: ${_contactNoController.text}, Emergency Contact No.: ${_emergencyContactNoController.text}';
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> _saveQrImage() async {
