@@ -51,11 +51,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         DefaultTextStyle(
                           style: TextStyle(
                             color: Colors.grey,
-                            fontSize: 15,
-                            fontFamily: "gilroy",
+                            fontSize: 21,
+                            fontFamily: "cirka",
                           ),
                           child: Text(
-                            "MEMBERSHIP APPLICATION",
+                            "Membership Application",
                           ),
                         ),
                         SizedBox(
