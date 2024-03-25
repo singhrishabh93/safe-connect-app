@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                   width: MediaQuery.of(context).size.width - 50,
                   child: newThirdChild()),
-              SizedBox(height: 500),
+              SizedBox(height: 100),
             ],
           ),
         ),
