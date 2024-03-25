@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:safe_connect/screens/ChatBot/chatBot.dart';
-import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/firstChild.dart';
+import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/carousel.dart';
+import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/newSecondChild.dart';
+import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/newThirdChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/secondChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/servicesContainer.dart';
+import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/welcomeChild.dart';
 import 'package:safe_connect/sideNavigationBar.dart';
+import 'package:safe_connect/theme.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -18,47 +21,29 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Center(
-            child: Container(
-              child: Image.asset("assets/images/SafeConnect 1.png"),
-            ),
-          ),
-          backgroundColor: Colors.grey.shade100,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(
-                Icons.support_agent_outlined,
-                size: 30,
-              ),
-              tooltip: 'Show Snackbar',
-              onPressed: () {
-                Get.to(() => const ChatScreen());
-              },
-            ),
-          ]),
-      drawer: CustomDrawer(),
+        toolbarHeight: 40,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0, // Set elevation to 0 to remove shadow
+      ),
       body: Container(
         color: Colors.white,
-        child: const SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: 30,
-              ),
-              firstChild(),
-              SizedBox(
-                height: 30,
-              ),
-              secondChild(),
-              SizedBox(
-                height: 30,
-              ),
-              services(),
-              SizedBox(
-                height: 30,
-              ),
+              welcomeChild(),
+              SizedBox(height: 30),
+              // Replace firstChild() with the Carousel
+              Carousel(),
+              SizedBox(height: 30),
+              Container(
+                  width: MediaQuery.of(context).size.width - 50,
+                  child: newSecondChild()),
+              SizedBox(height: 10),
+              Container(
+                  width: MediaQuery.of(context).size.width - 50,
+                  child: newThirdChild()),
+              SizedBox(height: 500),
             ],
           ),
         ),
