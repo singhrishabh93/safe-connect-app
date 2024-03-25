@@ -23,7 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         toolbarHeight: 40,
         backgroundColor: Colors.white,
-        elevation: 0, // Set elevation to 0 to remove shadow
+        elevation: 0,
+        scrolledUnderElevation: 0, // Set elevation to 0 to remove shadow
       ),
       body: Container(
         color: Colors.white,
@@ -42,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                   width: MediaQuery.of(context).size.width - 50,
                   child: newThirdChild()),
-              SizedBox(height: 70),
+              SizedBox(height: 500),
             ],
           ),
         ),
