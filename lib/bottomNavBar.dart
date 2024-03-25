@@ -1,160 +1,97 @@
 import 'package:flutter/material.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
-import 'package:safe_connect/screens/UserProfile/userProfile.dart';
 
 class bottomNavigationBar extends StatefulWidget {
-  const bottomNavigationBar({Key? key}) : super(key: key);
-
   @override
-  State<bottomNavigationBar> createState() => _bottomNavigationBarState();
+  _bottomNavigationBarState createState() => _bottomNavigationBarState();
 }
 
-class _bottomNavigationBarState extends State<bottomNavigationBar>
-    with SingleTickerProviderStateMixin {
+class _bottomNavigationBarState extends State<bottomNavigationBar> {
   int _selectedIndex = 0;
-  static List<Widget> _bodyView = <Widget>[
+
+  List<Color> _iconColors = [
+    Colors.black,
+    Colors.black,
+    Colors.black,
+    Colors.black,
+    Colors.black
+  ];
+
+  final List<Widget> _screens = [
     HomeScreen(),
-    Text(
-      'Index 1: Business',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    ),
-    Text(
-      'Index 2: School',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    ),
-    Text(
-      'Index 3: Other',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    ),
-    UserProfilePage(),
+    HomeScreen(),
+    HomeScreen(),
+    HomeScreen(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _updateIconColors(index);
     });
   }
 
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(vsync: this, length: 5);
+  void _updateIconColors(int selectedIndex) {
+    for (int i = 0; i < _iconColors.length; i++) {
+      _iconColors[i] = i == selectedIndex ? Colors.black : Colors.grey;
+    }
   }
 
-  Widget _tabItem(Widget child, {bool isSelected = false}) {
-    double circleSize = MediaQuery.of(context).size.width *
-        0.07; // Adjust the multiplier as needed
-
-    return AnimatedContainer(
-      margin: EdgeInsets.all(1),
-      alignment: Alignment.center,
-      duration: const Duration(milliseconds: 500),
-      decoration: !isSelected
-          ? null
-          : BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
+  Widget _buildIconWithDot(IconData iconData, int index) {
+    return Stack(
+      children: [
+        IconButton(
+          icon: Icon(iconData, color: _iconColors[index]),
+          onPressed: () => _onItemTapped(index),
+        ),
+        if (_selectedIndex == index)
+          Positioned(
+            bottom: 0,
+            left: 21.5, // Adjust this value to position the dot as desired
+            child: Container(
+              width: 5,
+              height: 5,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black,
+              ),
             ),
-      padding: EdgeInsets.all(5),
-      child: SizedBox(
-        width: circleSize,
-        height: circleSize,
-        child: child,
-      ),
+          ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _icons = [
-      Icon(
-        Icons.home_outlined,
-        size: 30,
-      ),
-      Icon(
-        Icons.explore_outlined,
-        size: 30,
-      ),
-      Icon(
-        Icons.qr_code,
-        size: 40,
-        color: Colors.black,
-      ),
-      Icon(
-        Icons.settings_outlined,
-        size: 30,
-      ),
-      Icon(
-        Icons.person_outline,
-        size: 30,
-      ),
-    ];
-
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Center(
-              child: _bodyView.elementAt(_selectedIndex),
-            ),
+      body: _screens[_selectedIndex], // Show selected screen
+      floatingActionButton: FloatingActionButton(
+        shape: CircleBorder(),
+        onPressed: () {
+          // Add your action here
+        },
+        child: Icon(
+          Icons.qr_code,
+          color: Colors.white,
+          size: 35,
+        ),
+        backgroundColor: Colors.black,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: SizedBox(
+        height: 70, // Reduce the height of the bottom navigation bar
+        child: BottomAppBar(
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _buildIconWithDot(Icons.home, 0),
+              _buildIconWithDot(Icons.search, 1),
+              _buildIconWithDot(Icons.person, 2),
+              _buildIconWithDot(Icons.settings, 3),
+            ],
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 100,
-              padding: const EdgeInsets.all(12),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child: Container(
-                  color: Colors.black,
-                  child: TabBar(
-                    onTap: (x) {
-                      setState(() {
-                        _selectedIndex = x;
-                      });
-                    },
-                    labelColor: Colors.black,
-                    unselectedLabelColor: Colors.grey,
-                    indicator: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                            color: Colors.transparent,
-                            width: 0), // Hide the indicator
-                      ),
-                    ),
-                    tabs: [
-                      for (int i = 0; i < _icons.length; i++)
-                        _tabItem(
-                          _icons[i],
-                          isSelected: i == _selectedIndex,
-                        ),
-                    ],
-                    controller: _tabController,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 25,
-            left: MediaQuery.of(context).size.width / 2 -
-                28, // Adjust this value to center the button
-            child: FloatingActionButton(
-              onPressed: () {
-                // Add onPressed functionality for the floating action button
-              },
-              backgroundColor:
-                  Colors.grey.shade400, // Background color for the button
-              child: Icon(
-                Icons.qr_code,
-                size: 40,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
