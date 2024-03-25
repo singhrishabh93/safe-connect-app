@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/bottomNavigationBar.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -229,6 +230,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // Add the user details to Firestore
         await FirebaseFirestore.instance
             .collection('users')
+            .doc(widget.mobileNumber) // Using mobileNumber as document ID
+            .collection('loginDetails')
             .doc(widget.mobileNumber) // Using mobileNumber as document ID
             .set({
           'name': _nameController.text,

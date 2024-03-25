@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -14,11 +15,12 @@ class QRGenerator extends StatefulWidget {
 class _QRGeneratorState extends State<QRGenerator> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _vehicleNameController = TextEditingController();
   final TextEditingController _vehicleNoController = TextEditingController();
-  final TextEditingController _aadharNoController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _contactNoController = TextEditingController();
-  final TextEditingController _emergencyContactNoController = TextEditingController();
+  final TextEditingController _emergencyContactNoController =
+      TextEditingController();
   String _qrData = '';
 
   @override
@@ -52,26 +54,32 @@ class _QRGeneratorState extends State<QRGenerator> {
                     labelText: 'Name',
                     border: OutlineInputBorder(),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
+                  onChanged: (value) {
+                    // Remove non-alphabetic characters and allow space
+                    _nameController.value = _nameController.value.copyWith(
+                      text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
+                      selection: TextSelection.collapsed(offset: value.length),
+                      composing: TextRange.empty,
+                    );
                   },
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
-                  controller: _ageController,
+                  controller: _vehicleNameController,
                   decoration: const InputDecoration(
-                    labelText: 'Age',
+                    labelText: 'Vehicle Brand and Name',
                     border: OutlineInputBorder(),
                   ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your age';
-                    }
-                    return null;
+                  keyboardType:
+                      TextInputType.text, // Change keyboardType to text
+                  onChanged: (value) {
+                    // Remove non-alphabetic and non-numeric characters
+                    _vehicleNameController.value =
+                        _vehicleNameController.value.copyWith(
+                      text: value.replaceAll(RegExp(r'[^a-zA-Z0-9\s]'), ''),
+                      selection: TextSelection.collapsed(offset: value.length),
+                      composing: TextRange.empty,
+                    );
                   },
                 ),
                 const SizedBox(height: 20.0),
@@ -81,23 +89,35 @@ class _QRGeneratorState extends State<QRGenerator> {
                     labelText: 'Vehicle No.',
                     border: OutlineInputBorder(),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your vehicle number';
-                    }
-                    return null;
+                  maxLength: 10, // Set maximum length to 10 characters
+                  onChanged: (value) {
+                    // Convert input to uppercase, remove non-alphabetic and non-numeric characters, and limit to 10 characters
+                    _vehicleNoController.value =
+                        _vehicleNoController.value.copyWith(
+                      text: value
+                          .toUpperCase()
+                          .replaceAll(RegExp(r'[^A-Z0-9]'), '')
+                          .substring(0, 10),
+                      selection: TextSelection.collapsed(offset: value.length),
+                      composing: TextRange.empty,
+                    );
                   },
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
-                  controller: _aadharNoController,
+                  controller: _emailController,
                   decoration: const InputDecoration(
-                    labelText: 'Aadhar No.',
+                    labelText: 'Email',
                     border: OutlineInputBorder(),
                   ),
+                  keyboardType:
+                      TextInputType.emailAddress, // Set keyboard type to email
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your Aadhar number';
+                      return 'Please enter your email';
+                    }
+                    if (!_isValidEmailFormat(value)) {
+                      return 'Please enter a valid email';
                     }
                     return null;
                   },
@@ -109,7 +129,12 @@ class _QRGeneratorState extends State<QRGenerator> {
                     labelText: 'Contact No.',
                     border: OutlineInputBorder(),
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType:
+                      TextInputType.phone, // Set keyboard type to phone
+                  maxLength: 10, // Set maximum length to 10 digits
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly
+                  ], // Allow only digits
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your contact number';
@@ -124,10 +149,15 @@ class _QRGeneratorState extends State<QRGenerator> {
                     labelText: 'Emergency Contact No.',
                     border: OutlineInputBorder(),
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType:
+                      TextInputType.phone, // Set keyboard type to phone
+                  maxLength: 10, // Set maximum length to 10 digits
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly
+                  ], // Allow only digits
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your emergency contact number';
+                      return 'Please enter your contact number';
                     }
                     return null;
                   },
@@ -149,7 +179,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
                               _qrData =
-                                  'Name: ${_nameController.text}, Age: ${_ageController.text}, Vehicle No.: ${_vehicleNoController.text}, Aadhar No.: ${_aadharNoController.text}, Contact No.: ${_contactNoController.text}, Emergency Contact No.: ${_emergencyContactNoController.text}';
+                                  'Name: ${_nameController.text}, Vehicle Brand & Name: ${_vehicleNameController.text}, Vehicle No.: ${_vehicleNoController.text}, Aadhar No.: ${_emailController.text}, Contact No.: ${_contactNoController.text}, Emergency Contact No.: ${_emergencyContactNoController.text}';
                             });
                           } else {
                             // Show alert
@@ -158,8 +188,8 @@ class _QRGeneratorState extends State<QRGenerator> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text("Form Error"),
-                                  content:
-                                      const Text("Please fill the form correctly."),
+                                  content: const Text(
+                                      "Please fill the form correctly."),
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () {
@@ -264,11 +294,16 @@ class _QRGeneratorState extends State<QRGenerator> {
   @override
   void dispose() {
     _nameController.dispose();
-    _ageController.dispose();
+    _vehicleNameController.dispose();
     _vehicleNoController.dispose();
-    _aadharNoController.dispose();
+    _emailController.dispose();
     _contactNoController.dispose();
     _emergencyContactNoController.dispose();
     super.dispose();
+  }
+
+  bool _isValidEmailFormat(String email) {
+    // Regular expression for email validation
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 }

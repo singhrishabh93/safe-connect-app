@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/SignUpScreen/signUpScreen.dart';
 import 'package:safe_connect/bottomNavigationBar.dart';
 
@@ -42,6 +43,8 @@ class _OtpScreenState extends State<OtpScreen> {
         // Check if the user's mobile number is already registered
         final userSnapshot = await FirebaseFirestore.instance
             .collection('users')
+            .doc(widget.mobileNumber)
+            .collection('loginDetails')
             .doc(widget.mobileNumber)
             .get();
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/bottomNavigationBar.dart';
 import 'package:safe_connect/screens/LoginScreen/loginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart'; 
@@ -43,6 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Check if the user is already logged in
     if (FirebaseAuth.instance.currentUser != null) {
       // User is already logged in, redirect to bottom navigation bar
+      // Get.offAll(() => bottomNavigationBar()); // Assuming bottomNavigationBar is your bottom navigation bar screen
       Get.offAll(() => bottomNavigationBar()); // Assuming bottomNavigationBar is your bottom navigation bar screen
     } else {
       // User is not logged in, redirect to login screen
