@@ -184,13 +184,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Document ID: $docId',
+                          'Registered Vehicle: $docId',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 5),
+                        // SizedBox(height: 2),
                         Text(
                           'Name: ${details['name']}',
                           style: TextStyle(color: Colors.black),
@@ -215,6 +215,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           'Emergency Contact: ${details['emergencyContact']}',
                           style: TextStyle(color: Colors.black),
                         ),
+                        SizedBox(
+                          height: 10,
+                        )
                       ],
                     );
                   },
