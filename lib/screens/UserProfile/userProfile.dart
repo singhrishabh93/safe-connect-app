@@ -22,6 +22,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
   bool isEditMode = false;
   bool showDeleteButton = false;
   Map<String, dynamic> registeredQrDetails = {};
+  bool showRegisteredQr =
+      false; // New flag to control visibility of registered QR details
 
   @override
   void initState() {
@@ -63,6 +65,266 @@ class _UserProfilePageState extends State<UserProfilePage> {
       });
       setState(() {});
     }
+  }
+
+  // Rest of the methods remain unchanged
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        title: Text(
+          'User Profile',
+          style: TextStyle(color: Colors.black, fontFamily: "gilroy"),
+        ),
+        backgroundColor: Colors.white,
+      ),
+      body: Container(
+        color: Colors.white,
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Registered Mobile Number: $mobileNumber',
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'gilroy',
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: _nameController,
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'gilroy',
+              ),
+              decoration: InputDecoration(
+                labelText: 'Name',
+                labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'gilroy',
+                  fontWeight: FontWeight.bold,
+                ),
+                border: OutlineInputBorder(),
+              ),
+              enabled: isEditMode,
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: _emailController,
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'gilroy',
+              ),
+              decoration: InputDecoration(
+                labelText: 'Email',
+                labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'gilroy',
+                  fontWeight: FontWeight.bold,
+                ),
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.emailAddress,
+              inputFormatters: [
+                FilteringTextInputFormatter.singleLineFormatter,
+              ],
+              enabled: isEditMode,
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: _emergencyContactController,
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'gilroy',
+              ),
+              decoration: InputDecoration(
+                labelText: 'Emergency Contact',
+                labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'gilroy',
+                  fontWeight: FontWeight.bold,
+                ),
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10),
+              ],
+              enabled: isEditMode,
+            ),
+            SizedBox(height: 25),
+            Text(
+              'Registered QR Details',
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'gilroy',
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 10),
+            if (showRegisteredQr) // Conditionally show registered QR details above the button
+              Expanded(
+                child: ListView.builder(
+                  itemCount: registeredQrDetails.length,
+                  itemBuilder: (context, index) {
+                    String docId = registeredQrDetails.keys.elementAt(index);
+                    Map<String, dynamic> details =
+                        registeredQrDetails.values.elementAt(index);
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Document ID: $docId',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          'Name: ${details['name']}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Text(
+                          'Vehicle Name: ${details['vehicleName']}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Text(
+                          'Vehicle Number: ${details['vehicleNumber']}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Text(
+                          'Email: ${details['email']}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Text(
+                          'Contact Number: ${details['contactNumber']}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Text(
+                          'Emergency Contact: ${details['emergencyContact']}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  showRegisteredQr = !showRegisteredQr; // Toggle the flag
+                });
+                if (showRegisteredQr) {
+                  _fetchRegisteredQrDetails(); // Fetch registered QR details if the flag is true
+                }
+              },
+              child: Text(
+                showRegisteredQr ? 'Hide QR Details' : 'Show QR Details',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: "gilroy",
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ),
+            SizedBox(height: 5),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  if (isEditMode) {
+                    _updateUserData();
+                  }
+                  isEditMode = !isEditMode;
+                });
+              },
+              child: Text(
+                isEditMode ? 'Save Detail' : 'Edit Details',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: "gilroy",
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isEditMode ? Colors.green : Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut(); // Sign out the user
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                        (route) => false,
+                      );
+                    },
+                    child: Text(
+                      "Sign Out",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: "gilroy",
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            if (showDeleteButton)
+              ElevatedButton(
+                onPressed: _deleteAccount,
+                child: Text(
+                  "Delete Account",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontFamily: "gilroy",
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _updateUserData() async {
@@ -188,273 +450,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ],
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        title: Text(
-          'User Profile',
-          style: TextStyle(color: Colors.black, fontFamily: "gilroy"),
-        ),
-        backgroundColor: Colors.white,
-      ),
-      body: Container(
-        color: Colors.white,
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Registered Mobile Number: $mobileNumber',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _nameController,
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'gilroy',
-              ),
-              decoration: InputDecoration(
-                labelText: 'Name',
-                labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'gilroy',
-                ),
-                border: OutlineInputBorder(),
-              ),
-              enabled: isEditMode,
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: _emailController,
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'gilroy',
-              ),
-              decoration: InputDecoration(
-                labelText: 'Email',
-                labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'gilroy',
-                ),
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.emailAddress,
-              inputFormatters: [
-                FilteringTextInputFormatter.singleLineFormatter,
-              ],
-              enabled: isEditMode,
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: _emergencyContactController,
-              style: TextStyle(color: Colors.black, fontFamily: 'gilroy'),
-              decoration: InputDecoration(
-                labelText: 'Emergency Contact',
-                labelStyle:
-                    TextStyle(color: Colors.black, fontFamily: 'gilroy'),
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.phone,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
-              ],
-              enabled: isEditMode,
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Registered QR Details',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: registeredQrDetails.length,
-                itemBuilder: (context, index) {
-                  String docId = registeredQrDetails.keys.elementAt(index);
-                  Map<String, dynamic> details =
-                      registeredQrDetails.values.elementAt(index);
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Document ID: $docId',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        'Name: ${details['name']}',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        'Vehicle Name: ${details['vehicleName']}',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        'Vehicle Number: ${details['vehicleNumber']}',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        'Email: ${details['email']}',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        'Contact Number: ${details['contactNumber']}',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        'Emergency Contact: ${details['emergencyContact']}',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Divider(
-                        color: Colors.black,
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-            SizedBox(height: 20),
-            isEditMode
-                ? Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: _updateUserData,
-                          child: Text(
-                            "Update",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontFamily: "gilroy",
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              isEditMode = false;
-                              showDeleteButton = false;
-                            });
-                          },
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontFamily: "gilroy",
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        isEditMode = true;
-                        showDeleteButton = true;
-                      });
-                    },
-                    child: Text(
-                      "Edit Details",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: "gilroy",
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                  ),
-            SizedBox(height: 10),
-            if (showDeleteButton)
-              ElevatedButton(
-                onPressed: _deleteAccount,
-                child: Text(
-                  "Delete Account",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontFamily: "gilroy",
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              )
-            else
-              ElevatedButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut(); // Sign out the user
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            LoginScreen()), // Navigate to login screen
-                    (route) =>
-                        false, // Clear all routes except for the login screen
-                  );
-                },
-                child: Text(
-                  "Sign Out",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontFamily: "gilroy",
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
     );
   }
 }
