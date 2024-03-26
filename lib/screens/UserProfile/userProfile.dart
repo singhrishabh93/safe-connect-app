@@ -21,6 +21,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   late String mobileNumber;
   bool isEditMode = false;
   bool showDeleteButton = false;
+  Map<String, dynamic> registeredQrDetails = {};
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     user = FirebaseAuth.instance.currentUser;
     mobileNumber = user!.phoneNumber!;
     _fetchUserData();
+    _fetchRegisteredQrDetails(); // Fetch registered QR details
   }
 
   Future<void> _fetchUserData() async {
@@ -45,6 +47,22 @@ class _UserProfilePageState extends State<UserProfilePage> {
       _emailController.text = userData?['email'] ?? '';
       _emergencyContactController.text = userData?['emergencyContact'] ?? '';
     });
+  }
+
+  Future<void> _fetchRegisteredQrDetails() async {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(mobileNumber)
+        .collection('registeredQr')
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      registeredQrDetails.clear();
+      snapshot.docs.forEach((doc) {
+        registeredQrDetails[doc.id] = doc.data();
+      });
+      setState(() {});
+    }
   }
 
   Future<void> _updateUserData() async {
@@ -241,6 +259,67 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
               enabled: isEditMode,
             ),
+            SizedBox(height:             20),
+            Text(
+              'Registered QR Details',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 10),
+            Expanded(
+              child: ListView.builder(
+                itemCount: registeredQrDetails.length,
+                itemBuilder: (context, index) {
+                  String docId = registeredQrDetails.keys.elementAt(index);
+                  Map<String, dynamic> details =
+                      registeredQrDetails.values.elementAt(index);
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Document ID: $docId',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        'Name: ${details['name']}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'Vehicle Name: ${details['vehicleName']}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'Vehicle Number: ${details['vehicleNumber']}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'Email: ${details['email']}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'Contact Number: ${details['contactNumber']}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        'Emergency Contact: ${details['emergencyContact']}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
             SizedBox(height: 20),
             isEditMode
                 ? Row(
@@ -366,3 +445,4 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 }
+
