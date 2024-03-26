@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -271,6 +272,8 @@ class _QRGeneratorState extends State<QRGenerator> {
 
   Future<void> _saveDataToFirestore() async {
     try {
+      final user = FirebaseAuth.instance.currentUser;
+      final mobileNumber = user!.phoneNumber;
       final carNumber = _vehicleNoController.text;
 
       // Check if the car number already exists in Firestore
@@ -305,12 +308,26 @@ class _QRGeneratorState extends State<QRGenerator> {
             .doc(carNumber)
             .set({
           'name': _nameController.text,
-          'carName': _vehicleNameController.text,
-          'carNumber': _vehicleNoController.text,
+          'vehicleName': _vehicleNameController.text,
+          'vehicleNumber': _vehicleNoController.text,
           'email': _emailController.text,
           'contactNumber': int.parse(_contactNoController.text),
-          'emergencyContactNumber':
-              int.parse(_emergencyContactNoController.text),
+          'emergencyContact': int.parse(_emergencyContactNoController.text),
+        });
+
+        // Also save data to the additional collection
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(mobileNumber)
+            .collection('registeredQr')
+            .doc(carNumber)
+            .set({
+          'name': _nameController.text,
+          'vehicleName': _vehicleNameController.text,
+          'vehicleNumber': _vehicleNoController.text,
+          'email': _emailController.text,
+          'contactNumber': int.parse(_contactNoController.text),
+          'emergencyContact': int.parse(_emergencyContactNoController.text),
         });
 
         setState(() {
