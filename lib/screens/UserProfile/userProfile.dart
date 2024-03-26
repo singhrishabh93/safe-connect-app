@@ -196,16 +196,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: Colors.white, //change your color here
+          color: Colors.black, //change your color here
         ),
         title: Text(
           'User Profile',
-          style: TextStyle(color: Colors.white, fontFamily: "gilroy"),
+          style: TextStyle(color: Colors.black, fontFamily: "gilroy"),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
       ),
       body: Container(
-        color: Colors.black,
+        color: Colors.white,
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -215,15 +215,21 @@ class _UserProfilePageState extends State<UserProfilePage> {
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                  color: Colors.black),
             ),
             SizedBox(height: 20),
             TextField(
               controller: _nameController,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'gilroy',
+              ),
               decoration: InputDecoration(
                 labelText: 'Name',
-                labelStyle: TextStyle(color: Colors.white),
+                labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'gilroy',
+                ),
                 border: OutlineInputBorder(),
               ),
               enabled: isEditMode,
@@ -231,10 +237,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
             SizedBox(height: 10),
             TextField(
               controller: _emailController,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'gilroy',
+              ),
               decoration: InputDecoration(
                 labelText: 'Email',
-                labelStyle: TextStyle(color: Colors.white),
+                labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'gilroy',
+                ),
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.emailAddress,
@@ -246,10 +258,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
             SizedBox(height: 10),
             TextField(
               controller: _emergencyContactController,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black, fontFamily: 'gilroy'),
               decoration: InputDecoration(
                 labelText: 'Emergency Contact',
-                labelStyle: TextStyle(color: Colors.white),
+                labelStyle:
+                    TextStyle(color: Colors.black, fontFamily: 'gilroy'),
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.phone,
@@ -259,13 +272,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
               enabled: isEditMode,
             ),
-            SizedBox(height:             20),
+            SizedBox(height: 20),
             Text(
               'Registered QR Details',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
             SizedBox(height: 10),
@@ -283,37 +296,37 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       Text(
                         'Document ID: $docId',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(height: 5),
                       Text(
                         'Name: ${details['name']}',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       Text(
                         'Vehicle Name: ${details['vehicleName']}',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       Text(
                         'Vehicle Number: ${details['vehicleNumber']}',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       Text(
                         'Email: ${details['email']}',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       Text(
                         'Contact Number: ${details['contactNumber']}',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       Text(
                         'Emergency Contact: ${details['emergencyContact']}',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       Divider(
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ],
                   );
@@ -330,7 +343,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           child: Text(
                             "Update",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 18,
                               fontFamily: "gilroy",
                             ),
@@ -355,13 +368,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           child: Text(
                             "Cancel",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 18,
                               fontFamily: "gilroy",
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
+                            backgroundColor: Colors.black,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
@@ -380,13 +393,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     child: Text(
                       "Edit Details",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 18,
                         fontFamily: "gilroy",
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
+                      backgroundColor: Colors.black,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -427,13 +440,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 child: Text(
                   "Sign Out",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 18,
                     fontFamily: "gilroy",
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),
@@ -445,4 +458,3 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 }
-
