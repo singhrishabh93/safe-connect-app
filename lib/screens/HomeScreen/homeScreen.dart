@@ -21,17 +21,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 40,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0, // Set elevation to 0 to remove shadow
-      ),
+          toolbarHeight: 40,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          automaticallyImplyLeading:
+              false // Set elevation to 0 to remove shadow
+          ),
       body: Container(
         color: Colors.white,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              welcomeChild(),
+              WelcomeChild(),
               SizedBox(height: 30),
               // Replace firstChild() with the Carousel
               Carousel(),
