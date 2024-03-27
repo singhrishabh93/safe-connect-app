@@ -245,30 +245,55 @@ class _QRGeneratorState extends State<QRGenerator> {
     );
   }
 
-  Future<void> _onGenerateQRPressed() async {
-    if (_formKey.currentState!.validate()) {
-      _saveDataToFirestore();
-    } else {
-      // Show alert
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Form Error"),
-            content: const Text("Please fill the form correctly."),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
-    }
+Future<void> _onGenerateQRPressed() async {
+  if (_formKey.currentState!.validate()) {
+    await _saveDataToFirestore(); // Save data to Firestore
+    await _generateQRFromFirestoreData(); // Generate QR code from Firestore data
+  } else {
+    // Show alert
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Form Error"),
+          content: const Text("Please fill the form correctly."),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
+}
+
+Future<void> _generateQRFromFirestoreData() async {
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+    final carNumber = _vehicleNoController.text;
+
+    final documentSnapshot = await FirebaseFirestore.instance
+        .collection('registeredVehicles')
+        .doc(carNumber)
+        .get();
+
+    if (documentSnapshot.exists) {
+      final data = documentSnapshot.data() as Map<String, dynamic>;
+
+      setState(() {
+        _qrData =
+            'Name: ${data['name']}, Vehicle Brand & Name: ${data['vehicleName']}, Vehicle No.: ${data['vehicleNumber']}, Email: ${data['email']}, Contact No.: ${data['contactNumber']}, Emergency Contact No.: ${data['emergencyContact']}';
+      });
+    }
+  } catch (e) {
+    print(e.toString());
+  }
+}
+
 
   Future<void> _saveDataToFirestore() async {
     try {
