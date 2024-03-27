@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
+import 'package:safe_connect/screens/QrScanner/qrScanner.dart';
 
 class bottomNavigationBar extends StatefulWidget {
   @override
@@ -68,7 +71,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
         onPressed: () {
-          // Add your action here
+          Get.to(() => QRCodeScanner());
         },
         child: Icon(
           Icons.qr_code,
