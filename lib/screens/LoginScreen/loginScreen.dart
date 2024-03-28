@@ -67,36 +67,46 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.black,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 130, left: 30),
+                          padding: const EdgeInsets.only(top: 130, left: 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              DefaultTextStyle(
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 21,
-                                  fontFamily: "cirka",
-                                ),
-                                child: Text(
-                                  "Membership Application",
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: const DefaultTextStyle(
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 21,
+                                    fontFamily: "cirka",
+                                  ),
+                                  child: Text(
+                                    "Membership Application",
+                                  ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
-                              DefaultTextStyle(
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 21,
-                                  fontFamily: "gilroy",
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: const DefaultTextStyle(
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 21,
+                                    fontFamily: "gilroy",
+                                  ),
+                                  child: Text(
+                                    "Tell us your mobile number",
+                                  ),
                                 ),
-                                child: Text(
-                                  "Tell us your mobile number",
-                                ),
-                              )
+                              ),
+                              const SizedBox(
+                                height: 128,
+                              ),
+                              Image.asset("assets/images/train.gif"),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                     SizedBox(
