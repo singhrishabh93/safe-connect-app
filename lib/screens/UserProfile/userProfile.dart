@@ -81,6 +81,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           style: TextStyle(color: Colors.black, fontFamily: "gilroy"),
         ),
         backgroundColor: Colors.white,
+        scrolledUnderElevation: 0,
       ),
       body: Container(
         color: Colors.white,
