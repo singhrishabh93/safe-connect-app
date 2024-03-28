@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:safe_connect/firebase_options.dart';
+import 'package:safe_connect/screens/LoginScreen/loginScreen.dart';
 import 'package:safe_connect/screens/SignUpScreen/signUpScreen.dart';
 import 'package:safe_connect/screens/SplashScreen/splashScreen.dart';
 
