@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -9,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 
 class HelpLineScreen extends StatefulWidget {
   const HelpLineScreen({Key? key});
@@ -90,13 +92,16 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   bool _isImageMode = true; // Default to image mode
+  bool _isRecording = false; // Track if video recording is in progress
   late Future<void> _initializeControllerFuture;
-  bool _isUploading = false; // Track if the image is uploading
+  bool _isUploading = false; // Track if the media is uploading
+  int _videoDurationSeconds = 0; // Track the duration of the recorded video
 
   @override
   void initState() {
     super.initState();
     _initializeControllerFuture = widget.cameraController.initialize();
+    _startTimer();
   }
 
   @override
@@ -122,20 +127,36 @@ class _CameraScreenState extends State<CameraScreen> {
             CircularProgressIndicator(
               color: Colors.white,
               backgroundColor: Colors.black.withOpacity(0.5),
-              // value: AlwaysStoppedAnimation<Color>(value)
               strokeWidth: 3,
             ),
-              // ..color = Colors.white
-              // ..backgroundColor = Colors.black.withOpacity(0.5)
-              // ..valueColor = AlwaysStoppedAnimation<Color>(Colors.black.withOpacity(0.8))
-              // ..strokeWidth = 3,
           Align(
             alignment: Alignment.bottomCenter,
-            child: IconButton(
-              onPressed: _isUploading ? null : _captureMedia,
-              icon: Icon(Icons.camera_alt),
-              iconSize: 48,
-              color: Colors.black,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      onPressed: _isUploading ? null : _captureImage,
+                      icon: Icon(Icons.camera_alt),
+                      iconSize: 48,
+                      color: Colors.black,
+                    ),
+                    IconButton(
+                      onPressed: _isUploading ? null : _toggleRecording,
+                      icon: Icon(_isRecording ? Icons.stop : Icons.videocam),
+                      iconSize: 48,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+                if (_isRecording)
+                  Text(
+                    'Duration: $_videoDurationSeconds s',
+                    style: TextStyle(fontSize: 16),
+                  ),
+              ],
             ),
           ),
         ],
@@ -143,39 +164,84 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 
-  void _captureMedia() async {
+  void _captureImage() async {
+    setState(() {
+      _isImageMode = true;
+      _isUploading = true;
+    });
+
     try {
-      setState(() {
-        _isUploading = true; // Set uploading to true when capturing media
-      });
+      XFile? imageFile = await widget.cameraController.takePicture();
 
-      XFile? mediaFile; // Initialize mediaFile here
-
-      if (_isImageMode) {
-        mediaFile = await widget.cameraController.takePicture();
-      } else {
-        // Logic for capturing video
-      }
-
-      // Proceed only if mediaFile is not null
-      if (mediaFile != null) {
-        // Get user's current location
+      if (imageFile != null) {
         Position position = await _getCurrentLocation();
+        String imageUrl = await _uploadImageToStorage(File(imageFile.path));
+        String address = await _getAddressFromCoordinates(
+            position.latitude, position.longitude);
 
-        // Upload media file to Firebase Storage
-        String imageUrl = await _uploadImageToStorage(File(mediaFile.path));
-
-        // Upload media file link and location to Firestore
-        await _uploadDataToFirestore(imageUrl, position);
+        await _uploadDataToFirestore(imageUrl, position, address);
 
         setState(() {
-          _isUploading = false; // Set uploading to false after upload is complete
+          _isUploading = false;
         });
       }
     } catch (e) {
-      print("Error capturing media: $e");
+      print("Error capturing image: $e");
       setState(() {
-        _isUploading = false; // Set uploading to false if an error occurs
+        _isUploading = false;
+      });
+    }
+  }
+
+  void _toggleRecording() async {
+    if (!_isRecording) {
+      setState(() {
+        _isRecording = true;
+        _isUploading = true;
+      });
+
+      try {
+        // Start video recording without expecting a return value
+        await widget.cameraController.startVideoRecording();
+
+        // Update UI to indicate recording
+        setState(() {
+          _isUploading = false;
+        });
+      } catch (e) {
+        print("Error recording video: $e");
+        setState(() {
+          _isRecording = false;
+          _isUploading = false;
+        });
+      }
+    } else {
+      setState(() {
+        _isRecording = false;
+        _isUploading = false;
+      });
+      XFile? videoFile = await widget.cameraController.stopVideoRecording();
+
+      if (videoFile != null) {
+        Position position = await _getCurrentLocation();
+        String videoUrl = await _uploadVideoToStorage(File(videoFile.path));
+        String address = await _getAddressFromCoordinates(
+            position.latitude, position.longitude);
+
+        await _uploadDataToFirestore(videoUrl, position, address);
+
+        setState(() {
+          _videoDurationSeconds = 0; // Reset video duration after uploading
+        });
+      }
+    }
+  }
+
+  Future<void> _startTimer() async {
+    while (_isRecording) {
+      await Future.delayed(Duration(seconds: 1));
+      setState(() {
+        _videoDurationSeconds++;
       });
     }
   }
@@ -196,38 +262,50 @@ class _CameraScreenState extends State<CameraScreen> {
       final String imageUrl = await taskSnapshot.ref.getDownloadURL();
       return imageUrl;
     } catch (e) {
-      print("Error uploading image to Firebase Storage: $e");
+      print("      Error uploading image to Firebase Storage: $e");
+      return '';
+    }
+  }
+
+  Future<String> _uploadVideoToStorage(File videoFile) async {
+    try {
+      final Reference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('logs/${DateTime.now().millisecondsSinceEpoch}.mp4');
+      final UploadTask uploadTask = storageReference.putFile(videoFile);
+      final TaskSnapshot taskSnapshot =
+          await uploadTask.whenComplete(() => null);
+      final String videoUrl = await taskSnapshot.ref.getDownloadURL();
+      return videoUrl;
+    } catch (e) {
+      print("Error uploading video to Firebase Storage: $e");
       return '';
     }
   }
 
   Future<void> _uploadDataToFirestore(
-      String imageUrl, Position position) async {
+      String mediaUrl, Position position, String address) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       final mobileNumber = user!.phoneNumber;
 
-      // Generate a random document ID
       String randomId = DateTime.now().millisecondsSinceEpoch.toString();
 
-      // Upload media file link and location to Firestore
       await FirebaseFirestore.instance
           .collection('users')
           .doc(mobileNumber)
           .collection('logs')
           .doc(randomId)
           .set({
-        'imageLink': imageUrl,
-        'location': GeoPoint(position.latitude, position.longitude),
-        'type': _isImageMode
-            ? 100
-            : 200, // 100 for image, 200 for video (you can adjust as needed)
+        'mediaLink': mediaUrl,
+        'address': address,
+        'type': _isImageMode ? 'image' : 'video',
+        'call To': '100',
+        'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
       });
 
-      // Navigate back after successful upload
       Navigator.pop(context);
 
-      // Initiate a phone call to the emergency number
       String phoneNumber = '100';
       if (await canLaunch(phoneNumber)) {
         await launch(phoneNumber);
@@ -236,6 +314,23 @@ class _CameraScreenState extends State<CameraScreen> {
       }
     } catch (e) {
       print("Error uploading data to Firestore: $e");
+    }
+  }
+
+  Future<String> _getAddressFromCoordinates(
+      double latitude, double longitude) async {
+    try {
+      List<geo.Placemark> placemarks =
+          await geo.placemarkFromCoordinates(latitude, longitude);
+      if (placemarks.isNotEmpty) {
+        final geo.Placemark placemark = placemarks.first;
+        return '${placemark.street}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country} - ${placemark.postalCode ?? ''}';
+      } else {
+        return 'Unknown location';
+      }
+    } catch (e) {
+      print('Error fetching location: $e');
+      return 'Unknown location';
     }
   }
 }

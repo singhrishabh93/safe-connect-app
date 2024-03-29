@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:safe_connect/screens/LogsScreen/logsScreen.dart';
 
 class newSecondChild extends StatelessWidget {
   const newSecondChild({super.key});
@@ -26,13 +29,18 @@ class newSecondChild extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/bulb.png'),
-                          fit: BoxFit.fitWidth,
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => LogScreen());
+                      },
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/bulb.png'),
+                            fit: BoxFit.fitWidth,
+                          ),
                         ),
                       ),
                     ),
