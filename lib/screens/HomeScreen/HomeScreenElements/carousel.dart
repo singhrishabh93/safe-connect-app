@@ -6,12 +6,13 @@ class Carousel extends StatelessWidget {
   Widget build(BuildContext context) {
     return CarouselSlider(
       options: CarouselOptions(
-        height: 150.66,
-        aspectRatio: (MediaQuery.of(context).size.width - 50) / 97.66,
-        enableInfiniteScroll: true,
-        viewportFraction: 0.8, // Adjust viewportFraction to add space
-        enlargeCenterPage: false,
-      ),
+          height: 150.66,
+          aspectRatio: (MediaQuery.of(context).size.width - 50) / 97.66,
+          enableInfiniteScroll: true,
+          viewportFraction: 0.8, // Adjust viewportFraction to add space
+          enlargeCenterPage: false,
+          autoPlay: true,
+          autoPlayInterval: Duration(milliseconds: 500)),
       items: [
         Container(
           margin: EdgeInsets.symmetric(horizontal: 5), // Add horizontal margin
