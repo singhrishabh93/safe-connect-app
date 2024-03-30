@@ -7,7 +7,7 @@ class HelpRecords extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _getCurrentUserEmergencyContact(),
+      future: _getCurrentUserPhoneNumber(),
       builder: (context, AsyncSnapshot<String?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -21,37 +21,27 @@ class HelpRecords extends StatelessWidget {
         }
         if (!snapshot.hasData || snapshot.data == null) {
           return Center(
-            child:
-                Text('User not authenticated or no emergency contact found.'),
+            child: Text('User not authenticated.'),
           );
         }
-        return LogScreenBody(emergencyContact: snapshot.data!);
+        return LogScreenBody(phoneNumber: snapshot.data!);
       },
     );
   }
 
-  Future<String?> _getCurrentUserEmergencyContact() async {
+  Future<String?> _getCurrentUserPhoneNumber() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.phoneNumber)
-          .collection('loginDetails')
-          .doc(user.phoneNumber)
-          .get();
-      Map<String, dynamic>? userData =
-          userDataSnapshot.data() as Map<String, dynamic>?;
-      return userData?['emergencyContact'];
+      return user.phoneNumber;
     }
     return null;
   }
 }
 
 class LogScreenBody extends StatelessWidget {
-  final String emergencyContact;
+  final String phoneNumber;
 
-  const LogScreenBody({Key? key, required this.emergencyContact})
-      : super(key: key);
+  const LogScreenBody({Key? key, required this.phoneNumber}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +52,7 @@ class LogScreenBody extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .doc(emergencyContact)
+            .doc(phoneNumber)
             .collection('logsForEmergencyContact')
             .snapshots(),
         builder: (context, snapshot) {
@@ -81,7 +71,7 @@ class LogScreenBody extends StatelessWidget {
           final docs = snapshot.data!.docs;
           if (docs.isEmpty) {
             return Center(
-              child: Text('No logs found for emergency contact.'),
+              child: Text('No logs found for your emergency contact.'),
             );
           }
 
