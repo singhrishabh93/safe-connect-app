@@ -12,7 +12,7 @@ class Carousel extends StatelessWidget {
           viewportFraction: 0.8, // Adjust viewportFraction to add space
           enlargeCenterPage: false,
           autoPlay: true,
-          autoPlayInterval: Duration(milliseconds: 500)),
+          autoPlayInterval: Duration(milliseconds: 3000)),
       items: [
         Container(
           margin: EdgeInsets.symmetric(horizontal: 5), // Add horizontal margin
