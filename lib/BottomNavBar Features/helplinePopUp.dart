@@ -284,38 +284,85 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> _uploadDataToFirestore(
-      String mediaUrl, Position position, String address) async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      final mobileNumber = user!.phoneNumber;
+  String mediaUrl, Position position, String address) async {
+try {
+  final user = FirebaseAuth.instance.currentUser;
+  final mobileNumber = user!.phoneNumber;
 
-      String randomId = DateTime.now().millisecondsSinceEpoch.toString();
+  String randomId = DateTime.now().millisecondsSinceEpoch.toString();
 
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(mobileNumber)
-          .collection('logs')
-          .doc(randomId)
-          .set({
-        'mediaLink': mediaUrl,
-        'address': address,
-        'type': _isImageMode ? 'image' : 'video',
-        'call To': '100',
-        'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
-      });
+  // Fetch user's complete details
+  DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(mobileNumber)
+      .collection('loginDetails')
+      .doc(mobileNumber)
+      .get();
+  Map<String, dynamic>? userData =
+      userDataSnapshot.data() as Map<String, dynamic>?;
 
-      Navigator.pop(context);
+  // Print user's complete details in the terminal
+  print('User Details:');
+  print('Name: ${userData?['name']}');
+  print('Email: ${userData?['email']}');
+  print('Emergency Contact: ${userData?['emergencyContact']}');
 
-      String phoneNumber = '100';
-      if (await canLaunch(phoneNumber)) {
-        await launch(phoneNumber);
-      } else {
-        throw 'Could not launch $phoneNumber';
-      }
-    } catch (e) {
-      print("Error uploading data to Firestore: $e");
-    }
+  // Upload data to Firestore for the user
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(mobileNumber)
+      .collection('logs')
+      .doc(randomId)
+      .set({
+    'mediaLink': mediaUrl,
+    'address': address,
+    'type': _isImageMode ? 'image' : 'video',
+    'call To': '100',
+    'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
+    // Include user's details in Firestore document
+    'user_details': userData,
+  });
+
+  // Fetch emergency contact's details
+  String emergencyContact = userData?['emergencyContact'] ?? '';
+  DocumentSnapshot emergencyContactDataSnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(emergencyContact) // Use emergency contact as the document ID
+      .collection('loginDetails')
+      .doc(emergencyContact)
+      .get();
+  Map<String, dynamic>? emergencyContactData =
+      emergencyContactDataSnapshot.data() as Map<String, dynamic>?;
+
+  // Upload data to Firestore for the emergency contact
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(emergencyContact)
+      .collection('logsForEmergencyContact')
+      .doc(randomId)
+      .set({
+    'mediaLink': mediaUrl,
+    'address': address,
+    'type': _isImageMode ? 'image' : 'video',
+    'call To': '100',
+    'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
+    // Include user's details in Firestore document
+    'user_details': userData,
+  });
+
+  Navigator.pop(context);
+
+  String phoneNumber = '100';
+  if (await canLaunch(phoneNumber)) {
+    await launch(phoneNumber);
+  } else {
+    throw 'Could not launch $phoneNumber';
   }
+} catch (e) {
+  print("Error uploading data to Firestore: $e");
+}
+}
+
 
   Future<String> _getAddressFromCoordinates(
       double latitude, double longitude) async {

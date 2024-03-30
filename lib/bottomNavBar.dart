@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/BottomNavBar%20Features/helplinePopUp.dart';
+import 'package:safe_connect/screens/HelpLogScreen/helpLogScreen.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:safe_connect/screens/QrScanner/qrScanner.dart';
 
@@ -24,7 +25,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
   final List<Widget> _screens = [
     HomeScreen(),
     HelpLineScreen(),
-    HomeScreen(),
+    HelpRecords(),
     HomeScreen(),
   ];
 
@@ -90,8 +91,8 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               _buildIconWithDot(Icons.home, 0),
-              _buildIconWithDot(Icons.search, 1),
-              _buildIconWithDot(Icons.person, 2),
+              _buildIconWithDot(Icons.handshake, 1),
+              _buildIconWithDot(Icons.chat, 2),
               _buildIconWithDot(Icons.settings, 3),
             ],
           ),
