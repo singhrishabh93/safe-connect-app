@@ -22,8 +22,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   bool isEditMode = false;
   bool showDeleteButton = false;
   Map<String, dynamic> registeredQrDetails = {};
-  bool showRegisteredQr =
-      false; // New flag to control visibility of registered QR details
+  bool showRegisteredQr = false;
 
   @override
   void initState() {
@@ -31,7 +30,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     user = FirebaseAuth.instance.currentUser;
     mobileNumber = user!.phoneNumber!;
     _fetchUserData();
-    _fetchRegisteredQrDetails(); // Fetch registered QR details
+    _fetchRegisteredQrDetails();
   }
 
   Future<void> _fetchUserData() async {
@@ -67,14 +66,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
   }
 
-  // Rest of the methods remain unchanged
-
   @override
   Widget build(BuildContext context) {
+    final buttonWidth = MediaQuery.of(context).size.width / 2 - 32;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
+          color: Colors.black,
         ),
         title: Text(
           'User Profile',
@@ -172,114 +171,130 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ),
             ),
             SizedBox(height: 10),
-            if (showRegisteredQr) // Conditionally show registered QR details above the button
+            if (showRegisteredQr)
               Expanded(
                 child: ListView.builder(
                   itemCount: registeredQrDetails.length,
                   itemBuilder: (context, index) {
-                    String docId = registeredQrDetails.keys.elementAt(index);
+                    String docId =
+                        registeredQrDetails.keys.elementAt(index);
                     Map<String, dynamic> details =
                         registeredQrDetails.values.elementAt(index);
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Registered Vehicle: $docId',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                    return Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Registered Vehicle: $docId',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        // SizedBox(height: 2),
-                        Text(
-                          'Name: ${details['name']}',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        Text(
-                          'Vehicle Name: ${details['vehicleName']}',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        Text(
-                          'Vehicle Number: ${details['vehicleNumber']}',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        Text(
-                          'Email: ${details['email']}',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        Text(
-                          'Contact Number: ${details['contactNumber']}',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        Text(
-                          'Emergency Contact: ${details['emergencyContact']}',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        )
-                      ],
+                          SizedBox(height: 5),
+                          Text(
+                            'Name: ${details['name']}',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Text(
+                            'Vehicle Name: ${details['vehicleName']}',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Text(
+                            'Vehicle Number: ${details['vehicleNumber']}',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Text(
+                            'Email: ${details['email']}',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Text(
+                            'Contact Number: ${details['contactNumber']}',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Text(
+                            'Emergency Contact: ${details['emergencyContact']}',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
               ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  showRegisteredQr = !showRegisteredQr; // Toggle the flag
-                });
-                if (showRegisteredQr) {
-                  _fetchRegisteredQrDetails(); // Fetch registered QR details if the flag is true
-                }
-              },
-              child: Text(
-                showRegisteredQr ? 'Hide QR Details' : 'Show QR Details',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontFamily: "gilroy",
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-            ),
-            SizedBox(height: 5),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  if (isEditMode) {
-                    _updateUserData();
-                  }
-                  isEditMode = !isEditMode;
-                });
-              },
-              child: Text(
-                isEditMode ? 'Save Detail' : 'Edit Details',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontFamily: "gilroy",
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isEditMode ? Colors.green : Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-            ),
-            SizedBox(height: 5),
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      FirebaseAuth.instance.signOut(); // Sign out the user
+                      setState(() {
+                        showRegisteredQr = !showRegisteredQr;
+                      });
+                      if (showRegisteredQr) {
+                        _fetchRegisteredQrDetails();   // fetch the user data 
+                      }
+                    },
+                    child: Text(
+                      showRegisteredQr ? 'Hide QR Details' : 'Show QR Details',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: "gilroy",
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      minimumSize: Size(buttonWidth, 50),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        if (isEditMode) {
+                          _updateUserData();
+                        }
+                        isEditMode = !isEditMode;
+                      });
+                    },
+                    child: Text(
+                      isEditMode ? 'Save Detail' : 'Edit Details',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: "gilroy",
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isEditMode ? Colors.green : Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      minimumSize: Size(buttonWidth, 50),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
@@ -301,30 +316,33 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
+                      minimumSize: Size(buttonWidth, 50),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _deleteAccount,
+                    child: Text(
+                      "Delete Account",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: "gilroy",
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      minimumSize: Size(buttonWidth, 50),
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 10),
-            if (showDeleteButton)
-              ElevatedButton(
-                onPressed: _deleteAccount,
-                child: Text(
-                  "Delete Account",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontFamily: "gilroy",
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
           ],
         ),
       ),
@@ -339,12 +357,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
     // Validate email format
     if (!isValidEmail(email)) {
       _showErrorDialog(context, 'Invalid Email Format');
-      return;
-    }
-
-    // Validate emergency contact format
-    if (!isValidPhoneNumber(emergencyContact)) {
-      _showErrorDialog(context, 'Invalid Emergency Contact Number');
       return;
     }
 
@@ -383,7 +395,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text(
                 'Cancel',
@@ -392,15 +404,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             TextButton(
               onPressed: () async {
-                // Delete user document from Firestore
-                await FirebaseFirestore.instance
+                await FirebaseFirestore.instance                // after pressing delete user data get delete from the firebase auth
                     .collection('users')
                     .doc(mobileNumber)
                     .collection('loginDetails')
                     .doc(mobileNumber)
                     .delete();
-
-                // Delete user account from Firebase Auth
+                    
                 await user!.delete();
 
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -408,9 +418,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     content: Text('Account deleted successfully!'),
                   ),
                 );
-
-                // Navigate back to login screen
-                Get.to(() => LoginScreen());
+                      Get.to(() => LoginScreen());
               },
               child: Text(
                 'Delete',
