@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/BottomNavBar%20Features/helplinePopUp.dart';
+import 'package:safe_connect/BottomNavBar%20Features/sosScreen.dart';
 import 'package:safe_connect/screens/HelpLogScreen/helpLogScreen.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:safe_connect/screens/QrScanner/qrScanner.dart';
@@ -26,7 +27,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
     HomeScreen(),
     HelpLineScreen(),
     HelpRecords(),
-    HomeScreen(),
+    SoundRecorderPage(),
   ];
 
   void _onItemTapped(int index) {
