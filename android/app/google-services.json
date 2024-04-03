@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "159443933809",
+    "firebase_url": "https://safe-connect-app-1-default-rtdb.firebaseio.com",
     "project_id": "safe-connect-app-1",
     "storage_bucket": "safe-connect-app-1.appspot.com"
   },

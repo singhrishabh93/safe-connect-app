@@ -12,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 
+
 class HelpLineScreen extends StatefulWidget {
   const HelpLineScreen({Key? key});
 
@@ -262,7 +263,7 @@ class _CameraScreenState extends State<CameraScreen> {
       final String imageUrl = await taskSnapshot.ref.getDownloadURL();
       return imageUrl;
     } catch (e) {
-      print("      Error uploading image to Firebase Storage: $e");
+      print("Error uploading image to Firebase Storage: $e");
       return '';
     }
   }
@@ -284,85 +285,86 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> _uploadDataToFirestore(
-  String mediaUrl, Position position, String address) async {
-try {
-  final user = FirebaseAuth.instance.currentUser;
-  final mobileNumber = user!.phoneNumber;
+    String mediaUrl, Position position, String address) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final mobileNumber = user!.phoneNumber;
 
-  String randomId = DateTime.now().millisecondsSinceEpoch.toString();
+      String randomId = DateTime.now().millisecondsSinceEpoch.toString();
 
-  // Fetch user's complete details
-  DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(mobileNumber)
-      .collection('loginDetails')
-      .doc(mobileNumber)
-      .get();
-  Map<String, dynamic>? userData =
-      userDataSnapshot.data() as Map<String, dynamic>?;
+      // Fetch user's complete details
+      DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(mobileNumber)
+          .collection('loginDetails')
+          .doc(mobileNumber)
+          .get();
+      Map<String, dynamic>? userData =
+          userDataSnapshot.data() as Map<String, dynamic>?;
 
-  // Print user's complete details in the terminal
-  print('User Details:');
-  print('Name: ${userData?['name']}');
-  print('Email: ${userData?['email']}');
-  print('Emergency Contact: ${userData?['emergencyContact']}');
+      // Upload data to Firestore for the user
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(mobileNumber)
+          .collection('logs')
+          .doc(randomId)
+          .set({
+        'mediaLink': mediaUrl,
+        'address': address,
+        'type': _isImageMode ? 'image' : 'video',
+        'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
+        // Include user's details in Firestore document
+        'user_details': userData,
+      });
 
-  // Upload data to Firestore for the user
-  await FirebaseFirestore.instance
-      .collection('users')
-      .doc(mobileNumber)
-      .collection('logs')
-      .doc(randomId)
-      .set({
-    'mediaLink': mediaUrl,
-    'address': address,
-    'type': _isImageMode ? 'image' : 'video',
-    'call To': '100',
-    'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
-    // Include user's details in Firestore document
-    'user_details': userData,
-  });
+      // Fetch emergency contact's details
+      String emergencyContact = userData?['emergencyContact'] ?? '';
+      DocumentSnapshot emergencyContactDataSnapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(emergencyContact) // Use emergency contact as the document ID
+          .collection('loginDetails')
+          .doc(emergencyContact)
+          .get();
+      Map<String, dynamic>? emergencyContactData =
+          emergencyContactDataSnapshot.data() as Map<String, dynamic>?;
 
-  // Fetch emergency contact's details
-  String emergencyContact = userData?['emergencyContact'] ?? '';
-  DocumentSnapshot emergencyContactDataSnapshot = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(emergencyContact) // Use emergency contact as the document ID
-      .collection('loginDetails')
-      .doc(emergencyContact)
-      .get();
-  Map<String, dynamic>? emergencyContactData =
-      emergencyContactDataSnapshot.data() as Map<String, dynamic>?;
+      // Upload data to Firestore for the emergency contact
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(emergencyContact)
+          .collection('logsForEmergencyContact')
+          .doc(randomId)
+          .set({
+        'mediaLink': mediaUrl,
+        'address': address,
+        'type': _isImageMode ? 'image' : 'video',
+        'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
+        // Include user's details in Firestore document
+        'user_details': userData,
+      });
 
-  // Upload data to Firestore for the emergency contact
-  await FirebaseFirestore.instance
-      .collection('users')
-      .doc(emergencyContact)
-      .collection('logsForEmergencyContact')
-      .doc(randomId)
-      .set({
-    'mediaLink': mediaUrl,
-    'address': address,
-    'type': _isImageMode ? 'image' : 'video',
-    'call To': '100',
-    'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
-    // Include user's details in Firestore document
-    'user_details': userData,
-  });
-
-  Navigator.pop(context);
-
-  String phoneNumber = '100';
-  if (await canLaunch(phoneNumber)) {
-    await launch(phoneNumber);
-  } else {
-    throw 'Could not launch $phoneNumber';
+      // Send a text message to the emergency contact
+      String message = "Help! I need assistance. Here's the link to the media: $mediaUrl. My current location: $address";
+String phoneNumber = emergencyContact;
+if (phoneNumber.isNotEmpty) {
+  final uri = 'sms:$phoneNumber?body=${Uri.encodeQueryComponent(message)}';
+  try {
+    await launch(uri);
+  } catch (e) {
+    print("Error launching SMS: $e");
+    throw 'Could not launch SMS';
   }
-} catch (e) {
-  print("Error uploading data to Firestore: $e");
-}
+} else {
+  throw 'Emergency contact number is invalid';
 }
 
+
+      Navigator.pop(context);
+    } catch (e) {
+      print("Error uploading data to Firestore: $e");
+    }
+  }
 
   Future<String> _getAddressFromCoordinates(
       double latitude, double longitude) async {
