@@ -52,7 +52,7 @@ class _WelcomeChildState extends State<WelcomeChild> {
                             height: 20,
                             color: Colors.white,
                           ),
-                          SizedBox(height: 3),
+                          const SizedBox(height: 3),
                           Container(
                             width: 200,
                             height: 20,
@@ -65,14 +65,14 @@ class _WelcomeChildState extends State<WelcomeChild> {
                   if (snapshot.hasError) {
                     return Text(
                       'Error: ${snapshot.error}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                       ),
                     );
                   }
                   if (!snapshot.hasData || !snapshot.data!.exists) {
-                    return Text(
+                    return const Text(
                       'Hello,',
                       style: TextStyle(fontSize: 20),
                     );
@@ -86,10 +86,10 @@ class _WelcomeChildState extends State<WelcomeChild> {
                     children: [
                       Text(
                         'Hello, $name',
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
-                      SizedBox(height: 3),
-                      Text(
+                      const SizedBox(height: 3),
+                      const Text(
                         'Welcome to SafeConnect',
                         style: TextStyle(fontFamily: 'gilroy', fontSize: 20),
                       ),
@@ -103,7 +103,7 @@ class _WelcomeChildState extends State<WelcomeChild> {
             onTap: () {
               Get.to(() => UserProfilePage());
             },
-            child: Icon(
+            child: const Icon(
               Icons.account_circle,
               size: 50,
               color: Colors.black,

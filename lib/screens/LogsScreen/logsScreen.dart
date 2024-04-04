@@ -10,7 +10,7 @@ class LogScreen extends StatelessWidget {
       future: _getCurrentUserMobileNumber(),
       builder: (context, AsyncSnapshot<String?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -20,7 +20,7 @@ class LogScreen extends StatelessWidget {
           );
         }
         if (!snapshot.hasData || snapshot.data == null) {
-          return Center(
+          return const Center(
             child: Text('User not authenticated.'),
           );
         }
@@ -47,7 +47,7 @@ class LogScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Logs'),
+        title: const Text('Logs'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -63,14 +63,14 @@ class LogScreenBody extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
           final docs = snapshot.data!.docs;
           if (docs.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('No logs found.'),
             );
           }
@@ -83,7 +83,7 @@ class LogScreenBody extends StatelessWidget {
 
               if (log == null) {
                 // Handle the case where log is null
-                return SizedBox.shrink(); // or any other fallback widget
+                return const SizedBox.shrink(); // or any other fallback widget
               }
 
               var mediaUrl = log['mediaLink'] as String?;
@@ -189,7 +189,7 @@ class _VideoWidgetState extends State<VideoWidget> {
             aspectRatio: 16 / 9, // or set as per your video aspect ratio
             child: VideoPlayer(_controller),
           ),
-          Icon(
+          const Icon(
             Icons.play_circle_filled,
             size: 50,
             color: Colors.black,

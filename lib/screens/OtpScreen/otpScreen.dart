@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/SignUpScreen/signUpScreen.dart';
-import 'package:safe_connect/bottomNavigationBar.dart';
 
 class OtpScreen extends StatefulWidget {
   final String mobileNumber;
@@ -80,7 +79,7 @@ class _OtpScreenState extends State<OtpScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: BackButton(
+        leading: const BackButton(
           color: Colors.white,
         ),
       ),
@@ -103,8 +102,8 @@ class _OtpScreenState extends State<OtpScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 10),
-                        DefaultTextStyle(
+                        const SizedBox(height: 10),
+                        const DefaultTextStyle(
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 21,
@@ -114,7 +113,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             "Membership Application",
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         DefaultTextStyle(
@@ -132,7 +131,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Row(
@@ -142,7 +141,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   (index) => Container(
                     width: 50,
                     height: 50,
-                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
@@ -167,12 +166,12 @@ class _OtpScreenState extends State<OtpScreen> {
                             }
                           }
                         },
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                           fontFamily: "gilroy",
                         ),
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           counterText: '',
                           border: InputBorder.none,
                         ),
@@ -181,7 +180,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
@@ -190,7 +189,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   Container(
                     width: MediaQuery.of(context).size.width / 2 - 50,
                     height: 50,
-                    margin: EdgeInsets.only(right: 5),
+                    margin: const EdgeInsets.only(right: 5),
                     child: ElevatedButton(
                       onPressed: () {
                         String otp = _controllers.fold(

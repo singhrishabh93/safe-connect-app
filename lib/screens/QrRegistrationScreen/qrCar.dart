@@ -28,15 +28,6 @@ class _QRGeneratorState extends State<QRGenerator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Container(
-          child: Image.asset("assets/images/SafeConnect 1.png"),
-        ),
-        backgroundColor: Colors.grey.shade100,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-      ),
       body: Container(
         color: Colors.white,
         child: SingleChildScrollView(
@@ -245,55 +236,54 @@ class _QRGeneratorState extends State<QRGenerator> {
     );
   }
 
-Future<void> _onGenerateQRPressed() async {
-  if (_formKey.currentState!.validate()) {
-    await _saveDataToFirestore(); // Save data to Firestore
-    await _generateQRFromFirestoreData(); // Generate QR code from Firestore data
-  } else {
-    // Show alert
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Form Error"),
-          content: const Text("Please fill the form correctly."),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-Future<void> _generateQRFromFirestoreData() async {
-  try {
-    final user = FirebaseAuth.instance.currentUser;
-    final carNumber = _vehicleNoController.text;
-
-    final documentSnapshot = await FirebaseFirestore.instance
-        .collection('registeredVehicles')
-        .doc(carNumber)
-        .get();
-
-    if (documentSnapshot.exists) {
-      final data = documentSnapshot.data() as Map<String, dynamic>;
-
-      setState(() {
-        _qrData =
-            'Name: ${data['name']}, Vehicle Brand & Name: ${data['vehicleName']}, Vehicle No.: ${data['vehicleNumber']}, Email: ${data['email']}, Contact No.: ${data['contactNumber']}, Emergency Contact No.: ${data['emergencyContact']}';
-      });
+  Future<void> _onGenerateQRPressed() async {
+    if (_formKey.currentState!.validate()) {
+      await _saveDataToFirestore(); // Save data to Firestore
+      await _generateQRFromFirestoreData(); // Generate QR code from Firestore data
+    } else {
+      // Show alert
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Form Error"),
+            content: const Text("Please fill the form correctly."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
     }
-  } catch (e) {
-    print(e.toString());
   }
-}
 
+  Future<void> _generateQRFromFirestoreData() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final carNumber = _vehicleNoController.text;
+
+      final documentSnapshot = await FirebaseFirestore.instance
+          .collection('registeredVehicles')
+          .doc(carNumber)
+          .get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data() as Map<String, dynamic>;
+
+        setState(() {
+          _qrData =
+              'Name: ${data['name']}, Vehicle Brand & Name: ${data['vehicleName']}, Vehicle No.: ${data['vehicleNumber']}, Email: ${data['email']}, Contact No.: ${data['contactNumber']}, Emergency Contact No.: ${data['emergencyContact']}';
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   Future<void> _saveDataToFirestore() async {
     try {
@@ -309,6 +299,7 @@ Future<void> _generateQRFromFirestoreData() async {
 
       if (existingDoc.exists) {
         // Vehicle is already registered
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -378,6 +369,7 @@ Future<void> _generateQRFromFirestoreData() async {
       final imagePath = '${directory!.path}/qr_code.png';
       final File imageFile = File(imagePath);
       imageFile.writeAsBytesSync(image!.buffer.asUint8List());
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('QR Code saved as qr_code.png'),
       ));

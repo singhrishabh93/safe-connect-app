@@ -12,45 +12,45 @@ class Carousel extends StatelessWidget {
           viewportFraction: 0.8, // Adjust viewportFraction to add space
           enlargeCenterPage: false,
           autoPlay: true,
-          autoPlayInterval: Duration(milliseconds: 3000)),
+          autoPlayInterval: const Duration(milliseconds: 3000)),
       items: [
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 5), // Add horizontal margin
+          margin: const EdgeInsets.symmetric(horizontal: 5), // Add horizontal margin
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Color(0XFFFFF2CF),
+            color: const Color(0XFFFFF2CF),
           ),
           child: Image.asset("assets/images/carousel1.png"),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Color(0XFFFFF2CF),
+            color: const Color(0XFFFFF2CF),
           ),
           child: Image.asset("assets/images/carousel1.png"),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Color(0XFFFFF2CF),
+            color: const Color(0XFFFFF2CF),
           ),
           child: Image.asset("assets/images/carousel1.png"),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Color(0XFFFFF2CF),
+            color: const Color(0XFFFFF2CF),
           ),
           child: Image.asset("assets/images/carousel1.png"),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Color(0XFFFFF2CF),
+            color: const Color(0XFFFFF2CF),
           ),
           child: Image.asset("assets/images/carousel1.png"),
         ),

@@ -140,7 +140,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   children: [
                     IconButton(
                       onPressed: _isUploading ? null : _captureImage,
-                      icon: Icon(Icons.camera_alt),
+                      icon: const Icon(Icons.camera_alt),
                       iconSize: 48,
                       color: Colors.black,
                     ),
@@ -155,7 +155,7 @@ class _CameraScreenState extends State<CameraScreen> {
                 if (_isRecording)
                   Text(
                     'Duration: $_videoDurationSeconds s',
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
               ],
             ),
@@ -240,7 +240,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> _startTimer() async {
     while (_isRecording) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       setState(() {
         _videoDurationSeconds++;
       });

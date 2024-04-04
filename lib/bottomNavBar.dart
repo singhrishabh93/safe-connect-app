@@ -24,8 +24,8 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
   ];
 
   final List<Widget> _screens = [
-    HomeScreen(),
-    HelpLineScreen(),
+    const HomeScreen(),
+    const HelpLineScreen(),
     HelpRecords(),
     SoundRecorderPage(),
   ];
@@ -57,7 +57,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
             child: Container(
               width: 5,
               height: 5,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.black,
               ),
@@ -72,11 +72,11 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
     return Scaffold(
       body: _screens[_selectedIndex], // Show selected screen
       floatingActionButton: FloatingActionButton(
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         onPressed: () {
-          Get.to(() => QRCodeScanner());
+          Get.to(() => const QRCodeScanner());
         },
-        child: Icon(
+        child: const Icon(
           Icons.qr_code,
           color: Colors.white,
           size: 35,
