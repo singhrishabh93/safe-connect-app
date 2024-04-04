@@ -26,7 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: BackButton(
+        leading: const BackButton(
           color: Colors.white,
         ),
       ),
@@ -44,8 +44,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     width: MediaQuery.of(context).size.width,
                     color: Colors.black,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 25, left: 40),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 25, left: 40),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -77,14 +77,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Container(
                 width: MediaQuery.of(context).size.width - 45,
                 child: TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Name',
                     border: OutlineInputBorder(),
                     hintText: 'Enter your name',
@@ -97,12 +97,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
               ),
-              SizedBox(height: 20),
-              Container(
+              const SizedBox(height: 20),
+              SizedBox(
                 width: MediaQuery.of(context).size.width - 45,
                 child: TextFormField(
                   controller: _emailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(),
                     hintText: 'Enter your email',
@@ -119,12 +119,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
               ),
-              SizedBox(height: 20),
-              Container(
+              const SizedBox(height: 20),
+              SizedBox(
                 width: MediaQuery.of(context).size.width - 45,
                 child: TextFormField(
                   controller: _emergencyContactController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Emergency Contact Number',
                     border: OutlineInputBorder(),
                     hintText: 'Enter your emergency contact number',
@@ -145,7 +145,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: Row(
@@ -171,28 +171,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width - 45,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: _isButtonClicked ? _submitForm : null,
-                  child: Text(
-                    "SignUp",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontFamily: "gilroy",
-                    ),
-                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isButtonClicked
                         ? Colors.black
                         : Colors.grey.withOpacity(0.5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: const Text(
+                    "SignUp",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontFamily: "gilroy",
                     ),
                   ),
                 ),
@@ -212,14 +212,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Missing Information'),
-            content: Text('Please fill in all the required fields.'),
+            title: const Text('Missing Information'),
+            content: const Text('Please fill in all the required fields.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -241,12 +241,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         });
 
         // Show success message
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Sign Up Successful'),
-              content: Text('Your details have been successfully saved.'),
+              title: const Text('Sign Up Successful'),
+              content: const Text('Your details have been successfully saved.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -257,7 +258,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     );
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -266,18 +267,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       } catch (e) {
         print('Error adding user to Firestore: $e');
         // Show error message with actual error
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Error'),
+              title: const Text('Error'),
               content: Text('An error occurred: $e'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );

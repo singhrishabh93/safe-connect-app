@@ -10,7 +10,7 @@ class HelpRecords extends StatelessWidget {
       future: _getCurrentUserPhoneNumber(),
       builder: (context, AsyncSnapshot<String?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -20,7 +20,7 @@ class HelpRecords extends StatelessWidget {
           );
         }
         if (!snapshot.hasData || snapshot.data == null) {
-          return Center(
+          return const Center(
             child: Text('User not authenticated.'),
           );
         }
@@ -47,7 +47,7 @@ class LogScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Help Records'),
+        title: const Text('Help Records'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -63,14 +63,14 @@ class LogScreenBody extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
           final docs = snapshot.data!.docs;
           if (docs.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('No logs found for your emergency contact.'),
             );
           }
@@ -83,7 +83,7 @@ class LogScreenBody extends StatelessWidget {
 
               if (log == null) {
                 // Handle the case where log is null
-                return SizedBox.shrink(); // or any other fallback widget
+                return const SizedBox.shrink(); // or any other fallback widget
               }
 
               var mediaUrl = log['mediaLink'] as String?;
@@ -119,7 +119,7 @@ class LogScreenBody extends StatelessWidget {
                   mediaUrl.isNotEmpty) {
                 mediaWidget = VideoWidget(videoUrl: mediaUrl);
               } else {
-                mediaWidget = SizedBox.shrink();
+                mediaWidget = const SizedBox.shrink();
               }
 
               return ListTile(
@@ -167,9 +167,9 @@ class _VideoWidgetState extends State<VideoWidget> {
                 future: _initializeVideoPlayerFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
-                    return Text('Error loading video');
+                    return const Text('Error loading video');
                   } else {
                     return AspectRatio(
                       aspectRatio: _controller.value.aspectRatio,
@@ -189,7 +189,7 @@ class _VideoWidgetState extends State<VideoWidget> {
             aspectRatio: 16 / 9, // or set as per your video aspect ratio
             child: VideoPlayer(_controller),
           ),
-          Icon(
+          const Icon(
             Icons.play_circle_filled,
             size: 50,
             color: Colors.black,

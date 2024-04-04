@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/screens/LoginScreen/loginScreen.dart';
+import 'package:shimmer/shimmer.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -23,6 +24,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   bool showDeleteButton = false;
   Map<String, dynamic> registeredQrDetails = {};
   bool showRegisteredQr = false;
+  bool isLoadingQrDetails = false;
 
   @override
   void initState() {
@@ -51,6 +53,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   Future<void> _fetchRegisteredQrDetails() async {
+    setState(() {
+      isLoadingQrDetails = true;
+    });
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(mobileNumber)
@@ -62,7 +67,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
       snapshot.docs.forEach((doc) {
         registeredQrDetails[doc.id] = doc.data();
       });
-      setState(() {});
+      setState(() {
+        isLoadingQrDetails = false;
+      });
     }
   }
 
@@ -72,10 +79,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black,
         ),
-        title: Text(
+        title: const Text(
           'User Profile',
           style: TextStyle(color: Colors.black, fontFamily: "gilroy"),
         ),
@@ -84,27 +91,27 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ),
       body: Container(
         color: Colors.white,
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               'Registered Mobile Number: $mobileNumber',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontFamily: 'gilroy',
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: _nameController,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'gilroy',
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Name',
                 labelStyle: TextStyle(
                   color: Colors.black,
@@ -115,14 +122,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ),
               enabled: isEditMode,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: _emailController,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'gilroy',
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
                 labelStyle: TextStyle(
                   color: Colors.black,
@@ -137,14 +144,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
               enabled: isEditMode,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: _emergencyContactController,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'gilroy',
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Emergency Contact',
                 labelStyle: TextStyle(
                   color: Colors.black,
@@ -160,8 +167,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
               enabled: isEditMode,
             ),
-            SizedBox(height: 25),
-            Text(
+            const SizedBox(height: 25),
+            const Text(
               'Registered QR Details',
               style: TextStyle(
                 fontSize: 18,
@@ -170,65 +177,69 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 color: Colors.black,
               ),
             ),
-            SizedBox(height: 10),
-            if (showRegisteredQr)
-              Expanded(
-                child: ListView.builder(
-                  itemCount: registeredQrDetails.length,
-                  itemBuilder: (context, index) {
-                    String docId =
-                        registeredQrDetails.keys.elementAt(index);
-                    Map<String, dynamic> details =
-                        registeredQrDetails.values.elementAt(index);
+            const SizedBox(height: 10),
+            isLoadingQrDetails
+                ? _buildShimmerEffect()
+                : showRegisteredQr
+                    ? Expanded(
+                        child: ListView.builder(
+                          itemCount: registeredQrDetails.length,
+                          itemBuilder: (context, index) {
+                            String docId =
+                                registeredQrDetails.keys.elementAt(index);
+                            Map<String, dynamic> details =
+                                registeredQrDetails.values.elementAt(index);
 
-                    return Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.only(bottom: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Registered Vehicle: $docId',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            'Name: ${details['name']}',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          Text(
-                            'Vehicle Name: ${details['vehicleName']}',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          Text(
-                            'Vehicle Number: ${details['vehicleNumber']}',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          Text(
-                            'Email: ${details['email']}',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          Text(
-                            'Contact Number: ${details['contactNumber']}',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          Text(
-                            'Emergency Contact: ${details['emergencyContact']}',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
+                            return Container(
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Registered Vehicle: $docId',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Name: ${details['name']}',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  Text(
+                                    'Vehicle Name: ${details['vehicleName']}',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  Text(
+                                    'Vehicle Number: ${details['vehicleNumber']}',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  Text(
+                                    'Email: ${details['email']}',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  Text(
+                                    'Contact Number: ${details['contactNumber']}',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  Text(
+                                    'Emergency Contact: ${details['emergencyContact']}',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : const SizedBox(),
+            const SizedBox(height: 25),
             Row(
               children: [
                 Expanded(
@@ -238,12 +249,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         showRegisteredQr = !showRegisteredQr;
                       });
                       if (showRegisteredQr) {
-                        _fetchRegisteredQrDetails();   // fetch the user data 
+                        _fetchRegisteredQrDetails(); // fetch the user data
                       }
                     },
                     child: Text(
                       showRegisteredQr ? 'Hide QR Details' : 'Show QR Details',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                         fontFamily: "gilroy",
@@ -258,7 +269,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     ),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
@@ -288,7 +299,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
@@ -303,7 +314,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         (route) => false,
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       "Sign Out",
                       style: TextStyle(
                         color: Colors.white,
@@ -320,11 +331,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     ),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: _deleteAccount,
-                    child: Text(
+                    child: const Text(
                       "Delete Account",
                       style: TextStyle(
                         color: Colors.white,
@@ -345,6 +356,68 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerEffect() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: 5, // Assuming 5 shimmer items for simplicity
+        itemBuilder: (context, index) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 200,
+                    height: 20,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: 150,
+                    height: 20,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: 120,
+                    height: 20,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: 180,
+                    height: 20,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: 160,
+                    height: 20,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: 200,
+                    height: 20,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -373,7 +446,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('User data updated successfully!'),
+        content: const Text('User data updated successfully!'),
       ),
     );
   }
@@ -384,11 +457,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          title: Text(
+          title: const Text(
             'Confirm Account Deletion',
             style: TextStyle(color: Colors.black),
           ),
-          content: Text(
+          content: const Text(
             'Are you sure you want to delete your account?',
             style: TextStyle(color: Colors.black),
           ),
@@ -397,30 +470,30 @@ class _UserProfilePageState extends State<UserProfilePage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style: TextStyle(color: Colors.black),
               ),
             ),
             TextButton(
               onPressed: () async {
-                await FirebaseFirestore.instance                // after pressing delete user data get delete from the firebase auth
+                await FirebaseFirestore.instance // after pressing delete user data get delete from the firebase auth
                     .collection('users')
                     .doc(mobileNumber)
                     .collection('loginDetails')
                     .doc(mobileNumber)
                     .delete();
-                    
+
                 await user!.delete();
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Account deleted successfully!'),
+                    content: const Text('Account deleted successfully!'),
                   ),
                 );
-                      Get.to(() => LoginScreen());
+                Get.to(() => const LoginScreen());
               },
-              child: Text(
+              child: const Text(
                 'Delete',
                 style: TextStyle(color: Colors.red),
               ),
@@ -444,7 +517,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error'),
+          title: const Text('Error'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -454,7 +527,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

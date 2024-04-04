@@ -29,22 +29,22 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              WelcomeChild(),
-              SizedBox(height: 30),
+              const WelcomeChild(),
+              const SizedBox(height: 30),
               // Replace firstChild() with the Carousel
               Carousel(),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Container(
                   width: MediaQuery.of(context).size.width - 50,
-                  child: newSecondChild()),
-              SizedBox(height: 10),
+                  child: const newSecondChild()),
+              const SizedBox(height: 10),
               Container(
                   width: MediaQuery.of(context).size.width - 50,
-                  child: fourthChild()),
+                  child: const fourthChild()),
               Container(
                   width: MediaQuery.of(context).size.width - 50,
-                  child: newThirdChild()),
-              SizedBox(height: 10),
+                  child: const newThirdChild()),
+              const SizedBox(height: 10),
             ],
           ),
         ),

@@ -368,6 +368,7 @@ class _CameraScreenState extends State<CameraScreen> {
         onPressed: () async {
           try {
             final image = await widget.cameraController.takePicture();
+            // ignore: use_build_context_synchronously
             Navigator.push(
               context,
               MaterialPageRoute(

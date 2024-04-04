@@ -71,9 +71,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 30),
-                                child: const DefaultTextStyle(
+                              const Padding(
+                                padding: EdgeInsets.only(left: 30),
+                                child: DefaultTextStyle(
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 21,
@@ -87,9 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SizedBox(
                                 height: 5,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 30),
-                                child: const DefaultTextStyle(
+                              const Padding(
+                                padding:  EdgeInsets.only(left: 30),
+                                child:  DefaultTextStyle(
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 21,
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Container(
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                         decoration: InputDecoration(
                           labelText: "Mobile Number",
-                          labelStyle: TextStyle(
+                          labelStyle: const TextStyle(
                             color: Colors.grey,
                             fontSize: 15,
                             fontFamily: "gilroy",
@@ -135,14 +135,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           counterText: null,
                         ),
                         keyboardType: TextInputType.number,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 15,
                           fontFamily: "gilroy",
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Padding(
@@ -170,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Container(
@@ -185,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                               }
                             : null,
-                        child: Text(
+                        child: const Text(
                           "Continue",
                           style: TextStyle(
                             color: Colors.white,
@@ -212,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               height: MediaQuery.of(context).size.height * 0.4,
               color: Colors.transparent,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
                 ),

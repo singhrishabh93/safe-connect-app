@@ -23,7 +23,7 @@ class fourthChild extends StatelessWidget {
         Container(
           height: 270,
           child: StaggeredGridView.count(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
             staggeredTiles: [
               StaggeredTile.extent(1, 240),
@@ -93,7 +93,7 @@ class fourthChild extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8.0),
+                    const SizedBox(height: 8.0),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
@@ -119,7 +119,7 @@ class fourthChild extends StatelessWidget {
             ],
             mainAxisSpacing: 4.0,
             crossAxisSpacing: 4.0,
-            padding: EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(4.0),
           ),
         ),
       ],

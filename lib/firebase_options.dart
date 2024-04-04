@@ -17,19 +17,13 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -52,6 +46,17 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAnCHszGq7GhQq_Cb3H-o4fEUO3jWuCHHw',
+    appId: '1:159443933809:web:fb8f9bc3389cd27beb99d0',
+    messagingSenderId: '159443933809',
+    projectId: 'safe-connect-app-1',
+    authDomain: 'safe-connect-app-1.firebaseapp.com',
+    databaseURL: 'https://safe-connect-app-1-default-rtdb.firebaseio.com',
+    storageBucket: 'safe-connect-app-1.appspot.com',
+    measurementId: 'G-2T5ZG30ZYP',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCjf31wGfi-tzT1gnuLxzeLi8OhSxpfqnc',
     appId: '1:159443933809:android:196f5b9e4bb54d63eb99d0',
@@ -59,5 +64,16 @@ class DefaultFirebaseOptions {
     projectId: 'safe-connect-app-1',
     databaseURL: 'https://safe-connect-app-1-default-rtdb.firebaseio.com',
     storageBucket: 'safe-connect-app-1.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyAETcdx4-5EWSKhDeoJBijV4zdHPESwn0Y',
+    appId: '1:159443933809:ios:7a78791265b3308eeb99d0',
+    messagingSenderId: '159443933809',
+    projectId: 'safe-connect-app-1',
+    databaseURL: 'https://safe-connect-app-1-default-rtdb.firebaseio.com',
+    storageBucket: 'safe-connect-app-1.appspot.com',
+    androidClientId: '159443933809-hc1t91i3pvgol73nlnkte2j09ium3jab.apps.googleusercontent.com',
+    iosBundleId: 'com.example.safeConnect',
   );
 }

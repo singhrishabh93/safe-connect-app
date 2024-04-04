@@ -51,7 +51,7 @@ class _SoundRecorderPageState extends State<SoundRecorderPage> {
         _isRecording = true;
         _filePath = null;
         _startRecordingTime = DateTime.now().millisecondsSinceEpoch;
-        _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
           setState(() {});
         });
       });
