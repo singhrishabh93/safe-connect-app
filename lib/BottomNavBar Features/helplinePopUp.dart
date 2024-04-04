@@ -286,95 +286,100 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> _uploadDataToFirestore(
     String mediaUrl, Position position, String address) async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      final mobileNumber = user!.phoneNumber;
-
-      String randomId = DateTime.now().millisecondsSinceEpoch.toString();
-
-      // Fetch user's complete details
-      DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(mobileNumber)
-          .collection('loginDetails')
-          .doc(mobileNumber)
-          .get();
-      Map<String, dynamic>? userData =
-          userDataSnapshot.data() as Map<String, dynamic>?;
-
-      // Upload data to Firestore for the user
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(mobileNumber)
-          .collection('logs')
-          .doc(randomId)
-          .set({
-        'mediaLink': mediaUrl,
-        'address': address,
-        'type': _isImageMode ? 'image' : 'video',
-        'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
-        // Include user's details in Firestore document
-        'user_details': userData,
-      });
-
-      // Fetch emergency contact's details
-      String emergencyContact = userData?['emergencyContact'] ?? '';
-      DocumentSnapshot emergencyContactDataSnapshot = await FirebaseFirestore
-          .instance
-          .collection('users')
-          .doc(emergencyContact) // Use emergency contact as the document ID
-          .collection('loginDetails')
-          .doc(emergencyContact)
-          .get();
-      Map<String, dynamic>? emergencyContactData =
-          emergencyContactDataSnapshot.data() as Map<String, dynamic>?;
-
-      // Upload data to Firestore for the emergency contact
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(emergencyContact)
-          .collection('logsForEmergencyContact')
-          .doc(randomId)
-          .set({
-        'mediaLink': mediaUrl,
-        'address': address,
-        'type': _isImageMode ? 'image' : 'video',
-        'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
-        // Include user's details in Firestore document
-        'user_details': userData,
-      });
-
-      // Send a text message to the emergency contact
-      // Format the media URL with the token
-String token = Uri.parse(mediaUrl).queryParameters['token'] ?? '';
-String formattedMediaUrl = mediaUrl + '?alt=media&token=$token';
-print('Formatted Media URL: $formattedMediaUrl');
-print('Address: $address');
-
-// Send a text message to the emergency contact
-String message =
-    "Help! I need assistance. Here's the link to the media: ${Uri.encodeQueryComponent(formattedMediaUrl)}. My current location: $address";
-
-String phoneNumber = emergencyContact;
-if (phoneNumber.isNotEmpty) {
-  final uri = 'sms:$phoneNumber?body=${Uri.encodeQueryComponent(message)}';
   try {
-    await launch(uri);
+    final user = FirebaseAuth.instance.currentUser;
+    final mobileNumber = user!.phoneNumber;
+
+    String randomId = DateTime.now().millisecondsSinceEpoch.toString();
+
+    // Fetch user's complete details
+    DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(mobileNumber)
+        .collection('loginDetails')
+        .doc(mobileNumber)
+        .get();
+    Map<String, dynamic>? userData =
+        userDataSnapshot.data() as Map<String, dynamic>?;
+
+    // Upload data to Firestore for the user
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(mobileNumber)
+        .collection('logs')
+        .doc(randomId)
+        .set({
+      'mediaLink': mediaUrl,
+      'address': address,
+      'type': _isImageMode ? 'image' : 'video',
+      'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
+      // Include user's details in Firestore document
+      'user_details': userData,
+      // Include Google Maps URL
+      'google_maps_url': 'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}',
+    });
+
+    // Fetch emergency contact's details
+    String emergencyContact = userData?['emergencyContact'] ?? '';
+    DocumentSnapshot emergencyContactDataSnapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(emergencyContact) // Use emergency contact as the document ID
+        .collection('loginDetails')
+        .doc(emergencyContact)
+        .get();
+    Map<String, dynamic>? emergencyContactData =
+        emergencyContactDataSnapshot.data() as Map<String, dynamic>?;
+
+    // Upload data to Firestore for the emergency contact
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(emergencyContact)
+        .collection('logsForEmergencyContact')
+        .doc(randomId)
+        .set({
+      'mediaLink': mediaUrl,
+      'address': address,
+      'type': _isImageMode ? 'image' : 'video',
+      'duration_seconds': _isImageMode ? null : _videoDurationSeconds,
+      // Include user's details in Firestore document
+      'user_details': userData,
+      // Include Google Maps URL
+      'google_maps_url': 'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}',
+    });
+
+    // Send a text message to the emergency contact
+    String token = Uri.parse(mediaUrl).queryParameters['token'] ?? '';
+    String formattedMediaUrl = mediaUrl + '?alt=media&token=$token';
+    print('Formatted Media URL: $formattedMediaUrl');
+    print('Address: $address');
+    print('Google Maps URL: https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}');
+
+
+    // Send a text message to the emergency contact
+   String message =
+    "Help! I need assistance. Here's the link to the media: ${Uri.encodeQueryComponent(formattedMediaUrl)}. My current location: $address. Google Maps Location: https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}";
+
+
+    String phoneNumber = emergencyContact;
+    if (phoneNumber.isNotEmpty) {
+      final uri = 'sms:$phoneNumber?body=${Uri.encodeQueryComponent(message)}';
+      try {
+        await launch(uri);
+      } catch (e) {
+        print("Error launching SMS: $e");
+        throw 'Could not launch SMS';
+      }
+    } else {
+      throw 'Emergency contact number is invalid';
+    }
+
+    Navigator.pop(context);
   } catch (e) {
-    print("Error launching SMS: $e");
-    throw 'Could not launch SMS';
+    print("Error uploading data to Firestore: $e");
   }
-} else {
-  throw 'Emergency contact number is invalid';
 }
 
-
-
-      Navigator.pop(context);
-    } catch (e) {
-      print("Error uploading data to Firestore: $e");
-    }
-  }
 
   Future<String> _getAddressFromCoordinates(
       double latitude, double longitude) async {
