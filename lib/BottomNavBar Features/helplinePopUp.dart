@@ -345,7 +345,16 @@ class _CameraScreenState extends State<CameraScreen> {
       });
 
       // Send a text message to the emergency contact
-      String message = "Help! I need assistance. Here's the link to the media: $mediaUrl. My current location: $address";
+      // Format the media URL with the token
+String token = Uri.parse(mediaUrl).queryParameters['token'] ?? '';
+String formattedMediaUrl = mediaUrl + '?alt=media&token=$token';
+print('Formatted Media URL: $formattedMediaUrl');
+print('Address: $address');
+
+// Send a text message to the emergency contact
+String message =
+    "Help! I need assistance. Here's the link to the media: ${Uri.encodeQueryComponent(formattedMediaUrl)}. My current location: $address";
+
 String phoneNumber = emergencyContact;
 if (phoneNumber.isNotEmpty) {
   final uri = 'sms:$phoneNumber?body=${Uri.encodeQueryComponent(message)}';
@@ -358,6 +367,7 @@ if (phoneNumber.isNotEmpty) {
 } else {
   throw 'Emergency contact number is invalid';
 }
+
 
 
       Navigator.pop(context);
