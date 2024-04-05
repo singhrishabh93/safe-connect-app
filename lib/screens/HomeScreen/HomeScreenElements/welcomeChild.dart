@@ -74,7 +74,10 @@ class _WelcomeChildState extends State<WelcomeChild> {
                   if (!snapshot.hasData || !snapshot.data!.exists) {
                     return const Text(
                       'Hello,',
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Cirka',
+                          color: Color(0xffffffff)),
                     );
                   }
 
@@ -84,14 +87,36 @@ class _WelcomeChildState extends State<WelcomeChild> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Hello, $name',
-                        style: const TextStyle(fontSize: 20),
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Cirka',
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'Hello, ',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '$name',
+                              style: TextStyle(
+                                  color: Color(
+                                      0xffFFB13D) // Change the color as desired
+                                  ),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 3),
                       const Text(
                         'Welcome to SafeConnect',
-                        style: TextStyle(fontFamily: 'gilroy', fontSize: 20),
+                        style: TextStyle(
+                            fontFamily: 'gilroy',
+                            fontSize: 20,
+                            color: Color(0xffffffff)),
                       ),
                     ],
                   );
@@ -106,7 +131,7 @@ class _WelcomeChildState extends State<WelcomeChild> {
             child: const Icon(
               Icons.account_circle,
               size: 50,
-              color: Colors.black,
+              color: Color(0xffFFB13D),
             ),
           ),
         ],

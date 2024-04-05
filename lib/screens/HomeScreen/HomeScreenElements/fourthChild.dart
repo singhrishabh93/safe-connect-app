@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class fourthChild extends StatelessWidget {
   const fourthChild({super.key});
@@ -8,120 +7,109 @@ class fourthChild extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              "Popular Services",
-              style: TextStyle(fontFamily: "gilroy", fontSize: 18),
-            ),
+            RichText(
+              text: const TextSpan(
+                style: TextStyle(fontFamily: "gilroy", fontSize: 18),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: 'Medical',
+                      style: TextStyle(color: Color(0xffFFFFFf))),
+                  TextSpan(text: ' '),
+                  TextSpan(
+                      text: 'Emergency',
+                      style: TextStyle(color: Color(0xffFFB13D))),
+                ],
+              ),
+            )
           ],
         ),
         const SizedBox(
-          height: 10,
+          height: 25,
         ),
         Container(
-          height: 270,
-          child: StaggeredGridView.count(
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            staggeredTiles: [
-              StaggeredTile.extent(1, 240),
-              StaggeredTile.extent(1, 240),
-              StaggeredTile.extent(1, 240),
-            ],
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color(0xFFbae5f5)),
-                  // color: Color(0xFFbae5f5),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/internet.png'),
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Register your Car',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Color.fromRGBO(0, 0, 0, 1),
-                            fontFamily: 'gilroy',
-                            fontSize: 16,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.normal,
-                            height: 1,
-                          ),
-                        ),
+          height: 180,
+          width: MediaQuery.of(context).size.width - 50,
+          decoration: BoxDecoration(
+              color: Color(0xff1A1A1A),
+              borderRadius: BorderRadius.circular(10)),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: RichText(
+                    text: const TextSpan(
+                      style: TextStyle(fontFamily: "Cirka", fontSize: 16),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: 'Stay',
+                            style: TextStyle(color: Color(0xffFFFFFf))),
+                        TextSpan(text: ' '),
+                        TextSpan(
+                            text: 'Connected',
+                            style: TextStyle(color: Color(0xffFFB13D))),
+                        TextSpan(text: ' '),
+                        TextSpan(
+                            text: 'to loved ones',
+                            style: TextStyle(color: Color(0xffFFFFFf))),
                       ],
                     ),
                   ),
                 ),
-              ),
-              Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color(0xFFe1d4fe)),
-                        height: 100,
-                        child: Center(
-                          child: Text(
-                            'Tile 2.1',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0xFFccf0c0),
-                        ),
-                        height: 100,
-                        child: Center(
-                          child: Text(
-                            'Tile 2.2',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                const SizedBox(
+                  height: 10,
                 ),
-              ),
-            ],
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
-            padding: const EdgeInsets.all(4.0),
-          ),
-        ),
+                const Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Center(
+                    child: Text(
+                      "SafeConnect's labels, tags, necklaces and \n bracelets are designed to easily attach to \n clothing or wear comfortably. More robust \n than a medical ID, less invasive than a tracker, \n SafeConnect is designed for everyone's \n peace of mind.",
+                      style: TextStyle(fontSize: 9, color: Color(0xffFFFFFf)),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: SizedBox(
+                    height: 20,
+                    child: ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Register Now",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "gilroy",
+                              fontSize: 10),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color(0xffFF3D3D),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        )),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: SizedBox(
+                  height: 120,
+                  child: Image.asset("assets/images/RedCross.png")),
+            )
+          ]),
+        )
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/carousel.dart';
+import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/firstCard.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/fourthChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/newSecondChild.dart';
 import 'package:safe_connect/screens/HomeScreen/HomeScreenElements/newThirdChild.dart';
@@ -18,14 +19,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
           toolbarHeight: 40,
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xff000000),
           elevation: 0,
           scrolledUnderElevation: 0,
           automaticallyImplyLeading:
               false // Set elevation to 0 to remove shadow
           ),
       body: Container(
-        color: Colors.white,
+        color: Color(0xff000000),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -34,6 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
               // Replace firstChild() with the Carousel
               Carousel(),
               const SizedBox(height: 30),
+              FirstCard(),
+              const SizedBox(height: 30),
               Container(
                   width: MediaQuery.of(context).size.width - 50,
                   child: const newSecondChild()),
@@ -41,9 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                   width: MediaQuery.of(context).size.width - 50,
                   child: const fourthChild()),
-              Container(
-                  width: MediaQuery.of(context).size.width - 50,
-                  child: const newThirdChild()),
+              // Container(
+              //     width: MediaQuery.of(context).size.width - 50,
+              //     child: const newThirdChild()),
               const SizedBox(height: 10),
             ],
           ),
