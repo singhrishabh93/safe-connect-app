@@ -13,14 +13,14 @@ class bottomNavigationBar extends StatefulWidget {
 }
 
 class _bottomNavigationBarState extends State<bottomNavigationBar> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; // Set the initial index to 0 for HomeScreen
 
   List<Color> _iconColors = [
-    Colors.black,
-    Colors.black,
-    Colors.black,
-    Colors.black,
-    Colors.black
+    Colors.grey,
+    Colors.grey,
+    Colors.grey,
+    Colors.grey,
+    Colors.grey
   ];
 
   final List<Widget> _screens = [
@@ -39,7 +39,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
 
   void _updateIconColors(int selectedIndex) {
     for (int i = 0; i < _iconColors.length; i++) {
-      _iconColors[i] = i == selectedIndex ? Colors.black : Colors.grey;
+      _iconColors[i] = i == selectedIndex ? Colors.white : Colors.grey;
     }
   }
 
@@ -59,7 +59,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
               height: 5,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
           ),
@@ -78,16 +78,16 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
         },
         child: const Icon(
           Icons.qr_code,
-          color: Colors.white,
+          color: Colors.black,
           size: 35,
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xffAAAFB5),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: SizedBox(
         height: 70, // Reduce the height of the bottom navigation bar
         child: BottomAppBar(
-          color: Colors.white,
+          color: Color(0xff1A1919),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
