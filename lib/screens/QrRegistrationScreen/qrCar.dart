@@ -1,11 +1,13 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class QRGenerator extends StatefulWidget {
   const QRGenerator({Key? key}) : super(key: key);
@@ -356,27 +358,48 @@ class _QRGeneratorState extends State<QRGenerator> {
     }
   }
 
-  Future<void> _saveQrImage() async {
-    try {
-      final image = await QrPainter(
-        data: _qrData,
-        version: QrVersions.auto,
-        gapless: false,
-        color: const Color(0xFF000000),
-        emptyColor: const Color(0xFFFFFFFF),
-      ).toImageData(300);
-      final directory = await getExternalStorageDirectory();
-      final imagePath = '${directory!.path}/qr_code.png';
-      final File imageFile = File(imagePath);
-      imageFile.writeAsBytesSync(image!.buffer.asUint8List());
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('QR Code saved as qr_code.png'),
-      ));
-    } catch (e) {
-      print(e.toString());
-    }
+Future<void> _saveQrImage() async {
+  try {
+    final image = await QrPainter(
+      data: _qrData,
+      version: QrVersions.auto,
+      gapless: false,
+      color: const Color(0xFF000000),
+      emptyColor: const Color(0xFFFFFFFF),
+    ).toImageData(300);
+
+    final user = FirebaseAuth.instance.currentUser;
+    final vehicleNumber = _vehicleNoController.text; 
+    
+    final storageRef = FirebaseStorage.instance.ref().child('qr_codes').child('${user!.uid}_qr_code_$vehicleNumber.png');
+    
+    final UploadTask uploadTask = storageRef.putData(image!.buffer.asUint8List());
+
+    await uploadTask.whenComplete(() => print('QR code image uploaded'));
+    final String downloadURL = await storageRef.getDownloadURL();
+
+    await launch(downloadURL);
+  } catch (e) {
+    print('Error saving QR code image: $e');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text('Error saving QR code image: $e'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
+}
 
   @override
   void dispose() {
