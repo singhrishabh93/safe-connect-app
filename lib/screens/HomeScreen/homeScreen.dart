@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                   width: MediaQuery.of(context).size.width - 50,
                   child: const fourthChild()),
+              const SizedBox(height: 30),
               Container(
                   width: MediaQuery.of(context).size.width - 50,
                   child: const newThirdChild()),

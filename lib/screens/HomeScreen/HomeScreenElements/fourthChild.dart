@@ -41,7 +41,7 @@ class fourthChild extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
@@ -71,18 +71,18 @@ class fourthChild extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 20),
                   child: Center(
                     child: Text(
-                      "SafeConnect's labels, tags, necklaces and \n bracelets are designed to easily attach to \n clothing or wear comfortably. More robust \n than a medical ID, less invasive than a tracker, \n SafeConnect is designed for everyone's \n peace of mind.",
-                      style: TextStyle(fontSize: 9, color: Color(0xffFFFFFf)),
+                      "SafeConnect's wearable peace of mind \n comfortable, non-invasive, and simple \n for all.",
+                      style: TextStyle(fontSize: 10, color: Color(0xffFFFFFf)),
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: SizedBox(
-                    height: 20,
+                    height: 30,
                     child: ElevatedButton(
                         onPressed: () {},
                         child: Text(
@@ -90,7 +90,7 @@ class fourthChild extends StatelessWidget {
                           style: TextStyle(
                               color: Colors.white,
                               fontFamily: "gilroy",
-                              fontSize: 10),
+                              fontSize: 12),
                         ),
                         style: ElevatedButton.styleFrom(
                           primary: const Color(0xffFF3D3D),

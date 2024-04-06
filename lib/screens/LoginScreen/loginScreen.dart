@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: MediaQuery.of(context).size.width,
                           color: Colors.black,
                         ),
-                        Padding(
+                        const Padding(
                           padding: const EdgeInsets.only(top: 130, left: 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,12 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 128,
-                              ),
-                              Center(
-                                  child:
-                                      Image.asset("assets/images/train.gif")),
+                              
                             ],
                           ),
                         ),
