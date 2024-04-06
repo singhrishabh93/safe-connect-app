@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/screens/LogsScreen/logsScreen.dart';
+import 'package:safe_connect/screens/QrInfoScreen/car.dart';
 
 class newSecondChild extends StatelessWidget {
   const newSecondChild({super.key});
@@ -31,7 +32,7 @@ class newSecondChild extends StatelessWidget {
         Center(
           child: Container(
             width: MediaQuery.of(context).size.width - 50,
-            height: 134,
+            height: 124,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -40,119 +41,133 @@ class newSecondChild extends StatelessWidget {
                   children: <Widget>[
                     InkWell(
                       onTap: () {
-                        Get.to(() => LogScreen());
+                        Get.to(() => carQr());
                       },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/more.png'),
-                            fit: BoxFit.fitWidth,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/icons/vehicle.png'),
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          const Text(
+                            'Vehicle',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Color(0xffFFB13D),
+                              fontFamily: 'gilroy',
+                              fontSize: 14,
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.normal,
+                              height: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/icons/child.png'),
+                              fit: BoxFit.fitWidth,
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'Child',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Color(0xffFFB13D),
+                            fontFamily: 'gilroy',
+                            fontSize: 14,
+                            letterSpacing: 0,
+                            fontWeight: FontWeight.normal,
+                            height: 1,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       width: 20,
                     ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/more.png'),
-                          fit: BoxFit.fitWidth,
+                    Column(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/icons/pet.png'),
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'Pet',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Color(0xffFFB13D),
+                            fontFamily: 'gilroy',
+                            fontSize: 14,
+                            letterSpacing: 0,
+                            fontWeight: FontWeight.normal,
+                            height: 1,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       width: 20,
                     ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/more.png'),
-                          fit: BoxFit.fitWidth,
+                    Column(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/icons/electronics.png'),
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/more.png'),
-                          fit: BoxFit.fitWidth,
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Text(
-                      'More',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Color(0xffFFB13D),
-                        fontFamily: 'gilroy',
-                        fontSize: 14,
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.normal,
-                        height: 1,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'More',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Color(0xffFFB13D),
-                        fontFamily: 'gilroy',
-                        fontSize: 14,
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.normal,
-                        height: 1,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'More',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Color(0xffFFB13D),
-                        fontFamily: 'gilroy',
-                        fontSize: 14,
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.normal,
-                        height: 1,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'More',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Color(0xffFFB13D),
-                        fontFamily: 'gilroy',
-                        fontSize: 14,
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.normal,
-                        height: 1,
-                      ),
+                        const Text(
+                          'Electronics',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Color(0xffFFB13D),
+                            fontFamily: 'gilroy',
+                            fontSize: 14,
+                            letterSpacing: 0,
+                            fontWeight: FontWeight.normal,
+                            height: 1,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -163,7 +178,7 @@ class newSecondChild extends StatelessWidget {
         Center(
           child: Container(
             width: MediaQuery.of(context).size.width - 50,
-            height: 134,
+            height: 124,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -174,117 +189,131 @@ class newSecondChild extends StatelessWidget {
                       onTap: () {
                         Get.to(() => LogScreen());
                       },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/child.png'),
-                            fit: BoxFit.fitWidth,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/icons/bag.png'),
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const Text(
+                            'Bag',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Color(0xffFFB13D),
+                              fontFamily: 'gilroy',
+                              fontSize: 14,
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.normal,
+                              height: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/icons/key.png'),
+                              fit: BoxFit.fitWidth,
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'Key',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Color(0xffFFB13D),
+                            fontFamily: 'gilroy',
+                            fontSize: 14,
+                            letterSpacing: 0,
+                            fontWeight: FontWeight.normal,
+                            height: 1,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       width: 20,
                     ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/child.png'),
-                          fit: BoxFit.fitWidth,
+                    Column(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/icons/doorbell.png'),
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'Door Bell',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Color(0xffFFB13D),
+                            fontFamily: 'gilroy',
+                            fontSize: 14,
+                            letterSpacing: 0,
+                            fontWeight: FontWeight.normal,
+                            height: 1,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       width: 20,
                     ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/child.png'),
-                          fit: BoxFit.fitWidth,
+                    Column(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/icons/more.png'),
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/child.png'),
-                          fit: BoxFit.fitWidth,
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Text(
-                      'More',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Color(0xffFFB13D),
-                        fontFamily: 'gilroy',
-                        fontSize: 14,
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.normal,
-                        height: 1,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'More',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Color(0xffFFB13D),
-                        fontFamily: 'gilroy',
-                        fontSize: 14,
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.normal,
-                        height: 1,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'More',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Color(0xffFFB13D),
-                        fontFamily: 'gilroy',
-                        fontSize: 14,
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.normal,
-                        height: 1,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'More',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Color(0xffFFB13D),
-                        fontFamily: 'gilroy',
-                        fontSize: 14,
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.normal,
-                        height: 1,
-                      ),
+                        const Text(
+                          'More',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Color(0xffFFB13D),
+                            fontFamily: 'gilroy',
+                            fontSize: 14,
+                            letterSpacing: 0,
+                            fontWeight: FontWeight.normal,
+                            height: 1,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
