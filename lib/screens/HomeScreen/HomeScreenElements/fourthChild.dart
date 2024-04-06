@@ -71,7 +71,7 @@ class fourthChild extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 20),
                   child: Center(
                     child: Text(
-                      "SafeConnect's wearable peace of mind \n comfortable, non-invasive, and simple \n for all.",
+                      "SafeConnect's wearable peace of mind \ncomfortable, non-invasive, and simple \nfor all.",
                       style: TextStyle(fontSize: 10, color: Color(0xffFFFFFf)),
                     ),
                   ),
