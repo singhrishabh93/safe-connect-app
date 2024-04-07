@@ -59,7 +59,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCjf31wGfi-tzT1gnuLxzeLi8OhSxpfqnc',
-    appId: '1:159443933809:android:196f5b9e4bb54d63eb99d0',
+    appId: '1:159443933809:android:9fe3785dc3d06259eb99d0',
     messagingSenderId: '159443933809',
     projectId: 'safe-connect-app-1',
     databaseURL: 'https://safe-connect-app-1-default-rtdb.firebaseio.com',
@@ -68,7 +68,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAETcdx4-5EWSKhDeoJBijV4zdHPESwn0Y',
-    appId: '1:159443933809:ios:7a78791265b3308eeb99d0',
+    appId: '1:159443933809:ios:61af10cfacefa19beb99d0',
     messagingSenderId: '159443933809',
     projectId: 'safe-connect-app-1',
     databaseURL: 'https://safe-connect-app-1-default-rtdb.firebaseio.com',
