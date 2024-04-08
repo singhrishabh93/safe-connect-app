@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:safe_connect/MedicalInformation/medicalInformation.dart';
 
 class fourthChild extends StatelessWidget {
   const fourthChild({super.key});
@@ -84,7 +87,9 @@ class fourthChild extends StatelessWidget {
                   child: SizedBox(
                     height: 30,
                     child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(() => MedicalInformationPage());
+                        },
                         child: Text(
                           "Register Now",
                           style: TextStyle(

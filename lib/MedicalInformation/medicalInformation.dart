@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MedicalInformationPage extends StatefulWidget {
   @override
@@ -166,11 +168,55 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
               ),
               SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
-                    // Form is validated, you can proceed with submission
-                    // You can access the values entered by the user using the variables (_bloodType, _bloodPressure, etc.)
+                    try {
+                      final user = FirebaseAuth.instance.currentUser;
+                      final mobileNumber = user!.phoneNumber;
+
+                      // Send medical information to Firestore
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(mobileNumber)
+                          .collection('medicalInformation')
+                          .doc(mobileNumber)
+                          .set({
+                        'bloodType': _bloodType,
+                        'bloodPressure': _bloodPressure,
+                        'allergies': _allergies,
+                        'medications': _medications,
+                        'isOrganDonor': _isOrganDonor,
+                        'medicalNotes': _medicalNotes,
+                        'disease': _disease,
+                        'immunizations': _immunizations,
+                      });
+
+                      // Show success dialog
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Success'),
+                            content:
+                                Text('Medical information saved successfully!'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  // Clear form fields
+                                  _formKey.currentState?.reset();
+                                  // Close the dialog
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } catch (e) {
+                      print('Error saving medical information: $e');
+                    }
                   }
                 },
                 child: Text('Submit'),
