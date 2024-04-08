@@ -8,7 +8,7 @@ import 'package:safe_connect/screens/SplashScreen/splashScreen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      name: 'name-here', options: DefaultFirebaseOptions.currentPlatform);
+      options: DefaultFirebaseOptions.currentPlatform);
   await GetStorage.init();
   runApp(const MyApp());
 }
