@@ -269,17 +269,25 @@ class _QRGeneratorState extends State<QRGenerator> {
       final user = FirebaseAuth.instance.currentUser;
       final carNumber = _vehicleNoController.text;
 
-      final documentSnapshot = await FirebaseFirestore.instance
+      final vehicleDoc = await FirebaseFirestore.instance
           .collection('registeredVehicles')
           .doc(carNumber)
           .get();
 
-      if (documentSnapshot.exists) {
-        final data = documentSnapshot.data() as Map<String, dynamic>;
+      final medicalDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.phoneNumber)
+          .collection('medicalInformation')
+          .doc(user.phoneNumber)
+          .get();
+
+      if (vehicleDoc.exists && medicalDoc.exists) {
+        final vehicleData = vehicleDoc.data() as Map<String, dynamic>;
+        final medicalData = medicalDoc.data() as Map<String, dynamic>;
 
         setState(() {
           _qrData =
-              'Name: ${data['name']}, Vehicle Brand & Name: ${data['vehicleName']}, Vehicle No.: ${data['vehicleNumber']}, Email: ${data['email']}, Contact No.: ${data['contactNumber']}, Emergency Contact No.: ${data['emergencyContact']}';
+              'Name: ${vehicleData['name']}, Vehicle Brand & Name: ${vehicleData['vehicleName']}, Vehicle No.: ${vehicleData['vehicleNumber']}, Email: ${vehicleData['email']}, Contact No.: ${vehicleData['contactNumber']}, Emergency Contact No.: ${vehicleData['emergencyContact']}, Blood Type: ${medicalData['bloodType']}, Blood Pressure: ${medicalData['bloodPressure']}, Allergies: ${medicalData['allergies']}, Medications: ${medicalData['medications']}, Organ Donor: ${medicalData['isOrganDonor']}, Medical Notes: ${medicalData['medicalNotes']}, Disease: ${medicalData['disease']}, Immunizations: ${medicalData['immunizations']}';
         });
       }
     } catch (e) {
@@ -358,48 +366,52 @@ class _QRGeneratorState extends State<QRGenerator> {
     }
   }
 
-Future<void> _saveQrImage() async {
-  try {
-    final image = await QrPainter(
-      data: _qrData,
-      version: QrVersions.auto,
-      gapless: false,
-      color: const Color(0xFF000000),
-      emptyColor: const Color(0xFFFFFFFF),
-    ).toImageData(300);
+  Future<void> _saveQrImage() async {
+    try {
+      final image = await QrPainter(
+        data: _qrData,
+        version: QrVersions.auto,
+        gapless: false,
+        color: const Color(0xFF000000),
+        emptyColor: const Color(0xFFFFFFFF),
+      ).toImageData(300);
 
-    final user = FirebaseAuth.instance.currentUser;
-    final vehicleNumber = _vehicleNoController.text; 
-    
-    final storageRef = FirebaseStorage.instance.ref().child('qr_codes').child('${user!.uid}_qr_code_$vehicleNumber.png');
-    
-    final UploadTask uploadTask = storageRef.putData(image!.buffer.asUint8List());
+      final user = FirebaseAuth.instance.currentUser;
+      final vehicleNumber = _vehicleNoController.text;
 
-    await uploadTask.whenComplete(() => print('QR code image uploaded'));
-    final String downloadURL = await storageRef.getDownloadURL();
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('qr_codes')
+          .child('${user!.uid}_qr_code_$vehicleNumber.png');
 
-    await launch(downloadURL);
-  } catch (e) {
-    print('Error saving QR code image: $e');
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text('Error saving QR code image: $e'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+      final UploadTask uploadTask =
+          storageRef.putData(image!.buffer.asUint8List());
+
+      await uploadTask.whenComplete(() => print('QR code image uploaded'));
+      final String downloadURL = await storageRef.getDownloadURL();
+
+      await launch(downloadURL);
+    } catch (e) {
+      print('Error saving QR code image: $e');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text('Error saving QR code image: $e'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
-}
 
   @override
   void dispose() {
