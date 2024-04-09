@@ -3,6 +3,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/screens/LogsScreen/logsScreen.dart';
 import 'package:safe_connect/screens/QrInfoScreen/car.dart';
+import 'package:safe_connect/screens/QrRegistrationScreen/qrWallpaper.dart';
 
 class newSecondChild extends StatelessWidget {
   const newSecondChild({super.key});
@@ -140,34 +141,40 @@ class newSecondChild extends StatelessWidget {
                     const SizedBox(
                       width: 20,
                     ),
-                    Column(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/icons/electronics.png'),
-                              fit: BoxFit.fitWidth,
+                    InkWell(
+                      onTap: () {
+                        Get.to(() => QRWallpaper());
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image:
+                                    AssetImage('assets/icons/electronics.png'),
+                                fit: BoxFit.fitWidth,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Text(
-                          'Electronics',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Color(0xffFFB13D),
-                            fontFamily: 'gilroy',
-                            fontSize: 14,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.normal,
-                            height: 1,
+                          const SizedBox(
+                            height: 20,
                           ),
-                        ),
-                      ],
+                          const Text(
+                            'Electronics',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Color(0xffFFB13D),
+                              fontFamily: 'gilroy',
+                              fontSize: 14,
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.normal,
+                              height: 1,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
