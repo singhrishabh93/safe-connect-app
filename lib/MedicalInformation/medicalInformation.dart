@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
+import 'package:safe_connect/theme.dart';
 
 class MedicalInformationPage extends StatefulWidget {
   @override
@@ -47,8 +49,21 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('Medical Information'),
+        backgroundColor: Colors.black,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            },
+            icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white)),
+        title: Text(
+          'Medical Information',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -56,6 +71,30 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
           key: _formKey,
           child: ListView(
             children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Medical Registration',
+                    style: TextStyle(
+                      color: Color(0xffFFB13D),
+                      fontFamily: 'Gilroy',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 4.0),
+                  Text(
+                    'Fill out this registration form & generate the QR',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontFamily: 'Gilroy',
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 40.0),
               DropdownButtonFormField<String>(
                 value: _bloodType,
                 onChanged: (String? newValue) {
@@ -80,6 +119,17 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
                 }).toList(),
                 decoration: InputDecoration(
                   labelText: 'Blood Type',
+                  labelStyle:
+                      TextStyle(fontFamily: 'gilroy', color: Colors.white),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -87,13 +137,25 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
                   }
                   return null;
                 },
+                style: TextStyle(color: Colors.black, fontFamily: 'gilroy'),
               ),
               SizedBox(height: 20.0),
               TextFormField(
+                style: TextStyle(color: Colors.white),
                 controller: _bloodPressureController,
                 keyboardType: TextInputType.number,
+                cursorColor: Colors.white,
                 decoration: InputDecoration(
                   labelText: 'Blood Pressure (mmHg)',
+                  labelStyle:
+                      TextStyle(color: Colors.white, fontFamily: 'gilroy'),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
                 ),
                 onChanged: (value) {
                   _bloodPressure = value;
@@ -107,8 +169,19 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
               ),
               SizedBox(height: 20.0),
               TextFormField(
+                cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Allergies',
+                  labelStyle:
+                      TextStyle(color: Colors.white, fontFamily: 'gilroy'),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
                 ),
                 onChanged: (value) {
                   _allergies = value;
@@ -116,8 +189,19 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
               ),
               SizedBox(height: 20.0),
               TextFormField(
+                cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white, fontFamily: 'gilroy'),
                 decoration: InputDecoration(
                   labelText: 'Medications',
+                  labelStyle:
+                      TextStyle(fontFamily: 'gilroy', color: Colors.white),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
                 ),
                 onChanged: (value) {
                   _medications = value;
@@ -126,9 +210,13 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
               SizedBox(height: 20.0),
               Row(
                 children: [
-                  Text('Organ Donor:'),
+                  Text(
+                    'Organ Donor:',
+                    style: TextStyle(fontFamily: 'gilroy', color: Colors.white),
+                  ),
                   Checkbox(
                     value: _isOrganDonor,
+                    activeColor: Colors.transparent,
                     onChanged: (bool? value) {
                       if (value != null) {
                         setState(() {
@@ -136,13 +224,24 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
                         });
                       }
                     },
+                    checkColor: Color(0xffFFB13D),
                   ),
                 ],
               ),
               SizedBox(height: 20.0),
               TextFormField(
+                cursorColor: Colors.white,
                 decoration: InputDecoration(
                   labelText: 'Medical Notes',
+                  labelStyle:
+                      TextStyle(color: Colors.white, fontFamily: 'gilroy'),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
                 ),
                 onChanged: (value) {
                   _medicalNotes = value;
@@ -150,8 +249,21 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
               ),
               SizedBox(height: 20.0),
               TextFormField(
+                cursorColor: Colors.white,
+                style: TextStyle(color: Colors.white, fontFamily: 'gilroy'),
                 decoration: InputDecoration(
                   labelText: 'Disease',
+                  labelStyle:
+                      TextStyle(color: Colors.white, fontFamily: 'gilroy'),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.white,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
                 ),
                 onChanged: (value) {
                   _disease = value;
@@ -159,15 +271,35 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
               ),
               SizedBox(height: 20.0),
               TextFormField(
+                cursorColor: Colors.white,
                 decoration: InputDecoration(
                   labelText: 'Immunizations',
+                  labelStyle: TextStyle(
+                    fontFamily: 'gilroy',
+                    color: Colors.white,
+                  ),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
                 onChanged: (value) {
                   _immunizations = value;
                 },
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 40.0),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  backgroundColor: Color(0xffFFB13D),
+                ),
                 onPressed: () async {
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
@@ -219,7 +351,10 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
                     }
                   }
                 },
-                child: Text('Submit'),
+                child: Text(
+                  'Submit',
+                  style: TextStyle(color: Colors.black, fontFamily: 'gilroy'),
+                ),
               ),
             ],
           ),
