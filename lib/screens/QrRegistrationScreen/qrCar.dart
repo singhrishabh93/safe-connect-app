@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class QRGenerator extends StatefulWidget {
@@ -26,12 +25,30 @@ class _QRGeneratorState extends State<QRGenerator> {
   final TextEditingController _emergencyContactNoController =
       TextEditingController();
   String _qrData = '';
+  bool _showQRData = false;
+  String? _selectedVehicleType;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+          },
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+        ),
+        title: Text(
+          'Registration',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black,
+      ),
       body: Container(
-        color: Colors.white,
+        color: Colors.black, // Set background color to black
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Form(
@@ -39,15 +56,39 @@ class _QRGeneratorState extends State<QRGenerator> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Center(
-                    child: Text("Car Registration",
-                        style: TextStyle(fontSize: 15.0))),
-                const SizedBox(height: 10.0),
+                Text(
+                  'Vehicle Registration',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xffFFB13D),
+                    fontFamily: 'Gilroy',
+                  ),
+                ),
+                SizedBox(height: 5.0),
+                Text(
+                  'Fill out this registration form & generate the QR',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontFamily: 'Gilroy',
+                  ),
+                ),
+                SizedBox(height: 40.0),
                 TextFormField(
+                  cursorColor: Colors.white,
+                  style: TextStyle(color: Colors.white),
                   controller: _nameController,
                   decoration: const InputDecoration(
                     labelText: 'Name',
+                    labelStyle: TextStyle(
+                      color: Colors.grey,
+                    ),
                     border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
@@ -58,17 +99,68 @@ class _QRGeneratorState extends State<QRGenerator> {
                     );
                   },
                 ),
+                SizedBox(height: 20),
+                // Vehicle type dropdown
+                Container(
+                  width: double.infinity,
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      labelText: 'Vehicle Type',
+                      labelStyle: TextStyle(
+                        color: Colors.grey,
+                      ),
+                      border: OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                    value: _selectedVehicleType,
+                    items: ['Two Wheeler', 'Four Wheeler', 'Other']
+                        .map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    style: TextStyle(color: Colors.white), // Set text color
+                    dropdownColor:
+                        Colors.black, // Set dropdown background color
+                    onChanged: (String? value) {
+                      setState(() {
+                        _selectedVehicleType = value;
+                      });
+                    },
+                  ),
+                ),
                 const SizedBox(height: 20.0),
                 TextFormField(
-                  controller: _vehicleNameController,
+                  cursorColor: Colors.white,
+                  style: TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                     labelText: 'Vehicle Brand and Name',
+                    labelStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  keyboardType:
-                      TextInputType.text, // Change keyboardType to text
+                  keyboardType: TextInputType.text,
                   onChanged: (value) {
-                    // Remove non-alphabetic and non-numeric characters
                     _vehicleNameController.value =
                         _vehicleNameController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z0-9\s]'), ''),
@@ -79,34 +171,69 @@ class _QRGeneratorState extends State<QRGenerator> {
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
+                  cursorColor: Colors.white,
+                  style: TextStyle(color: Colors.white),
                   controller: _vehicleNoController,
                   decoration: const InputDecoration(
                     labelText: 'Vehicle No.',
+                    labelStyle: TextStyle(
+                      color: Colors.grey,
+                    ),
                     border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  maxLength: 10, // Set maximum length to 10 characters
+                  maxLength: 10,
                   onChanged: (value) {
-                    // Convert input to uppercase, remove non-alphabetic and non-numeric characters, and limit to 10 characters
+                    // Convert input to uppercase and remove non-alphabetic and non-numeric characters
+                    String processedValue = value
+                        .toUpperCase()
+                        .replaceAll(RegExp(r'[^A-Z0-9]'), '');
+
+                    // Ensure the processed value doesn't exceed the maximum length of 10 characters
+                    if (processedValue.length > 10) {
+                      processedValue = processedValue.substring(0, 10);
+                    }
+
+                    // Update the controller value
                     _vehicleNoController.value =
                         _vehicleNoController.value.copyWith(
-                      text: value
-                          .toUpperCase()
-                          .replaceAll(RegExp(r'[^A-Z0-9]'), '')
-                          .substring(0, 10),
-                      selection: TextSelection.collapsed(offset: value.length),
+                      text: processedValue,
+                      selection: TextSelection.collapsed(
+                          offset: processedValue.length),
                       composing: TextRange.empty,
                     );
                   },
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
+                  cursorColor: Colors.white,
+                  style: TextStyle(color: Colors.white),
                   controller: _emailController,
                   decoration: const InputDecoration(
                     labelText: 'Email',
+                    labelStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  keyboardType:
-                      TextInputType.emailAddress, // Set keyboard type to email
+                  keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
@@ -119,17 +246,29 @@ class _QRGeneratorState extends State<QRGenerator> {
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
+                  cursorColor: Colors.white,
+                  style: TextStyle(color: Colors.white),
                   controller: _contactNoController,
                   decoration: const InputDecoration(
                     labelText: 'Contact No.',
+                    labelStyle: TextStyle(
+                      color: Colors.grey,
+                    ),
                     border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  keyboardType:
-                      TextInputType.phone, // Set keyboard type to phone
-                  maxLength: 10, // Set maximum length to 10 digits
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly
-                  ], // Allow only digits
+                  keyboardType: TextInputType.phone,
+                  maxLength: 10,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your contact number';
@@ -139,17 +278,29 @@ class _QRGeneratorState extends State<QRGenerator> {
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
+                  cursorColor: Colors.white,
+                  style: TextStyle(color: Colors.white),
                   controller: _emergencyContactNoController,
                   decoration: const InputDecoration(
                     labelText: 'Emergency Contact No.',
+                    labelStyle: TextStyle(
+                      color: Colors.grey,
+                    ),
                     border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  keyboardType:
-                      TextInputType.phone, // Set keyboard type to phone
-                  maxLength: 10, // Set maximum length to 10 digits
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly
-                  ], // Allow only digits
+                  keyboardType: TextInputType.phone,
+                  maxLength: 10,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your contact number';
@@ -157,79 +308,89 @@ class _QRGeneratorState extends State<QRGenerator> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          // backgroundColor: Color(0xFF3199E4),
-                          backgroundColor: Colors.green,
-                        ),
-                        onPressed: _onGenerateQRPressed,
-                        child: const Text(
-                          'Generate QR Code',
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                      ),
+                const SizedBox(height: 40.0),
+                // Generate QR Button
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    const SizedBox(width: 10.0),
-                    Expanded(
-                      child: SizedBox(
-                        height: 40.0,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                    backgroundColor: Color(0xffFFB13D),
+                  ),
+                  onPressed: _onGenerateQRPressed,
+                  child: const Text(
+                    'Generate QR Code',
+                    style: TextStyle(color: Colors.black, fontSize: 14),
+                  ),
+                ),
+                if (_showQRData)
+                  Column(
+                    children: [
+                      const SizedBox(height: 20.0),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Center(
+                              child: Container(
+                                padding: const EdgeInsets.all(0.0),
+                                child: QrImageView(
+                                  data: _qrData,
+                                  version: QrVersions.auto,
+                                  size: 120.0,
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
                             ),
-                            backgroundColor: const Color(0xFF3199E4),
                           ),
-                          onPressed: () async {
-                            if (_qrData.isNotEmpty) {
-                              await _saveQrImage();
-                            }
-                          },
-                          child: const Text(
-                            'Download QR',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          Expanded(
+                            flex: 3,
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 20.0),
+                              child: Text(
+                                'Stay Connected to loved ones Download the QR for ${_vehicleNoController.text}',
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.white,
+                                  fontFamily: 'Gilroy',
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10.0),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(0.0),
-                          child: QrImageView(
-                            data: _qrData,
-                            version: QrVersions.auto,
-                            size: 150.0,
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 40.0,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  backgroundColor: const Color(0xffFF3D3D),
+                                ),
+                                onPressed: () async {
+                                  if (_qrData.isNotEmpty) {
+                                    await _saveQrImage();
+                                  }
+                                },
+                                child: const Text(
+                                  'Click to downlaod QR',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                    const Expanded(
-                      flex: 3,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          'Download this QR code and stick it on the front and backside of your car',
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -242,6 +403,9 @@ class _QRGeneratorState extends State<QRGenerator> {
     if (_formKey.currentState!.validate()) {
       await _saveDataToFirestore(); // Save data to Firestore
       await _generateQRFromFirestoreData(); // Generate QR code from Firestore data
+      setState(() {
+        _showQRData = true; // Set _showQRData to true when QR data is generated
+      });
     } else {
       // Show alert
       showDialog(
@@ -328,6 +492,16 @@ class _QRGeneratorState extends State<QRGenerator> {
           },
         );
       } else {
+        // Convert dropdown value to text
+        String vehicleTypeText = '';
+        if (_selectedVehicleType == 'Two Wheeler') {
+          vehicleTypeText = 'Two Wheeler';
+        } else if (_selectedVehicleType == 'Four Wheeler') {
+          vehicleTypeText = 'Four Wheeler';
+        } else {
+          vehicleTypeText = 'Other';
+        }
+
         // Vehicle is not registered, proceed to save data
         await FirebaseFirestore.instance
             .collection('registeredVehicles')
@@ -336,6 +510,7 @@ class _QRGeneratorState extends State<QRGenerator> {
           'name': _nameController.text,
           'vehicleName': _vehicleNameController.text,
           'vehicleNumber': _vehicleNoController.text,
+          'vehicleType': vehicleTypeText,
           'email': _emailController.text,
           'contactNumber': int.parse(_contactNoController.text),
           'emergencyContact': int.parse(_emergencyContactNoController.text),
@@ -351,6 +526,7 @@ class _QRGeneratorState extends State<QRGenerator> {
           'name': _nameController.text,
           'vehicleName': _vehicleNameController.text,
           'vehicleNumber': _vehicleNoController.text,
+          'vehicleType': vehicleTypeText,
           'email': _emailController.text,
           'contactNumber': int.parse(_contactNoController.text),
           'emergencyContact': int.parse(_emergencyContactNoController.text),
@@ -358,7 +534,7 @@ class _QRGeneratorState extends State<QRGenerator> {
 
         setState(() {
           _qrData =
-              'Name: ${_nameController.text}, Vehicle Brand & Name: ${_vehicleNameController.text}, Vehicle No.: ${_vehicleNoController.text}, Email: ${_emailController.text}, Contact No.: ${_contactNoController.text}, Emergency Contact No.: ${_emergencyContactNoController.text}';
+              'Name: ${_nameController.text}, Vehicle Brand & Name: ${_vehicleNameController.text}, Vehicle No.: ${_vehicleNoController.text}, Vehicle Type: $vehicleTypeText, Email: ${_emailController.text}, Contact No.: ${_contactNoController.text}, Emergency Contact No.: ${_emergencyContactNoController.text}';
         });
       }
     } catch (e) {
@@ -372,8 +548,8 @@ class _QRGeneratorState extends State<QRGenerator> {
         data: _qrData,
         version: QrVersions.auto,
         gapless: false,
-        color: const Color(0xFF000000),
-        emptyColor: const Color(0xFFFFFFFF),
+        color: const Color(0xFFFFFFFF), // White color
+        emptyColor: const Color(0xFF000000), // Black color
       ).toImageData(300);
 
       final user = FirebaseAuth.instance.currentUser;
@@ -390,7 +566,71 @@ class _QRGeneratorState extends State<QRGenerator> {
       await uploadTask.whenComplete(() => print('QR code image uploaded'));
       final String downloadURL = await storageRef.getDownloadURL();
 
-      await launch(downloadURL);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.black, // Set background color to black
+            titleTextStyle: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Gilroy'), // Set title text color and font
+            contentTextStyle: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Gilroy'), // Set content text color and font
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'QR code image generated successfully for ${_vehicleNoController.text}',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'gilroy',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.normal), // Set text color to white
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    // Launch URL to download the QR code
+                    await launch(downloadURL);
+                  },
+                  child: const Text(
+                    'Download',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'gilroy',
+                        fontSize: 14.0), // Set font color to black
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Color(0xffFFB13D), // Set button background color
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Close',
+                  style: TextStyle(
+                      fontFamily: 'gilroy',
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            ],
+            // Add border of color 0xffFFB13D
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: Color(0xffFFB13D)),
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+          );
+        },
+      );
     } catch (e) {
       print('Error saving QR code image: $e');
       showDialog(

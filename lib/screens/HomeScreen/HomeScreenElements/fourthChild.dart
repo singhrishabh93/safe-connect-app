@@ -98,7 +98,7 @@ class fourthChild extends StatelessWidget {
                               fontSize: 12),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary: const Color(0xffFF3D3D),
+                          backgroundColor: const Color(0xffFF3D3D),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(2),
                           ),
