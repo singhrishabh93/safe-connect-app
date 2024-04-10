@@ -83,11 +83,15 @@ class _QRWallpaperState extends State<QRWallpaper> {
                       if (_showQRData)
                         Column(
                           children: [
-                            Row(
+                            Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                    'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}'),
+                                  'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "gilroy"),
+                                ),
                                 Slider(
                                   value: _horizontalPosition,
                                   onChanged: (value) {
@@ -95,16 +99,20 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                       _horizontalPosition = value;
                                     });
                                   },
-                                  min: -100,
-                                  max: 100,
+                                  min: -2000,
+                                  max: 2000,
                                 ),
                               ],
                             ),
-                            Row(
+                            Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                    'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}'),
+                                  'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "gilroy"),
+                                ),
                                 Slider(
                                   value: _verticalPosition,
                                   onChanged: (value) {
@@ -112,8 +120,8 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                       _verticalPosition = value;
                                     });
                                   },
-                                  min: -100,
-                                  max: 100,
+                                  min: -800,
+                                  max: 800,
                                 ),
                               ],
                             ),
@@ -125,47 +133,47 @@ class _QRWallpaperState extends State<QRWallpaper> {
                           if (_showQRData)
                             Column(
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}'),
-                                    SizedBox(width: 20),
-                                    GestureDetector(
-                                      onPanUpdate: (details) {
-                                        setState(() {
-                                          _horizontalPosition +=
-                                              details.delta.dx;
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 100,
-                                        height: 20,
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}'),
-                                    SizedBox(width: 20),
-                                    GestureDetector(
-                                      onPanUpdate: (details) {
-                                        setState(() {
-                                          _verticalPosition += details.delta.dy;
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 100,
-                                        height: 20,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   children: [
+                                //     Text(
+                                //         'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}'),
+                                //     SizedBox(width: 20),
+                                //     // GestureDetector(
+                                //     //   onPanUpdate: (details) {
+                                //     //     setState(() {
+                                //     //       _horizontalPosition +=
+                                //     //           details.delta.dx;
+                                //     //     });
+                                //     //   },
+                                //     //   child: Container(
+                                //     //     width: 100,
+                                //     //     height: 20,
+                                //     //     color: Colors.blue,
+                                //     //   ),
+                                //     // ),
+                                //   ],
+                                // ),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   children: [
+                                //     Text(
+                                //         'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}'),
+                                //     SizedBox(width: 20),
+                                //     // GestureDetector(
+                                //     //   onPanUpdate: (details) {
+                                //     //     setState(() {
+                                //     //       _verticalPosition += details.delta.dy;
+                                //     //     });
+                                //     //   },
+                                //     //   child: Container(
+                                //     //     width: 100,
+                                //     //     height: 20,
+                                //     //     color: Colors.red,
+                                //     //   ),
+                                //     // ),
+                                //   ],
+                                // ),
                               ],
                             ),
                           Container(
