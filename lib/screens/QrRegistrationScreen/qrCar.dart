@@ -320,7 +320,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                   onPressed: _onGenerateQRPressed,
                   child: const Text(
                     'Generate QR Code',
-                    style: TextStyle(color: Colors.black, fontSize: 14),
+                    style: TextStyle(color: Colors.black, fontSize: 14,fontFamily: 'gilroy'),
                   ),
                 ),
                 if (_showQRData)
