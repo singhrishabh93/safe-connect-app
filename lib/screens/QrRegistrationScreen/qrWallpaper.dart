@@ -1,12 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
 
 class QRWallpaper extends StatefulWidget {
   const QRWallpaper({Key? key}) : super(key: key);
@@ -29,6 +35,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
   Uint8List? _uploadedImageData;
   double _horizontalPosition = 0.0;
   double _verticalPosition = 0.0;
+  GlobalKey _globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -176,43 +183,74 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                 // ),
                               ],
                             ),
-                          Container(
-                            height: MediaQuery.of(context).size.height - 50,
-                            width: MediaQuery.of(context).size.width - 50,
-                            child: AspectRatio(
-                              aspectRatio: 9 / 16,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: MemoryImage(_uploadedImageData!),
-                                    fit: BoxFit.cover,
+                          RepaintBoundary(
+                            key: _globalKey,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height - 50,
+                              width: MediaQuery.of(context).size.width - 50,
+                              child: AspectRatio(
+                                aspectRatio: 9 / 16,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: MemoryImage(_uploadedImageData!),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    if (_showQRData)
-                                      Positioned(
-                                        left: _horizontalPosition + 100,
-                                        top: _verticalPosition + 100,
-                                        child: GestureDetector(
-                                          onPanUpdate: (details) {
-                                            setState(() {
-                                              _horizontalPosition +=
-                                                  details.delta.dx;
-                                              _verticalPosition +=
-                                                  details.delta.dy;
-                                            });
-                                          },
-                                          child: QrImageView(
-                                            data: _qrData,
-                                            version: QrVersions.auto,
-                                            size: 120.0,
-                                            backgroundColor:
-                                                Colors.white.withOpacity(0.5),
+                                  child: Stack(
+                                    children: [
+                                      // Add the yellow rectangular container below the QR Code
+                                      if (_showQRData)
+                                        Positioned(
+                                          top: _verticalPosition + 300,
+                                          left: _horizontalPosition + 100,
+                                          child: GestureDetector(
+                                            onPanUpdate: (details) {
+                                              setState(() {
+                                                _horizontalPosition +=
+                                                    details.delta.dx;
+                                                _verticalPosition +=
+                                                    details.delta.dy;
+                                              });
+                                            },
+                                            child: Container(
+                                              height: 100,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  100,
+                                              padding: EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.yellow,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  // Qr code image
+                                                  QrImageView(
+                                                    data: _qrData,
+                                                    version: QrVersions.auto,
+                                                    size: 100.0,
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  // Text widget
+                                                  Text(
+                                                    'Your Text Here',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -461,6 +499,11 @@ class _QRWallpaperState extends State<QRWallpaper> {
                           ),
                         ],
                       ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _saveImageToDevice,
+                        child: Text('Download Image'),
+                      ),
                     ],
                   ),
               ],
@@ -580,5 +623,31 @@ class _QRWallpaperState extends State<QRWallpaper> {
 
   bool _isValidEmailFormat(String email) {
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  Future<void> _saveImageToDevice() async {
+    try {
+      // Create a key for the RepaintBoundary widget
+      final GlobalKey _repaintKey = GlobalKey();
+
+      // Capture the area containing the positioned QR code and the yellow container
+      RenderRepaintBoundary boundary = _repaintKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
+
+      // Save the image to the device's gallery
+      String path = (await getTemporaryDirectory()).path;
+      File file = File('$path/image.png');
+      await file.writeAsBytes(pngBytes);
+      File savedFile = await FlutterNativeImage.compressImage(file.path);
+      await ImageGallerySaver.saveFile(savedFile.path);
+
+      print('Image saved to gallery.');
+    } catch (e) {
+      print('Failed to save image: $e');
+    }
   }
 }
