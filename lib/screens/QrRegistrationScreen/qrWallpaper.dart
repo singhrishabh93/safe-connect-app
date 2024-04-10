@@ -1,15 +1,12 @@
 import 'dart:async';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:image/image.dart' as img;
 
 class QRWallpaper extends StatefulWidget {
   const QRWallpaper({Key? key}) : super(key: key);
@@ -29,8 +26,9 @@ class _QRWallpaperState extends State<QRWallpaper> {
   String _qrData = '';
   bool _showQRData = false;
   String? _selectedDeviceType;
-  late Uint8List _imageBytes = Uint8List(0);
-  Offset _qrPosition = Offset.zero;
+  Uint8List? _uploadedImageData;
+  double _horizontalPosition = 0.0;
+  double _verticalPosition = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +36,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-            );
+            Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
         ),
@@ -77,6 +72,148 @@ class _QRWallpaperState extends State<QRWallpaper> {
                   ),
                 ),
                 SizedBox(height: 40.0),
+                ElevatedButton(
+                  onPressed: _uploadImage,
+                  child: Text('Upload Image'),
+                ),
+                if (_uploadedImageData != null)
+                  Column(
+                    children: [
+                      SizedBox(height: 20),
+                      if (_showQRData)
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                    'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}'),
+                                Slider(
+                                  value: _horizontalPosition,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _horizontalPosition = value;
+                                    });
+                                  },
+                                  min: -100,
+                                  max: 100,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                    'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}'),
+                                Slider(
+                                  value: _verticalPosition,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _verticalPosition = value;
+                                    });
+                                  },
+                                  min: -100,
+                                  max: 100,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      Column(
+                        children: [
+                          SizedBox(height: 20),
+                          if (_showQRData)
+                            Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                        'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}'),
+                                    SizedBox(width: 20),
+                                    GestureDetector(
+                                      onPanUpdate: (details) {
+                                        setState(() {
+                                          _horizontalPosition +=
+                                              details.delta.dx;
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        height: 20,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                        'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}'),
+                                    SizedBox(width: 20),
+                                    GestureDetector(
+                                      onPanUpdate: (details) {
+                                        setState(() {
+                                          _verticalPosition += details.delta.dy;
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        height: 20,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          Container(
+                            height: MediaQuery.of(context).size.height - 50,
+                            width: MediaQuery.of(context).size.width - 50,
+                            child: AspectRatio(
+                              aspectRatio: 9 / 16,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: MemoryImage(_uploadedImageData!),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    if (_showQRData)
+                                      Positioned(
+                                        left: _horizontalPosition + 100,
+                                        top: _verticalPosition + 100,
+                                        child: GestureDetector(
+                                          onPanUpdate: (details) {
+                                            setState(() {
+                                              _horizontalPosition +=
+                                                  details.delta.dx;
+                                              _verticalPosition +=
+                                                  details.delta.dy;
+                                            });
+                                          },
+                                          child: QrImageView(
+                                            data: _qrData,
+                                            version: QrVersions.auto,
+                                            size: 120.0,
+                                            backgroundColor:
+                                                Colors.white.withOpacity(0.5),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                SizedBox(height: 20),
                 TextFormField(
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
@@ -192,15 +329,15 @@ class _QRWallpaperState extends State<QRWallpaper> {
                     ),
                   ),
                   keyboardType: TextInputType.emailAddress,
-                  // validator: (value) {
-                  //   if (value == null || value.isEmpty) {
-                  //     return 'Please enter your email';
-                  //   }
-                  //   if (!_isValidEmailFormat(value)) {
-                  //     return 'Please enter a valid email';
-                  //   }
-                  //   return null;
-                  // },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!_isValidEmailFormat(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
@@ -283,30 +420,20 @@ class _QRWallpaperState extends State<QRWallpaper> {
                 if (_showQRData)
                   Column(
                     children: [
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       Row(
                         children: [
                           Expanded(
                             flex: 2,
                             child: Center(
-                              child: Stack(
-                                children: [
-                                  if (_imageBytes != null)
-                                    Image.memory(
-                                      _imageBytes,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  Positioned(
-                                    left: _qrPosition.dx,
-                                    top: _qrPosition.dy,
-                                    child: QrImageView(
-                                      data: _qrData,
-                                      version: QrVersions.auto,
-                                      size: 120.0,
-                                      backgroundColor: Colors.white,
-                                    ),
-                                  ),
-                                ],
+                              child: Container(
+                                padding: const EdgeInsets.all(0.0),
+                                child: QrImageView(
+                                  data: _qrData,
+                                  version: QrVersions.auto,
+                                  size: 120.0,
+                                  backgroundColor: Colors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -326,20 +453,6 @@ class _QRWallpaperState extends State<QRWallpaper> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20.0),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: _pickImage,
-                            child: Text('Upload Wallpaper'),
-                          ),
-                          SizedBox(width: 20),
-                          ElevatedButton(
-                            onPressed: () => _showQRPositionDialog(context),
-                            child: Text('Adjust QR Position'),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
               ],
@@ -350,77 +463,13 @@ class _QRWallpaperState extends State<QRWallpaper> {
     );
   }
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
-      setState(() {
-        _imageBytes = bytes;
-      });
-    }
-  }
-
-  void _showQRPositionDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Adjust QR Position'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Drag the QR code to adjust its position.'),
-              SizedBox(height: 20),
-              Container(
-                width: 120,
-                height: 120,
-                child: Stack(
-                  children: [
-                    if (_imageBytes != null)
-                      Image.memory(
-                        _imageBytes,
-                        fit: BoxFit.cover,
-                      ),
-                    Positioned(
-                      left: _qrPosition.dx,
-                      top: _qrPosition.dy,
-                      child: GestureDetector(
-                        onPanUpdate: (details) {
-                          setState(() {
-                            _qrPosition += details.delta;
-                          });
-                        },
-                        child: QrImageView(
-                          data: _qrData,
-                          version: QrVersions.auto,
-                          size: 120.0,
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Done'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> _onGenerateQRPressed() async {
     if (_formKey.currentState!.validate()) {
       await _saveDataToFirestore(); // Save data to Firestore
       _generateQRFromFirestoreData(); // Generate QR code from Firestore data
+      setState(() {
+        _showQRData = true;
+      });
     } else {
       showDialog(
         context: context,
@@ -489,7 +538,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
           .collection('users')
           .doc(mobileNumber)
           .collection('wallpaperQr')
-          .doc(_deviceNameController.text) // Use device name as document ID
+          .doc(_deviceNameController.text)
           .get();
 
       if (snapshot.exists) {
@@ -501,7 +550,6 @@ class _QRWallpaperState extends State<QRWallpaper> {
 
         setState(() {
           _qrData = qrData;
-          _showQRData = true;
         });
       }
     } catch (e) {
@@ -509,13 +557,20 @@ class _QRWallpaperState extends State<QRWallpaper> {
     }
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _deviceNameController.dispose();
-    _emailController.dispose();
-    _contactNoController.dispose();
-    _emergencyContactNoController.dispose();
-    super.dispose();
+  Future<void> _uploadImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      final Uint8List imageData = await image.readAsBytes();
+      setState(() {
+        _uploadedImageData = imageData;
+        _horizontalPosition = 0.0;
+        _verticalPosition = 0.0;
+      });
+    }
+  }
+
+  bool _isValidEmailFormat(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 }
