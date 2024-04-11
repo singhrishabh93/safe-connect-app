@@ -2,8 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -13,6 +17,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:safe_connect/theme.dart';
 
 class QRWallpaper extends StatefulWidget {
   const QRWallpaper({Key? key}) : super(key: key);
@@ -80,9 +85,21 @@ class _QRWallpaperState extends State<QRWallpaper> {
                 ),
                 SizedBox(height: 40.0),
                 ElevatedButton(
-                  onPressed: _uploadImage,
-                  child: Text('Upload Image'),
-                ),
+                    onPressed: _uploadImage,
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      backgroundColor: Color(0xffFFB13D),
+                    ),
+                    child: Text(
+                      'Upload Image',
+                      style: TextStyle(
+                        fontFamily: 'gilroy',
+                        fontSize: 14.0,
+                        color: Colors.black,
+                      ),
+                    )),
                 if (_uploadedImageData != null)
                   Column(
                     children: [
@@ -97,10 +114,14 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                   'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: "gilroy"),
+                                      fontFamily: "gilroy",
+                                      fontSize: 14.0),
                                 ),
                                 Slider(
                                   value: _horizontalPosition,
+                                  activeColor: Color(0xffFFB13D),
+                                  inactiveColor: Colors.grey,
+                                  secondaryActiveColor: Color(0xffFFB13D),
                                   onChanged: (value) {
                                     setState(() {
                                       _horizontalPosition = value;
@@ -118,10 +139,14 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                   'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: "gilroy"),
+                                      fontFamily: "gilroy",
+                                      fontSize: 14.0),
                                 ),
                                 Slider(
                                   value: _verticalPosition,
+                                  activeColor: Color(0xffFFB13D),
+                                  inactiveColor: Colors.grey,
+                                  secondaryActiveColor: Color(0xffFFB13D),
                                   onChanged: (value) {
                                     setState(() {
                                       _verticalPosition = value;
@@ -221,9 +246,9 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                                   100,
                                               padding: EdgeInsets.all(10),
                                               decoration: BoxDecoration(
-                                                color: Colors.yellow,
+                                                color: Colors.black,
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                    BorderRadius.circular(5),
                                               ),
                                               child: Row(
                                                 children: [
@@ -231,17 +256,21 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                                   QrImageView(
                                                     data: _qrData,
                                                     version: QrVersions.auto,
-                                                    size: 100.0,
+                                                    size: 80,
                                                     backgroundColor:
-                                                        Colors.white,
+                                                        Color(0xffFFB13D),
+                                                    foregroundColor:
+                                                        Colors.black,
                                                   ),
-                                                  SizedBox(width: 10),
+                                                  SizedBox(width: 18),
                                                   // Text widget
+
                                                   Text(
-                                                    'Your Text Here',
+                                                    'SafeConnect: Never be alone\nin an emergency.',
                                                     style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 16,
+                                                      color: Colors.white,
+                                                      fontSize: 14,
+                                                      fontFamily: 'Cirka',
                                                     ),
                                                   ),
                                                 ],
@@ -259,7 +288,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                       ),
                     ],
                   ),
-                SizedBox(height: 20),
+                SizedBox(height: 40),
                 TextFormField(
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
@@ -486,7 +515,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                           Expanded(
                             flex: 3,
                             child: Padding(
-                              padding: EdgeInsets.only(left: 20.0),
+                              padding: EdgeInsets.only(left: 15.0),
                               child: Text(
                                 'Stay Connected to loved ones Download the QR for ${_deviceNameController.text}',
                                 style: TextStyle(
@@ -501,8 +530,18 @@ class _QRWallpaperState extends State<QRWallpaper> {
                       ),
                       SizedBox(height: 20),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        backgroundColor: Colors.red,
+                        ),
                         onPressed: _saveImageToDevice,
-                        child: Text('Download Image'),
+                        child: Text('Download Image',style:TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.white,
+                                  fontFamily: 'Gilroy',
+                                ),),
                       ),
                     ],
                   ),
