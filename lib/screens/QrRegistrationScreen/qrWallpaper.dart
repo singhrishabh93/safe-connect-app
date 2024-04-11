@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -9,7 +12,6 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 
 class QRWallpaper extends StatefulWidget {
@@ -43,7 +45,8 @@ class _QRWallpaperState extends State<QRWallpaper> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
         ),
         title: const Text(
           'Registration',
@@ -78,21 +81,22 @@ class _QRWallpaperState extends State<QRWallpaper> {
                 ),
                 const SizedBox(height: 40.0),
                 ElevatedButton(
-                    onPressed: _uploadImage,
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      backgroundColor: Color(0xffFFB13D),
+                  onPressed: _uploadImage,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: const Text(
-                      'Upload Image',
-                      style: TextStyle(
-                        fontFamily: 'gilroy',
-                        fontSize: 14.0,
-                        color: Colors.black,
-                      ),
-                    )),
+                    backgroundColor: Color(0xffFFB13D),
+                  ),
+                  child: const Text(
+                    'Upload Image',
+                    style: TextStyle(
+                      fontFamily: 'gilroy',
+                      fontSize: 14.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
                 if (_uploadedImageData != null)
                   Column(
                     children: [
@@ -152,132 +156,80 @@ class _QRWallpaperState extends State<QRWallpaper> {
                             ),
                           ],
                         ),
-                      Column(
-                        children: [
-                          const SizedBox(height: 20),
-                          if (_showQRData)
-                            const Column(
-                              children: [
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.center,
-                                //   children: [
-                                //     Text(
-                                //         'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}'),
-                                //     SizedBox(width: 20),
-                                //     // GestureDetector(
-                                //     //   onPanUpdate: (details) {
-                                //     //     setState(() {
-                                //     //       _horizontalPosition +=
-                                //     //           details.delta.dx;
-                                //     //     });
-                                //     //   },
-                                //     //   child: Container(
-                                //     //     width: 100,
-                                //     //     height: 20,
-                                //     //     color: Colors.blue,
-                                //     //   ),
-                                //     // ),
-                                //   ],
-                                // ),
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.center,
-                                //   children: [
-                                //     Text(
-                                //         'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}'),
-                                //     SizedBox(width: 20),
-                                //     // GestureDetector(
-                                //     //   onPanUpdate: (details) {
-                                //     //     setState(() {
-                                //     //       _verticalPosition += details.delta.dy;
-                                //     //     });
-                                //     //   },
-                                //     //   child: Container(
-                                //     //     width: 100,
-                                //     //     height: 20,
-                                //     //     color: Colors.red,
-                                //     //   ),
-                                //     // ),
-                                //   ],
-                                // ),
-                              ],
-                            ),
-                          RepaintBoundary(
-                            key: _globalKey,
+                      RepaintBoundary(
+                        key: _globalKey,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height - 50,
+                          width: MediaQuery.of(context).size.width - 50,
+                          child: AspectRatio(
+                            aspectRatio: 9 / 16,
                             child: Container(
-                              height: MediaQuery.of(context).size.height - 50,
-                              width: MediaQuery.of(context).size.width - 50,
-                              child: AspectRatio(
-                                aspectRatio: 9 / 16,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: MemoryImage(_uploadedImageData!),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      // Add the yellow rectangular container below the QR Code
-                                      if (_showQRData)
-                                        Positioned(
-                                          top: _verticalPosition + 300,
-                                          left: _horizontalPosition + 100,
-                                          child: GestureDetector(
-                                            onPanUpdate: (details) {
-                                              setState(() {
-                                                _horizontalPosition +=
-                                                    details.delta.dx;
-                                                _verticalPosition +=
-                                                    details.delta.dy;
-                                              });
-                                            },
-                                            child: Container(
-                                              height: 100,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width -
-                                                  100,
-                                              padding: EdgeInsets.all(10),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: MemoryImage(_uploadedImageData!),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: Stack(
+                                children: [
+                                  // Add the yellow rectangular container below the QR Code
+                                  if (_showQRData)
+                                    Positioned(
+                                      top: _verticalPosition + 300,
+                                      left: _horizontalPosition + 100,
+                                      child: GestureDetector(
+                                        onPanUpdate: (details) {
+                                          setState(() {
+                                            _horizontalPosition +=
+                                                details.delta.dx;
+                                            _verticalPosition +=
+                                                details.delta.dy;
+                                          });
+                                        },
+                                        child: Container(
+                                          height: 100,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              100,
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              // Qr code image
+                                              QrImageView(
+                                                data: _qrData,
+                                                version: QrVersions.auto,
+                                                size: 80,
+                                                backgroundColor:
+                                                    Color(0xffFFB13D),
+                                                foregroundColor: Colors.black,
                                               ),
-                                              child: Row(
-                                                children: [
-                                                  // Qr code image
-                                                  QrImageView(
-                                                    data: _qrData,
-                                                    version: QrVersions.auto,
-                                                    size: 80,
-                                                    backgroundColor:
-                                                        Color(0xffFFB13D),
-                                                    foregroundColor:
-                                                        Colors.black,
-                                                  ),
-                                                  SizedBox(width: 18),
-                                                  // Text widget
+                                              SizedBox(width: 18),
+                                              // Text widget
 
-                                                  const Text(
-                                                    'SafeConnect: Never be alone\nin an emergency.',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 14,
-                                                      fontFamily: 'Cirka',
-                                                    ),
-                                                  ),
-                                                ],
+                                              const Text(
+                                                'SafeConnect: Never be alone\nin an emergency.',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontFamily: 'Cirka',
+                                                ),
                                               ),
-                                            ),
+                                            ],
                                           ),
                                         ),
-                                    ],
-                                  ),
-                                ),
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -527,14 +479,17 @@ class _QRWallpaperState extends State<QRWallpaper> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                        backgroundColor: Colors.red,
+                          backgroundColor: Colors.red,
                         ),
                         onPressed: _saveImageToDevice,
-                        child: Text('Download Image',style:TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.white,
-                                  fontFamily: 'Gilroy',
-                                ),),
+                        child: Text(
+                          'Download Image',
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.white,
+                            fontFamily: 'Gilroy',
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -578,36 +533,22 @@ class _QRWallpaperState extends State<QRWallpaper> {
     try {
       final user = FirebaseAuth.instance.currentUser;
       final mobileNumber = user!.phoneNumber;
-      final deviceName = _deviceNameController.text;
-
-      // Save registration data to Firestore under 'registrationData' collection
-      await FirebaseFirestore.instance
-          .collection('registeredDevices')
-          .doc(mobileNumber)
-          .set({
-        'name': _nameController.text,
+      final deviceRegistrationData = {
+        'name': _nameController.text.trim(),
         'deviceType': _selectedDeviceType,
-        'deviceName': deviceName,
-        'email': _emailController.text,
-        'contactNo': _contactNoController.text,
-        'emergencyContactNo': _emergencyContactNoController.text,
-      });
+        'deviceName': _deviceNameController.text.trim(),
+        'email': _emailController.text.trim(),
+        'contactNo': _contactNoController.text.trim(),
+        'emergencyContactNo': _emergencyContactNoController.text.trim(),
+        'mobileNumber': mobileNumber,
+      };
 
-      // Save data to 'wallpaperQr' collection
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('devices')
           .doc(mobileNumber)
-          .collection('wallpaperQr')
-          .doc(deviceName)
-          .set({
-        'name': _nameController.text,
-        'deviceType': _selectedDeviceType,
-        'email': _emailController.text,
-        'contactNo': _contactNoController.text,
-        'emergencyContactNo': _emergencyContactNoController.text,
-      });
-    } catch (e) {
-      print(e.toString());
+          .set(deviceRegistrationData);
+    } catch (error) {
+      print('Failed to save data to Firestore: $error');
     }
   }
 
@@ -616,70 +557,85 @@ class _QRWallpaperState extends State<QRWallpaper> {
       final user = FirebaseAuth.instance.currentUser;
       final mobileNumber = user!.phoneNumber;
 
-      // Retrieve data from Firestore
       final snapshot = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('devices')
           .doc(mobileNumber)
-          .collection('wallpaperQr')
-          .doc(_deviceNameController.text)
           .get();
 
       if (snapshot.exists) {
-        final data = snapshot.data() as Map<String, dynamic>;
-
-        // Generate QR data
-        final qrData =
-            'Name: ${data['name']}, Device Type: ${data['deviceType']}, Device Name: ${data['deviceName']}, Email: ${data['email']}, Contact No.: ${data['contactNo']}, Emergency Contact No.: ${data['emergencyContactNo']}';
-
         setState(() {
-          _qrData = qrData;
+          _qrData = snapshot.data().toString();
         });
       }
-    } catch (e) {
-      print(e.toString());
+    } catch (error) {
+      print('Failed to generate QR code from Firestore data: $error');
     }
   }
 
   Future<void> _uploadImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      final Uint8List imageData = await image.readAsBytes();
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final imageData = await pickedFile.readAsBytes();
       setState(() {
         _uploadedImageData = imageData;
-        _horizontalPosition = 0.0;
-        _verticalPosition = 0.0;
+        _showQRData = true;
       });
     }
   }
 
-  bool _isValidEmailFormat(String email) {
-    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
-  }
-
   Future<void> _saveImageToDevice() async {
     try {
-      // Create a key for the RepaintBoundary widget
-      final GlobalKey _repaintKey = GlobalKey();
-
-      // Capture the area containing the positioned QR code and the yellow container
-      RenderRepaintBoundary boundary = _repaintKey.currentContext!
+      RenderRepaintBoundary boundary = _globalKey.currentContext!
           .findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
       ByteData? byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-      // Save the image to the device's gallery
-      String path = (await getTemporaryDirectory()).path;
-      File file = File('$path/image.png');
-      await file.writeAsBytes(pngBytes);
-      File savedFile = await FlutterNativeImage.compressImage(file.path);
-      await ImageGallerySaver.saveFile(savedFile.path);
-
-      print('Image saved to gallery.');
+      final Uint8List pngBytes = byteData!.buffer.asUint8List();
+      final result = await ImageGallerySaver.saveImage(pngBytes);
+      print(result);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Image Saved"),
+            content: const Text("The QR Image has been saved to your device."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
     } catch (e) {
       print('Failed to save image: $e');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Error"),
+            content: const Text("Failed to save the QR Image."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
     }
+  }
+
+  bool _isValidEmailFormat(String email) {
+    String emailRegex =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    return RegExp(emailRegex).hasMatch(email);
   }
 }
