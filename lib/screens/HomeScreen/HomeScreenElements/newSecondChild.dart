@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:safe_connect/screens/ChildRegistration/childregistration.dart';
 import 'package:safe_connect/screens/LogsScreen/logsScreen.dart';
 import 'package:safe_connect/screens/QrInfoScreen/car.dart';
 import 'package:safe_connect/screens/QrRegistrationScreen/qrWallpaper.dart';
@@ -79,13 +80,18 @@ class newSecondChild extends StatelessWidget {
                     ),
                     Column(
                       children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/icons/child.png'),
-                              fit: BoxFit.fitWidth,
+                        InkWell(
+                          onTap: () {
+                           Get.to(()=> ChildRegistration());
+                          },
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/icons/child.png'),
+                                fit: BoxFit.fitWidth,
+                              ),
                             ),
                           ),
                         ),
