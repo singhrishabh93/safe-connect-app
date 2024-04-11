@@ -1,23 +1,16 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:flutter/animation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image/image.dart' as img;
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:safe_connect/theme.dart';
 
 class QRWallpaper extends StatefulWidget {
   const QRWallpaper({Key? key}) : super(key: key);
@@ -50,9 +43,9 @@ class _QRWallpaperState extends State<QRWallpaper> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
         ),
-        title: Text(
+        title: const Text(
           'Registration',
           style: TextStyle(color: Colors.white),
         ),
@@ -67,7 +60,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
+                const Text(
                   'Device Registration',
                   style: TextStyle(
                     fontSize: 20,
@@ -75,15 +68,15 @@ class _QRWallpaperState extends State<QRWallpaper> {
                     fontFamily: 'Gilroy',
                   ),
                 ),
-                SizedBox(height: 5.0),
-                Text(
+                const SizedBox(height: 5.0),
+                const Text(
                   'Fill out this registration form & generate the QR',
                   style: TextStyle(
                     color: Colors.grey,
                     fontFamily: 'Gilroy',
                   ),
                 ),
-                SizedBox(height: 40.0),
+                const SizedBox(height: 40.0),
                 ElevatedButton(
                     onPressed: _uploadImage,
                     style: ElevatedButton.styleFrom(
@@ -92,7 +85,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                       ),
                       backgroundColor: Color(0xffFFB13D),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Upload Image',
                       style: TextStyle(
                         fontFamily: 'gilroy',
@@ -103,7 +96,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                 if (_uploadedImageData != null)
                   Column(
                     children: [
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       if (_showQRData)
                         Column(
                           children: [
@@ -112,7 +105,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                               children: [
                                 Text(
                                   'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: "gilroy",
                                       fontSize: 14.0),
@@ -137,7 +130,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                               children: [
                                 Text(
                                   'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: "gilroy",
                                       fontSize: 14.0),
@@ -161,9 +154,9 @@ class _QRWallpaperState extends State<QRWallpaper> {
                         ),
                       Column(
                         children: [
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           if (_showQRData)
-                            Column(
+                            const Column(
                               children: [
                                 // Row(
                                 //   mainAxisAlignment: MainAxisAlignment.center,
@@ -265,7 +258,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                                   SizedBox(width: 18),
                                                   // Text widget
 
-                                                  Text(
+                                                  const Text(
                                                     'SafeConnect: Never be alone\nin an emergency.',
                                                     style: TextStyle(
                                                       color: Colors.white,
@@ -314,11 +307,11 @@ class _QRWallpaperState extends State<QRWallpaper> {
                     );
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   width: double.infinity,
                   child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Device Type',
                       labelStyle: TextStyle(
                         color: Colors.grey,
@@ -338,13 +331,13 @@ class _QRWallpaperState extends State<QRWallpaper> {
                         value: value,
                         child: Text(
                           value,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
                       );
                     }).toList(),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     dropdownColor: Colors.black,
                     onChanged: (String? value) {
                       setState(() {
@@ -356,7 +349,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                 const SizedBox(height: 20.0),
                 TextFormField(
                   cursorColor: Colors.white,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   controller: _deviceNameController,
                   decoration: const InputDecoration(
                     labelText: 'Device Name',
@@ -386,7 +379,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                 const SizedBox(height: 20.0),
                 TextFormField(
                   cursorColor: Colors.white,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   controller: _emailController,
                   decoration: const InputDecoration(
                     labelText: 'Email',
@@ -449,7 +442,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                 const SizedBox(height: 20.0),
                 TextFormField(
                   cursorColor: Colors.white,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   controller: _emergencyContactNoController,
                   decoration: const InputDecoration(
                     labelText: 'Emergency Contact No.',
