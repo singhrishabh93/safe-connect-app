@@ -35,6 +35,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
   double _horizontalPosition = 0.0;
   double _verticalPosition = 0.0;
   GlobalKey _globalKey = GlobalKey();
+  bool _imageUploaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -286,6 +287,18 @@ class _QRWallpaperState extends State<QRWallpaper> {
                     ),
                   ),
                 ),
+                if (_imageUploaded)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Text(
+                      'Your image has been successfully uploaded', // Display this message
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontFamily: 'gilroy',
+                          fontSize: 14),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
                 if (_uploadedImageData != null)
                   Column(
                     children: [
@@ -376,12 +389,12 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                             });
                                           },
                                           child: Container(
-                                            height: 100,
+                                            height: 120,
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width -
-                                                100,
-                                            padding: EdgeInsets.all(10),
+100,
+                                            padding: EdgeInsets.all(12),
                                             decoration: BoxDecoration(
                                               color: Colors.black,
                                               borderRadius:
@@ -392,7 +405,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                                 QrImageView(
                                                   data: _qrData,
                                                   version: QrVersions.auto,
-                                                  size: 80,
+                                                  size: 100,
                                                   backgroundColor:
                                                       Color(0xffFFB13D),
                                                   foregroundColor: Colors.black,
@@ -400,10 +413,10 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                                 SizedBox(width: 18),
                                                 // Text widget
                                                 const Text(
-                                                  'SafeConnect: Never be alone\nin an emergency.',
+                                                  'SafeConnect: Never be\nalone in an emergency.',
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 14,
+                                                    fontSize: 15,
                                                     fontFamily: 'Cirka',
                                                   ),
                                                 ),
@@ -577,6 +590,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
       setState(() {
         _uploadedImageData = imageData;
         _showQRData = false;
+        _imageUploaded = true;
       });
     }
   }
