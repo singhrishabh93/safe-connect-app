@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -80,160 +79,6 @@ class _QRWallpaperState extends State<QRWallpaper> {
                   ),
                 ),
                 const SizedBox(height: 40.0),
-                ElevatedButton(
-                  onPressed: _uploadImage,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    backgroundColor: Color(0xffFFB13D),
-                  ),
-                  child: const Text(
-                    'Upload Image',
-                    style: TextStyle(
-                      fontFamily: 'gilroy',
-                      fontSize: 14.0,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                if (_uploadedImageData != null)
-                  Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      if (_showQRData)
-                        Column(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: "gilroy",
-                                      fontSize: 14.0),
-                                ),
-                                Slider(
-                                  value: _horizontalPosition,
-                                  activeColor: Color(0xffFFB13D),
-                                  inactiveColor: Colors.grey,
-                                  secondaryActiveColor: Color(0xffFFB13D),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _horizontalPosition = value;
-                                    });
-                                  },
-                                  min: -2000,
-                                  max: 2000,
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: "gilroy",
-                                      fontSize: 14.0),
-                                ),
-                                Slider(
-                                  value: _verticalPosition,
-                                  activeColor: Color(0xffFFB13D),
-                                  inactiveColor: Colors.grey,
-                                  secondaryActiveColor: Color(0xffFFB13D),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _verticalPosition = value;
-                                    });
-                                  },
-                                  min: -800,
-                                  max: 800,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      RepaintBoundary(
-                        key: _globalKey,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height - 50,
-                          width: MediaQuery.of(context).size.width - 50,
-                          child: AspectRatio(
-                            aspectRatio: 9 / 16,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: MemoryImage(_uploadedImageData!),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: Stack(
-                                children: [
-                                  // Add the yellow rectangular container below the QR Code
-                                  if (_showQRData)
-                                    Positioned(
-                                      top: _verticalPosition + 300,
-                                      left: _horizontalPosition + 100,
-                                      child: GestureDetector(
-                                        onPanUpdate: (details) {
-                                          setState(() {
-                                            _horizontalPosition +=
-                                                details.delta.dx;
-                                            _verticalPosition +=
-                                                details.delta.dy;
-                                          });
-                                        },
-                                        child: Container(
-                                          height: 100,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              100,
-                                          padding: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              // Qr code image
-                                              QrImageView(
-                                                data: _qrData,
-                                                version: QrVersions.auto,
-                                                size: 80,
-                                                backgroundColor:
-                                                    Color(0xffFFB13D),
-                                                foregroundColor: Colors.black,
-                                              ),
-                                              SizedBox(width: 18),
-                                              // Text widget
-
-                                              const Text(
-                                                'SafeConnect: Never be alone\nin an emergency.',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontFamily: 'Cirka',
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                SizedBox(height: 40),
                 TextFormField(
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
@@ -362,7 +207,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                 const SizedBox(height: 20.0),
                 TextFormField(
                   cursorColor: Colors.white,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   controller: _contactNoController,
                   decoration: const InputDecoration(
                     labelText: 'Contact No.',
@@ -424,6 +269,158 @@ class _QRWallpaperState extends State<QRWallpaper> {
                   },
                 ),
                 const SizedBox(height: 40.0),
+                ElevatedButton(
+                  onPressed: _uploadImage,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    backgroundColor: Color(0xffFFB13D),
+                  ),
+                  child: const Text(
+                    'Upload Image',
+                    style: TextStyle(
+                      fontFamily: 'gilroy',
+                      fontSize: 14.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                if (_uploadedImageData != null)
+                  Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      if (_showQRData)
+                        Column(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Horizontal Position: ${_horizontalPosition.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "gilroy",
+                                      fontSize: 14.0),
+                                ),
+                                Slider(
+                                  value: _horizontalPosition,
+                                  activeColor: Color(0xffFFB13D),
+                                  inactiveColor: Colors.grey,
+                                  secondaryActiveColor: Color(0xffFFB13D),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _horizontalPosition = value;
+                                    });
+                                  },
+                                  min: -2000,
+                                  max: 2000,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Vertical Position: ${_verticalPosition.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "gilroy",
+                                      fontSize: 14.0),
+                                ),
+                                Slider(
+                                  value: _verticalPosition,
+                                  activeColor: Color(0xffFFB13D),
+                                  inactiveColor: Colors.grey,
+                                  secondaryActiveColor: Color(0xffFFB13D),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _verticalPosition = value;
+                                    });
+                                  },
+                                  min: -800,
+                                  max: 800,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      if (_showQRData)
+                        RepaintBoundary(
+                          key: _globalKey,
+                          child: Container(
+                            height: MediaQuery.of(context).size.height - 50,
+                            width: MediaQuery.of(context).size.width - 50,
+                            child: AspectRatio(
+                              aspectRatio: 9 / 16,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: MemoryImage(_uploadedImageData!),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    if (_showQRData)
+                                      Positioned(
+                                        top: _verticalPosition + 300,
+                                        left: _horizontalPosition + 100,
+                                        child: GestureDetector(
+                                          onPanUpdate: (details) {
+                                            setState(() {
+                                              _horizontalPosition +=
+                                                  details.delta.dx;
+                                              _verticalPosition +=
+                                                  details.delta.dy;
+                                            });
+                                          },
+                                          child: Container(
+                                            height: 100,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                100,
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                QrImageView(
+                                                  data: _qrData,
+                                                  version: QrVersions.auto,
+                                                  size: 80,
+                                                  backgroundColor:
+                                                      Color(0xffFFB13D),
+                                                  foregroundColor: Colors.black,
+                                                ),
+                                                SizedBox(width: 18),
+                                                // Text widget
+                                                const Text(
+                                                  'SafeConnect: Never be alone\nin an emergency.',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14,
+                                                    fontFamily: 'Cirka',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                SizedBox(height: 40),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -503,8 +500,8 @@ class _QRWallpaperState extends State<QRWallpaper> {
 
   Future<void> _onGenerateQRPressed() async {
     if (_formKey.currentState!.validate()) {
-      await _saveDataToFirestore(); // Save data to Firestore
-      _generateQRFromFirestoreData(); // Generate QR code from Firestore data
+      await _saveDataToFirestore();
+      _generateQRFromFirestoreData();
       setState(() {
         _showQRData = true;
       });
@@ -579,7 +576,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
       final imageData = await pickedFile.readAsBytes();
       setState(() {
         _uploadedImageData = imageData;
-        _showQRData = true;
+        _showQRData = false;
       });
     }
   }
