@@ -48,7 +48,7 @@ class _QRGeneratorState extends State<QRGenerator> {
         backgroundColor: Colors.black,
       ),
       body: Container(
-        color: Colors.black, // Set background color to black
+        color: Colors.black, 
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Form(
