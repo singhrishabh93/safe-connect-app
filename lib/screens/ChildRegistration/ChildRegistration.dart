@@ -13,6 +13,8 @@ class ChildRegistration extends StatefulWidget {
 class _ChildRegistrationState extends State<ChildRegistration> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _fathernameController = TextEditingController();
+  final TextEditingController _mothernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _contactNoController = TextEditingController();
@@ -123,7 +125,7 @@ class _ChildRegistrationState extends State<ChildRegistration> {
                 TextFormField(
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
-                  controller: _nameController,
+                  controller: _fathernameController,
                   decoration: const InputDecoration(
                     labelText: ' Fathers Name',
                     labelStyle: TextStyle(
@@ -139,7 +141,7 @@ class _ChildRegistrationState extends State<ChildRegistration> {
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
-                    _nameController.value = _nameController.value.copyWith(
+                    _fathernameController.value = _fathernameController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
                       selection: TextSelection.collapsed(offset: value.length),
                       composing: TextRange.empty,
@@ -150,7 +152,7 @@ class _ChildRegistrationState extends State<ChildRegistration> {
                 TextFormField(
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
-                  controller: _nameController,
+                  controller: _mothernameController,
                   decoration: const InputDecoration(
                     labelText: 'Mothers Name',
                     labelStyle: TextStyle(
@@ -166,7 +168,7 @@ class _ChildRegistrationState extends State<ChildRegistration> {
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
-                    _nameController.value = _nameController.value.copyWith(
+                    _mothernameController.value = _mothernameController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
                       selection: TextSelection.collapsed(offset: value.length),
                       composing: TextRange.empty,
@@ -351,6 +353,8 @@ class _ChildRegistrationState extends State<ChildRegistration> {
   @override
   void dispose() {
     _nameController.dispose();
+    _fathernameController.dispose();
+    _mothernameController.dispose();
     _emailController.dispose();
     _contactNoController.dispose();
     _emergencyContactNoController.dispose();
