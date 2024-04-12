@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,7 +37,7 @@ class _QRGeneratorState extends State<QRGenerator> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
+              MaterialPageRoute(builder: (context) => bottomNavigationBar()),
             );
           },
           icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),

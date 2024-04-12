@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:safe_connect/screens/ChildRegistration/childregistration.dart';
 import 'package:safe_connect/screens/LogsScreen/logsScreen.dart';
 import 'package:safe_connect/screens/PetRegistration/PetRegistration.dart';
 import 'package:safe_connect/screens/QrInfoScreen/car.dart';
+import 'package:safe_connect/screens/QrRegistrationScreen/ChildRegistration.dart';
 import 'package:safe_connect/screens/QrRegistrationScreen/qrWallpaper.dart';
 
 class newSecondChild extends StatelessWidget {
