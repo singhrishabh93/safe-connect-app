@@ -36,8 +36,10 @@ class _PetRegistrationState extends State<PetRegistration> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => bottomNavigationBar()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => bottomNavigationBar()));
             },
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
@@ -92,7 +94,8 @@ class _PetRegistrationState extends State<PetRegistration> {
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
-                    _ownernameController.value = _ownernameController.value.copyWith(
+                    _ownernameController.value =
+                        _ownernameController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
                       selection: TextSelection.collapsed(offset: value.length),
                       composing: TextRange.empty,
@@ -119,7 +122,8 @@ class _PetRegistrationState extends State<PetRegistration> {
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
-                    _petnameController.value = _petnameController.value.copyWith(
+                    _petnameController.value =
+                        _petnameController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
                       selection: TextSelection.collapsed(offset: value.length),
                       composing: TextRange.empty,
@@ -315,7 +319,8 @@ class _PetRegistrationState extends State<PetRegistration> {
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
-                    _petbreedController.value = _petbreedController.value.copyWith(
+                    _petbreedController.value =
+                        _petbreedController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
                       selection: TextSelection.collapsed(offset: value.length),
                       composing: TextRange.empty,
@@ -328,8 +333,8 @@ class _PetRegistrationState extends State<PetRegistration> {
                   style: TextStyle(color: Colors.white),
                   controller: _notesController,
                   keyboardType: TextInputType.multiline,
-                  maxLines: null, 
-                  maxLength: 500, 
+                  maxLines: null,
+                  maxLength: 500,
                   decoration: InputDecoration(
                     labelText: 'Some distinctive marks in pet',
                     labelStyle: TextStyle(
@@ -409,20 +414,24 @@ class _PetRegistrationState extends State<PetRegistration> {
                   },
                 ),
                 SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _uploadImage,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                Container(
+                  width: MediaQuery.of(context).size.width - 45,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _uploadImage,
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      backgroundColor: Color(0xffFFB13D),
                     ),
-                    backgroundColor: Color(0xffFFB13D),
-                  ),
-                  child: const Text(
-                    'Upload Image',
-                    style: TextStyle(
-                      fontFamily: 'gilroy',
-                      fontSize: 14.0,
-                      color: Colors.black,
+                    child: const Text(
+                      'Upload Image',
+                      style: TextStyle(
+                        fontFamily: 'gilroy',
+                        fontSize: 14.0,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -439,19 +448,23 @@ class _PetRegistrationState extends State<PetRegistration> {
                     ),
                   ),
                 SizedBox(height: 40),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                Container(
+                  width: MediaQuery.of(context).size.width - 45,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      backgroundColor: Color(0xffFFB13D),
                     ),
-                    backgroundColor: Color(0xffFFB13D),
-                  ),
-                  onPressed: () {
-                    print('the button is pressed');
-                  },
-                  child: const Text(
-                    'Generate QR Code',
-                    style: TextStyle(color: Colors.black, fontSize: 14),
+                    onPressed: () {
+                      print('the button is pressed');
+                    },
+                    child: const Text(
+                      'Generate QR Code',
+                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    ),
                   ),
                 ),
               ],

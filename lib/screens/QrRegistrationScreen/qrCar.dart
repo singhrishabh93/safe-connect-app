@@ -49,7 +49,7 @@ class _QRGeneratorState extends State<QRGenerator> {
         backgroundColor: Colors.black,
       ),
       body: Container(
-        color: Colors.black, 
+        color: Colors.black,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Form(
@@ -311,17 +311,24 @@ class _QRGeneratorState extends State<QRGenerator> {
                 ),
                 const SizedBox(height: 40.0),
                 // Generate QR Button
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                Container(
+                  width: MediaQuery.of(context).size.width - 45,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      backgroundColor: Color(0xffFFB13D),
                     ),
-                    backgroundColor: Color(0xffFFB13D),
-                  ),
-                  onPressed: _onGenerateQRPressed,
-                  child: const Text(
-                    'Generate QR Code',
-                    style: TextStyle(color: Colors.black, fontSize: 14,fontFamily: 'gilroy'),
+                    onPressed: _onGenerateQRPressed,
+                    child: const Text(
+                      'Generate QR Code',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontFamily: 'gilroy'),
+                    ),
                   ),
                 ),
                 if (_showQRData)
@@ -367,11 +374,12 @@ class _QRGeneratorState extends State<QRGenerator> {
                         children: [
                           Expanded(
                             child: SizedBox(
-                              height: 40.0,
+                              width: MediaQuery.of(context).size.width - 45,
+                              height: 50,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   backgroundColor: const Color(0xffFF3D3D),
                                 ),
