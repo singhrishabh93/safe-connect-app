@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lottie/lottie.dart';
 import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/SignUpScreen/signUpScreen.dart';
 
@@ -87,7 +88,7 @@ class _OtpScreenState extends State<OtpScreen> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          color: Colors.white,
+          color: Colors.black,
           child: Column(
             children: [
               Stack(
@@ -98,14 +99,14 @@ class _OtpScreenState extends State<OtpScreen> {
                     color: Colors.black,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 100, left: 35),
+                    padding: const EdgeInsets.only(top: 20, left: 35),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 10),
                         const DefaultTextStyle(
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Color(0xFFFFB13D),
                             fontSize: 21,
                             fontFamily: "cirka",
                           ),
@@ -125,8 +126,19 @@ class _OtpScreenState extends State<OtpScreen> {
                           child: Text(
                             "Enter OTP sent to ${widget.mobileNumber}",
                           ),
-                        )
+                        ),
                       ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 570,
+                    child: OverflowBox(
+                      minHeight: 500,
+                      maxHeight: 500,
+                      child: Lottie.asset(
+                        'assets/images/carLottie.json',
+                        repeat: true,
+                      ),
                     ),
                   )
                 ],
@@ -145,12 +157,13 @@ class _OtpScreenState extends State<OtpScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
-                        color: Colors.black,
+                        color: Colors.white,
                         width: 1.5,
                       ),
                     ),
                     child: Center(
                       child: TextFormField(
+                        cursorColor: Colors.white,
                         controller: _controllers[index],
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.number,
@@ -167,7 +180,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           }
                         },
                         style: const TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 20,
                           fontFamily: "gilroy",
                         ),
@@ -199,13 +212,13 @@ class _OtpScreenState extends State<OtpScreen> {
                       child: Text(
                         "Verify",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 15,
                           fontFamily: "gilroy",
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        backgroundColor: Color(0xFFFFb13D),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),

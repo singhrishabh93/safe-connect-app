@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lottie/lottie.dart';
 import 'package:safe_connect/screens/OtpScreen/otpScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -66,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: MediaQuery.of(context).size.width,
                           color: Colors.black,
                         ),
-                        const Padding(
+                        Padding(
                           padding: const EdgeInsets.only(top: 130, left: 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,17 +101,29 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                               ),
+                              SizedBox(
+                                height: 400,
+                                child: OverflowBox(
+                                  minHeight: 500,
+                                  maxHeight: 500,
+                                  child: Lottie.asset(
+                                    'assets/images/carLottie.json',
+                                    repeat: true,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width - 45,
                       child: TextFormField(
+                        cursorColor: Colors.white,
                         controller: _mobileNumberController,
                         maxLength: 10,
                         inputFormatters: [
@@ -127,6 +140,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           counterText: null,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
                         ),
                         keyboardType: TextInputType.number,
                         style: const TextStyle(
@@ -151,7 +167,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _isButtonClicked = _isChecked;
                               });
                             },
-                            activeColor: Color(0xffFFB13D),
+                            focusColor: Colors.white,
+                            activeColor: Colors.black,
                           ),
                           Text(
                             'I agree to the terms and conditions',
