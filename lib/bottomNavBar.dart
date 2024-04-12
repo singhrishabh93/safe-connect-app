@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:safe_connect/BottomNavBar%20Features/SOSPopup.dart';
 import 'package:safe_connect/BottomNavBar%20Features/helplinePopUp.dart';
 import 'package:safe_connect/BottomNavBar%20Features/sosScreen.dart';
 import 'package:safe_connect/screens/HelpLogScreen/helpLogScreen.dart';
@@ -25,7 +26,8 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const HelpLineScreen(),
+    // const HelpLineScreen(),
+    SOSPopup(),
     HelpRecords(),
     SoundRecorderPage(),
   ];

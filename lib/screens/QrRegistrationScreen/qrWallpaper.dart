@@ -291,7 +291,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
-                      'Your image has been successfully uploaded', // Display this message
+                      'Your image has been successfully uploaded \nNow click on Generate QR to adjust and download the Wallpaper', // Display this message
                       style: TextStyle(
                           color: Colors.grey,
                           fontFamily: 'gilroy',
@@ -393,7 +393,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width -
-100,
+                                                100,
                                             padding: EdgeInsets.all(12),
                                             decoration: BoxDecoration(
                                               color: Colors.black,
