@@ -43,9 +43,20 @@ class SOSPopup extends StatelessWidget {
                       fontFamily: "gilroy",
                       fontSize: 15),
                 ),
+                const SizedBox(height: 30),
+                Container(
+                  width: MediaQuery.of(context).size.width - 50,
+                  child: Text(
+                    "Lorem ipsum dolor sit amet, consectetur elit.Lore ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum ipsum dolor sit amet, consectetur ipsum ipsum dolor sit amet, consectetur",
+                    style: TextStyle(
+                        color: Color(0xffffffff),
+                        fontFamily: "gilroy",
+                        fontSize: 15),
+                  ),
+                ),
                 const SizedBox(height: 50),
                 Container(
-                  height: 200,
+                  height: 50,
                   width: MediaQuery.of(context).size.width - 50,
                   decoration: BoxDecoration(
                       color: Color(0xffFFB13D),
@@ -55,12 +66,12 @@ class SOSPopup extends StatelessWidget {
                         style: TextStyle(
                             color: Color(0xff000000),
                             fontFamily: "Cirka",
-                            fontSize: 30)),
+                            fontSize: 20)),
                   ),
                 ),
                 const SizedBox(height: 30),
                 Container(
-                  height: 200,
+                  height: 50,
                   width: MediaQuery.of(context).size.width - 50,
                   decoration: BoxDecoration(
                       color: Color(0xffFFB13D),
@@ -70,7 +81,7 @@ class SOSPopup extends StatelessWidget {
                         style: TextStyle(
                             color: Color(0xff000000),
                             fontFamily: "Cirka",
-                            fontSize: 30)),
+                            fontSize: 20)),
                   ),
                 ),
                 const SizedBox(height: 30),
