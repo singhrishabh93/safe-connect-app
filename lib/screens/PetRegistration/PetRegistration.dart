@@ -13,7 +13,9 @@ class PetRegistration extends StatefulWidget {
 
 class _PetRegistrationState extends State<PetRegistration> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ownernameController = TextEditingController();
+  final TextEditingController _petnameController = TextEditingController();
+  final TextEditingController _petbreedController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _microchipNumberController =
       TextEditingController();
@@ -73,7 +75,7 @@ class _PetRegistrationState extends State<PetRegistration> {
                 TextFormField(
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
-                  controller: _nameController,
+                  controller: _ownernameController,
                   decoration: const InputDecoration(
                     labelText: 'Owner Name',
                     labelStyle: TextStyle(
@@ -89,7 +91,7 @@ class _PetRegistrationState extends State<PetRegistration> {
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
-                    _nameController.value = _nameController.value.copyWith(
+                    _ownernameController.value = _ownernameController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
                       selection: TextSelection.collapsed(offset: value.length),
                       composing: TextRange.empty,
@@ -100,7 +102,7 @@ class _PetRegistrationState extends State<PetRegistration> {
                 TextFormField(
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
-                  controller: _nameController,
+                  controller: _petnameController,
                   decoration: const InputDecoration(
                     labelText: 'Pet Name',
                     labelStyle: TextStyle(
@@ -116,7 +118,7 @@ class _PetRegistrationState extends State<PetRegistration> {
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
-                    _nameController.value = _nameController.value.copyWith(
+                    _petnameController.value = _petnameController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
                       selection: TextSelection.collapsed(offset: value.length),
                       composing: TextRange.empty,
@@ -296,7 +298,7 @@ class _PetRegistrationState extends State<PetRegistration> {
                 TextFormField(
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
-                  controller: _nameController,
+                  controller: _petbreedController,
                   decoration: const InputDecoration(
                     labelText: 'Pet Breed',
                     labelStyle: TextStyle(
@@ -312,7 +314,7 @@ class _PetRegistrationState extends State<PetRegistration> {
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
-                    _nameController.value = _nameController.value.copyWith(
+                    _petbreedController.value = _petbreedController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
                       selection: TextSelection.collapsed(offset: value.length),
                       composing: TextRange.empty,
@@ -487,7 +489,9 @@ class _PetRegistrationState extends State<PetRegistration> {
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _ownernameController.dispose();
+    _petnameController.dispose();
+    _petbreedController.dispose();
     _contactNoController.dispose();
     _emergencyContactNoController.dispose();
     super.dispose();
