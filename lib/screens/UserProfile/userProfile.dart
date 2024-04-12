@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/LoginScreen/loginScreen.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -79,9 +80,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => bottomNavigationBar()));
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.black,
+            )),
         title: const Text(
           'User Profile',
           style: TextStyle(color: Colors.black, fontFamily: "gilroy"),
@@ -477,7 +486,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             TextButton(
               onPressed: () async {
-                await FirebaseFirestore.instance // after pressing delete user data get delete from the firebase auth
+                await FirebaseFirestore
+                    .instance // after pressing delete user data get delete from the firebase auth
                     .collection('users')
                     .doc(mobileNumber)
                     .collection('loginDetails')

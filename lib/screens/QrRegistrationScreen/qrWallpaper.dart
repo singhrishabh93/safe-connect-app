@@ -12,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:safe_connect/bottomNavBar.dart';
 
 class QRWallpaper extends StatefulWidget {
   const QRWallpaper({Key? key}) : super(key: key);
@@ -43,7 +44,8 @@ class _QRWallpaperState extends State<QRWallpaper> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context,
+            MaterialPageRoute(builder: (context)=> bottomNavigationBar()));
           },
           icon:
               const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),

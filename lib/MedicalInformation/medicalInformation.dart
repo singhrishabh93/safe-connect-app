@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:safe_connect/theme.dart';
 
@@ -56,7 +57,7 @@ class _MedicalInformationPageState extends State<MedicalInformationPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => bottomNavigationBar()),
               );
             },
             icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white)),
