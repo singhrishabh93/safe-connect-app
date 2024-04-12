@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
-                color: Colors.white,
+                color: Colors.black,
                 child: Column(
                   children: [
                     Stack(
@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding: EdgeInsets.only(left: 30),
                                 child: DefaultTextStyle(
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    color: Color(0xffFFB13D),
                                     fontSize: 21,
                                     fontFamily: "cirka",
                                   ),
@@ -88,8 +88,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 5,
                               ),
                               const Padding(
-                                padding:  EdgeInsets.only(left: 30),
-                                child:  DefaultTextStyle(
+                                padding: EdgeInsets.only(left: 30),
+                                child: DefaultTextStyle(
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 21,
@@ -100,7 +100,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                               ),
-                              
                             ],
                           ),
                         ),
@@ -131,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         keyboardType: TextInputType.number,
                         style: const TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 15,
                           fontFamily: "gilroy",
                         ),
@@ -152,14 +151,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _isButtonClicked = _isChecked;
                               });
                             },
-                            activeColor: Colors.black,
+                            activeColor: Color(0xffFFB13D),
                           ),
                           Text(
                             'I agree to the terms and conditions',
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: "gilroy",
-                              color: _isChecked ? Colors.black : Colors.grey,
+                              color: _isChecked
+                                  ? Color(0xffFFB13D)
+                                  : Colors.grey.withOpacity(0.5),
                             ),
                           ),
                         ],
@@ -183,17 +184,27 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: const Text(
                           "Continue",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 15,
                             fontFamily: "gilroy",
                           ),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _isButtonClicked
-                              ? Colors.black
-                              : Colors.grey.withOpacity(0.5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) {
+                              if (_isChecked &&
+                                  !states.contains(MaterialState.disabled)) {
+                                return Color(0xffFFB13D);
+                              }
+                              return Colors.grey.withOpacity(
+                                  0.5); // Changed to blue when checkbox is not checked
+                            },
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
                           ),
                         ),
                       ),
