@@ -30,8 +30,10 @@ class _ChildRegistrationState extends State<ChildRegistration> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => bottomNavigationBar()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => bottomNavigationBar()));
             },
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
@@ -142,7 +144,8 @@ class _ChildRegistrationState extends State<ChildRegistration> {
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
-                    _fathernameController.value = _fathernameController.value.copyWith(
+                    _fathernameController.value =
+                        _fathernameController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
                       selection: TextSelection.collapsed(offset: value.length),
                       composing: TextRange.empty,
@@ -169,7 +172,8 @@ class _ChildRegistrationState extends State<ChildRegistration> {
                   ),
                   onChanged: (value) {
                     // Remove non-alphabetic characters and allow space
-                    _mothernameController.value = _mothernameController.value.copyWith(
+                    _mothernameController.value =
+                        _mothernameController.value.copyWith(
                       text: value.replaceAll(RegExp(r'[^a-zA-Z\s]'), ''),
                       selection: TextSelection.collapsed(offset: value.length),
                       composing: TextRange.empty,
@@ -271,20 +275,24 @@ class _ChildRegistrationState extends State<ChildRegistration> {
                     return null;
                   },
                 ),
-                ElevatedButton(
-                  onPressed: _uploadImage,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                Container(
+                  width: MediaQuery.of(context).size.width - 45,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _uploadImage,
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      backgroundColor: Color(0xffFFB13D),
                     ),
-                    backgroundColor: Color(0xffFFB13D),
-                  ),
-                  child: const Text(
-                    'Upload Image',
-                    style: TextStyle(
-                      fontFamily: 'gilroy',
-                      fontSize: 14.0,
-                      color: Colors.black,
+                    child: const Text(
+                      'Upload Image',
+                      style: TextStyle(
+                        fontFamily: 'gilroy',
+                        fontSize: 14.0,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -301,19 +309,23 @@ class _ChildRegistrationState extends State<ChildRegistration> {
                     ),
                   ),
                 SizedBox(height: 40),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                Container(
+                  width: MediaQuery.of(context).size.width - 45,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      backgroundColor: Color(0xffFFB13D),
                     ),
-                    backgroundColor: Color(0xffFFB13D),
-                  ),
-                  onPressed: () {
-                    print('the button is pressed');
-                  },
-                  child: const Text(
-                    'Generate QR Code',
-                    style: TextStyle(color: Colors.black, fontSize: 14),
+                    onPressed: () {
+                      print('the button is pressed');
+                    },
+                    child: const Text(
+                      'Generate QR Code',
+                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    ),
                   ),
                 ),
               ],
@@ -323,7 +335,6 @@ class _ChildRegistrationState extends State<ChildRegistration> {
       ),
     );
   }
-  
 
   Future<void> _uploadImage() async {
     final imagePicker = ImagePicker();

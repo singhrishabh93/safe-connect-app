@@ -45,7 +45,7 @@ class _QRWallpaperState extends State<QRWallpaper> {
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context,
-            MaterialPageRoute(builder: (context)=> bottomNavigationBar()));
+                MaterialPageRoute(builder: (context) => bottomNavigationBar()));
           },
           icon:
               const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
@@ -272,20 +272,24 @@ class _QRWallpaperState extends State<QRWallpaper> {
                   },
                 ),
                 const SizedBox(height: 40.0),
-                ElevatedButton(
-                  onPressed: _uploadImage,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                Container(
+                  width: MediaQuery.of(context).size.width - 45,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: _uploadImage,
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      backgroundColor: Color(0xffFFB13D),
                     ),
-                    backgroundColor: Color(0xffFFB13D),
-                  ),
-                  child: const Text(
-                    'Upload Image',
-                    style: TextStyle(
-                      fontFamily: 'gilroy',
-                      fontSize: 14.0,
-                      color: Colors.black,
+                    child: const Text(
+                      'Upload Image',
+                      style: TextStyle(
+                        fontFamily: 'gilroy',
+                        fontSize: 14.0,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -436,17 +440,21 @@ class _QRWallpaperState extends State<QRWallpaper> {
                     ],
                   ),
                 SizedBox(height: 40),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                Container(
+                  width: MediaQuery.of(context).size.width - 45,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      backgroundColor: Color(0xffFFB13D),
                     ),
-                    backgroundColor: Color(0xffFFB13D),
-                  ),
-                  onPressed: _onGenerateQRPressed,
-                  child: const Text(
-                    'Generate QR Code',
-                    style: TextStyle(color: Colors.black, fontSize: 14),
+                    onPressed: _onGenerateQRPressed,
+                    child: const Text(
+                      'Generate QR Code',
+                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    ),
                   ),
                 ),
                 if (_showQRData)
@@ -486,20 +494,24 @@ class _QRWallpaperState extends State<QRWallpaper> {
                         ],
                       ),
                       SizedBox(height: 20),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 45,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            backgroundColor: Colors.red,
                           ),
-                          backgroundColor: Colors.red,
-                        ),
-                        onPressed: _saveImageToDevice,
-                        child: Text(
-                          'Download Image',
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.white,
-                            fontFamily: 'Gilroy',
+                          onPressed: _saveImageToDevice,
+                          child: Text(
+                            'Download Image',
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.white,
+                              fontFamily: 'Gilroy',
+                            ),
                           ),
                         ),
                       ),
