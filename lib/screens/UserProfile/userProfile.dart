@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/LoginScreen/loginScreen.dart';
+import 'package:safe_connect/screens/UserProfile/qrdetail.dart';
 import 'package:shimmer/shimmer.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -24,7 +25,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
   bool isEditMode = false;
   bool showDeleteButton = false;
   Map<String, dynamic> registeredQrDetails = {};
-  bool showRegisteredQr = false;
   bool isLoadingQrDetails = false;
 
   @override
@@ -33,7 +33,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
     user = FirebaseAuth.instance.currentUser;
     mobileNumber = user!.phoneNumber!;
     _fetchUserData();
-    _fetchRegisteredQrDetails();
   }
 
   Future<void> _fetchUserData() async {
@@ -53,318 +52,236 @@ class _UserProfilePageState extends State<UserProfilePage> {
     });
   }
 
-  Future<void> _fetchRegisteredQrDetails() async {
-    setState(() {
-      isLoadingQrDetails = true;
-    });
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(mobileNumber)
-        .collection('registeredQr')
-        .get();
-
-    if (snapshot.docs.isNotEmpty) {
-      registeredQrDetails.clear();
-      snapshot.docs.forEach((doc) {
-        registeredQrDetails[doc.id] = doc.data();
-      });
-      setState(() {
-        isLoadingQrDetails = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final buttonWidth = MediaQuery.of(context).size.width / 2 - 32;
 
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => bottomNavigationBar()));
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Colors.black,
-            )),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => bottomNavigationBar(),
+              ),
+            );
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.white,
+          ),
+        ),
         title: const Text(
           'User Profile',
-          style: TextStyle(color: Colors.black, fontFamily: "gilroy"),
+          style: TextStyle(color: Colors.white, fontFamily: "gilroy"),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         scrolledUnderElevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                if (isEditMode) {
+                  _updateUserData();
+                }
+                isEditMode = !isEditMode;
+              });
+            },
+            icon: Icon(
+              isEditMode ? Icons.save : Icons.edit,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
-      body: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Registered Mobile Number: $mobileNumber',
-              style: const TextStyle(
-                fontSize: 16,
-                fontFamily: 'gilroy',
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _nameController,
-              style: const TextStyle(
-                color: Colors.black,
-                fontFamily: 'gilroy',
-              ),
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'gilroy',
-                  fontWeight: FontWeight.bold,
-                ),
-                border: OutlineInputBorder(),
-              ),
-              enabled: isEditMode,
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _emailController,
-              style: const TextStyle(
-                color: Colors.black,
-                fontFamily: 'gilroy',
-              ),
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'gilroy',
-                  fontWeight: FontWeight.bold,
-                ),
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.emailAddress,
-              inputFormatters: [
-                FilteringTextInputFormatter.singleLineFormatter,
-              ],
-              enabled: isEditMode,
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _emergencyContactController,
-              style: const TextStyle(
-                color: Colors.black,
-                fontFamily: 'gilroy',
-              ),
-              decoration: const InputDecoration(
-                labelText: 'Emergency Contact',
-                labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'gilroy',
-                  fontWeight: FontWeight.bold,
-                ),
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.phone,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
-              ],
-              enabled: isEditMode,
-            ),
-            const SizedBox(height: 25),
-            const Text(
-              'Registered QR Details',
-              style: TextStyle(
-                fontSize: 18,
-                fontFamily: 'gilroy',
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 10),
-            isLoadingQrDetails
-                ? _buildShimmerEffect()
-                : showRegisteredQr
-                    ? Expanded(
-                        child: ListView.builder(
-                          itemCount: registeredQrDetails.length,
-                          itemBuilder: (context, index) {
-                            String docId =
-                                registeredQrDetails.keys.elementAt(index);
-                            Map<String, dynamic> details =
-                                registeredQrDetails.values.elementAt(index);
-
-                            return Container(
-                              padding: const EdgeInsets.all(10),
-                              margin: const EdgeInsets.only(bottom: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Registered Vehicle: $docId',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    'Name: ${details['name']}',
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                  Text(
-                                    'Vehicle Name: ${details['vehicleName']}',
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                  Text(
-                                    'Vehicle Number: ${details['vehicleNumber']}',
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                  Text(
-                                    'Email: ${details['email']}',
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                  Text(
-                                    'Contact Number: ${details['contactNumber']}',
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                  Text(
-                                    'Emergency Contact: ${details['emergencyContact']}',
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                ],
+      body: CustomScrollView(
+        shrinkWrap: true,
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Registered Mobile Number: $mobileNumber',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'gilroy',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFB13D),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _nameController,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'gilroy',
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'gilroy',
+                        fontWeight: FontWeight.bold,
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                    enabled: isEditMode,
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _emailController,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'gilroy',
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'gilroy',
+                        fontWeight: FontWeight.bold,
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.singleLineFormatter,
+                    ],
+                    enabled: isEditMode,
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _emergencyContactController,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'gilroy',
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: 'Emergency Contact',
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'gilroy',
+                        fontWeight: FontWeight.bold,
+                      ),
+                      border: OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(10),
+                    ],
+                    enabled: isEditMode,
+                  ),
+                  const SizedBox(height: 25),
+                  const Text(
+                    'Registered QR Details',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'gilroy',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  isLoadingQrDetails
+                      ? _buildShimmerEffect()
+                      : ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => QRDetailsPage(
+                                  qrDetails: registeredQrDetails,
+                                ),
                               ),
                             );
                           },
+                          child: Text(
+                            'Show QR Details',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: "gilroy",
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFFFB13D),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            minimumSize: Size(buttonWidth, 50),
+                          ),
                         ),
-                      )
-                    : const SizedBox(),
-            const SizedBox(height: 25),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        showRegisteredQr = !showRegisteredQr;
-                      });
-                      if (showRegisteredQr) {
-                        _fetchRegisteredQrDetails(); // fetch the user data
-                      }
-                    },
-                    child: Text(
-                      showRegisteredQr ? 'Hide QR Details' : 'Show QR Details',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: "gilroy",
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      minimumSize: Size(buttonWidth, 50),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        if (isEditMode) {
-                          _updateUserData();
-                        }
-                        isEditMode = !isEditMode;
-                      });
-                    },
-                    child: Text(
-                      isEditMode ? 'Save Detail' : 'Edit Details',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: "gilroy",
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isEditMode ? Colors.green : Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      minimumSize: Size(buttonWidth, 50),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
+                  const SizedBox(height: 30),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 220),
+                        child: TextButton(
+                          onPressed: () {
+                            FirebaseAuth.instance.signOut();
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                              (route) => false,
+                            );
+                          },
+                          child: const Text(
+                            "Sign Out",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: "gilroy",
+                            ),
+                          ),
+                          style: TextButton.styleFrom(
+                            backgroundColor: Color(0xFFFFB13D),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            minimumSize: Size(buttonWidth, 50),
+                          ),
                         ),
-                        (route) => false,
-                      );
-                    },
-                    child: const Text(
-                      "Sign Out",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: "gilroy",
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
+                      const SizedBox(height: 10),
+                      TextButton(
+                        onPressed: _deleteAccount,
+                        child: const Text(
+                          "Delete Account",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16,
+                            fontFamily: "gilroy",
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          minimumSize: Size(buttonWidth, 50),
+                        ),
                       ),
-                      minimumSize: Size(buttonWidth, 50),
-                    ),
+                      const SizedBox(height: 16),
+                    ],
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _deleteAccount,
-                    child: const Text(
-                      "Delete Account",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: "gilroy",
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      minimumSize: Size(buttonWidth, 50),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
