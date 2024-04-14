@@ -1,13 +1,18 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 class QRGenerator extends StatefulWidget {
   const QRGenerator({Key? key}) : super(key: key);
@@ -552,116 +557,60 @@ class _QRGeneratorState extends State<QRGenerator> {
   }
 
   Future<void> _saveQrImage() async {
-    try {
-      final image = await QrPainter(
-        data: _qrData,
-        version: QrVersions.auto,
-        gapless: false,
-        color: const Color(0xFFFFFFFF), // White color
-        emptyColor: const Color(0xFF000000), // Black color
-      ).toImageData(300);
+  try {
+    final image = await QrPainter(
+      data: _qrData,
+      version: QrVersions.auto,
+      gapless: false,
+      color: const Color(0xFFFFFFFF), 
+      emptyColor: const Color(0xFF000000), 
+    ).toImageData(300);
 
-      final user = FirebaseAuth.instance.currentUser;
-      final vehicleNumber = _vehicleNoController.text;
+    final directory = await getExternalStorageDirectory();
+    final imagePath = '${directory!.path}/qr_code_${_vehicleNoController.text}.png';
 
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('qr_codes')
-          .child('${user!.uid}_qr_code_$vehicleNumber.png');
 
-      final UploadTask uploadTask =
-          storageRef.putData(image!.buffer.asUint8List());
-
-      await uploadTask.whenComplete(() => print('QR code image uploaded'));
-      final String downloadURL = await storageRef.getDownloadURL();
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Colors.black, // Set background color to black
-            titleTextStyle: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Gilroy'), // Set title text color and font
-            contentTextStyle: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Gilroy'), // Set content text color and font
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  'QR code image generated successfully for ${_vehicleNoController.text}',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'gilroy',
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.normal), // Set text color to white
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    // Launch URL to download the QR code
-                    await launch(downloadURL);
-                  },
-                  child: const Text(
-                    'Download',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'gilroy',
-                        fontSize: 14.0), // Set font color to black
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Color(0xffFFB13D), // Set button background color
-                  ),
-                ),
-              ],
+    await File(imagePath).writeAsBytes(image!.buffer.asUint8List());
+    await ImageGallerySaver.saveFile(imagePath);
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Success'),
+          content: Text('QR code image saved successfully for ${_vehicleNoController.text}'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
             ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'Close',
-                  style: TextStyle(
-                      fontFamily: 'gilroy',
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal),
-                ),
-              ),
-            ],
-            // Add border of color 0xffFFB13D
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Color(0xffFFB13D)),
-              borderRadius: BorderRadius.circular(15.0),
+          ],
+        );
+      },
+    );
+  } catch (e) {
+    print('Error saving QR code image: $e');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text('Error saving QR code image: $e'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
             ),
-          );
-        },
-      );
-    } catch (e) {
-      print('Error saving QR code image: $e');
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: Text('Error saving QR code image: $e'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+          ],
+        );
+      },
+    );
   }
-
+}
   @override
   void dispose() {
     _nameController.dispose();
