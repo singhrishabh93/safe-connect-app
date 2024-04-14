@@ -306,6 +306,11 @@ class _QRGeneratorState extends State<QRGenerator> {
                   keyboardType: TextInputType.phone,
                   maxLength: 10,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  onChanged: (value) {
+                    if (value.length == 10) {
+                      FocusScope.of(context).unfocus();
+                    }
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your contact number';
