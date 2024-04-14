@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 class QRGenerator extends StatefulWidget {
   const QRGenerator({Key? key}) : super(key: key);
@@ -557,60 +556,70 @@ class _QRGeneratorState extends State<QRGenerator> {
   }
 
   Future<void> _saveQrImage() async {
-  try {
-    final image = await QrPainter(
-      data: _qrData,
-      version: QrVersions.auto,
-      gapless: false,
-      color: const Color(0xFFFFFFFF), 
-      emptyColor: const Color(0xFF000000), 
-    ).toImageData(300);
+    try {
+      final image = await QrPainter(
+        data: _qrData,
+        version: QrVersions.auto,
+        gapless: false,
+        color: const Color(0xFFFFFFFF),
+        emptyColor: const Color(0xFF000000),
+      ).toImageData(300);
 
-    final directory = await getExternalStorageDirectory();
-    final imagePath = '${directory!.path}/qr_code_${_vehicleNoController.text}.png';
+      final directory = await getExternalStorageDirectory();
+      final imagePath =
+          '${directory!.path}/qr_code_${_vehicleNoController.text}.png';
 
+      await File(imagePath).writeAsBytes(image!.buffer.asUint8List());
 
-    await File(imagePath).writeAsBytes(image!.buffer.asUint8List());
-    await ImageGallerySaver.saveFile(imagePath);
-    
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Success'),
-          content: Text('QR code image saved successfully for ${_vehicleNoController.text}'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  } catch (e) {
-    print('Error saving QR code image: $e');
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text('Error saving QR code image: $e'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+      await ImageGallerySaver.saveFile(imagePath);
+
+      final storageRef = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('qr_codes')
+          .child('qr_code_${_vehicleNoController.text}.png');
+
+      await storageRef.putFile(File(imagePath));
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Success'),
+            content: Text(
+                'QR code image saved successfully for ${_vehicleNoController.text}'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      print('Error saving QR code image: $e');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text('Error saving QR code image: $e'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
-}
+
   @override
   void dispose() {
     _nameController.dispose();
