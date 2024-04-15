@@ -5,11 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:camera/camera.dart';
 
 class VideoRecorderPage extends StatefulWidget {
   @override
@@ -17,8 +17,15 @@ class VideoRecorderPage extends StatefulWidget {
 }
 
 class _VideoRecorderPageState extends State<VideoRecorderPage> {
-  late CameraController _controller;
-  late List<CameraDescription> _cameras;
+  late CameraController _controller = CameraController(
+    CameraDescription(
+      name: '',
+      lensDirection: CameraLensDirection.front,
+      sensorOrientation: 0,
+    ),
+    ResolutionPreset.medium,
+  );
+
   bool _isRecording = false;
   String? _filePath;
   Timer? _timer;
@@ -28,7 +35,7 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
   @override
   void initState() {
     super.initState();
-    _initializeCamera();
+    _initializeRecorder();
     _requestPermissions();
   }
 
@@ -39,11 +46,20 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
     super.dispose();
   }
 
-  Future<void> _initializeCamera() async {
-    _cameras = await availableCameras();
-    _controller = CameraController(_cameras[0], ResolutionPreset.medium);
-    await _controller.initialize();
-    setState(() {});
+  Future<void> _initializeRecorder() async {
+    if (await _checkPermissions()) {
+      // Initialize camera
+      WidgetsFlutterBinding.ensureInitialized();
+      final cameras = await availableCameras();
+      final firstCamera = cameras.first;
+      _controller = CameraController(
+        firstCamera,
+        ResolutionPreset.high,
+      );
+
+      // Initialize camera controller
+      await _controller.initialize();
+    }
   }
 
   Future<bool> _checkPermissions() async {
@@ -56,7 +72,7 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
   }
 
   void _startRecording() async {
-    if (!_isRecording && _controller.value.isInitialized) {
+    if (_controller != null) {
       setState(() {
         _isRecording = true;
         _filePath = null;
@@ -72,31 +88,25 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
       try {
         await _controller.startVideoRecording();
       } catch (e) {
-        print('Error starting video recording: $e');
-        setState(() {
-          _isRecording = false;
-          _timer?.cancel();
-        });
+        print('Error starting recording: $e');
       }
     }
   }
 
   void _stopRecording() async {
-    if (_isRecording) {
-      setState(() {
-        _isRecording = false;
-        _timer?.cancel();
-      });
+    setState(() {
+      _isRecording = false;
+      _timer?.cancel();
+    });
 
-      try {
-        XFile videoFile = await _controller.stopVideoRecording();
-        _filePath = videoFile.path;
-        if (_filePath != null) {
-          await _uploadToFirebase();
-        }
-      } catch (e) {
-        print('Error stopping video recording: $e');
+    try {
+      final videoPath = await _controller.stopVideoRecording();
+      if (videoPath != null) {
+        _filePath = videoPath.path;
+        await _uploadToFirebase();
       }
+    } catch (e) {
+      print('Error stopping recording: $e');
     }
   }
 
@@ -255,37 +265,28 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
       appBar: AppBar(
         title: Text('Video Recorder'),
       ),
-      body: FutureBuilder(
-        future: _controller.initialize(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (_isRecording)
-                    Text(
-                        'Recording... Duration: ${_formatDuration(_elapsedSeconds)}'),
-                  if (_filePath != null) Text('Recording saved at: $_filePath'),
-                  ElevatedButton(
-                    onPressed:
-                        _isRecording ? _stopRecording : _startRecording,
-                    child: Text(
-                        _isRecording ? 'Stop Recording' : 'Start Recording'),
-                  ),
-                  SizedBox(height: 20),
-                  if (_controller.value.isInitialized)
-                    AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: CameraPreview(_controller),
-                    ),
-                ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (_controller != null && _controller.value.isInitialized)
+              Expanded(
+                child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: CameraPreview(_controller),
+                ),
               ),
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+            SizedBox(height: 16),
+            if (_isRecording)
+              Text(
+                  'Recording... Duration: ${_formatDuration(_elapsedSeconds)}'),
+            if (_filePath != null) Text('Recording saved at: $_filePath'),
+            ElevatedButton(
+              onPressed: _isRecording ? _stopRecording : _startRecording,
+              child: Text(_isRecording ? 'Stop Recording' : 'Start Recording'),
+            ),
+          ],
+        ),
       ),
     );
   }
