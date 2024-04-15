@@ -42,6 +42,40 @@ class _StoryUploadPageState extends State<StoryUploadPage> {
     });
   }
 
+  void _showImageSourceDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Select Image Source"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                GestureDetector(
+                  child: Text("Gallery"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    getImageFromGallery();
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                ),
+                GestureDetector(
+                  child: Text("Camera"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    getImageFromCamera();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,14 +91,14 @@ class _StoryUploadPageState extends State<StoryUploadPage> {
               // Image Upload Option
               GestureDetector(
                 onTap: () {
-                  getImageFromGallery(); // Open gallery when tapped
+                  _showImageSourceDialog(); // Show dialog to select image source
                 },
                 child: _image == null
                     ? IconButton(
                         icon: Icon(Icons.camera_alt),
                         iconSize: 50,
                         onPressed: () {
-                          getImageFromCamera(); // Open camera when icon tapped
+                          _showImageSourceDialog(); // Show dialog when icon tapped
                         },
                       )
                     : Image.file(_image!),
