@@ -3,7 +3,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/BottomNavBar%20Features/SOSPopup.dart';
 import 'package:safe_connect/BottomNavBar%20Features/helplinePopUp.dart';
-import 'package:safe_connect/BottomNavBar%20Features/sosScreen.dart';
+import 'package:safe_connect/BottomNavBar%20Features/soundRecorder.dart';
 import 'package:safe_connect/screens/HelpLogScreen/helpLogScreen.dart';
 import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
 import 'package:safe_connect/screens/QrScanner/qrScanner.dart';
@@ -27,9 +27,9 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
   final List<Widget> _screens = [
     const HomeScreen(),
     // const HelpLineScreen(),
-    SOSPopup(),
     HelpRecords(),
     SoundRecorderPage(),
+    SOSPopup(),
   ];
 
   void _onItemTapped(int index) {
@@ -96,7 +96,7 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
               _buildIconWithDot(Icons.home, 0),
               _buildIconWithDot(Icons.handshake, 1),
               _buildIconWithDot(Icons.chat, 2),
-              _buildIconWithDot(Icons.settings, 3),
+              _buildIconWithDot(Icons.safety_check, 3),
             ],
           ),
         ),

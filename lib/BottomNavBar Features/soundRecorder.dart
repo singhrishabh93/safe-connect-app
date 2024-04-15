@@ -22,12 +22,19 @@ class _SoundRecorderPageState extends State<SoundRecorderPage> {
   String? _filePath;
   Timer? _timer;
   int _startRecordingTime = 0;
+  int _elapsedSeconds = 0;
 
   @override
   void initState() {
     super.initState();
     _initializeRecorder();
     _requestPermissions();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   Future<void> _initializeRecorder() async {
@@ -51,8 +58,11 @@ class _SoundRecorderPageState extends State<SoundRecorderPage> {
         _isRecording = true;
         _filePath = null;
         _startRecordingTime = DateTime.now().millisecondsSinceEpoch;
+        _elapsedSeconds = 0;
         _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-          setState(() {});
+          setState(() {
+            _elapsedSeconds++;
+          });
         });
       });
 
@@ -110,88 +120,88 @@ class _SoundRecorderPageState extends State<SoundRecorderPage> {
   }
 
   Future<void> _uploadDataToFirestore(String url) async {
-  try {
-    Position position = await _getCurrentLocation();
-    String address = await _getAddressFromCoordinates(
-        position.latitude, position.longitude);
+    try {
+      Position position = await _getCurrentLocation();
+      String address = await _getAddressFromCoordinates(
+          position.latitude, position.longitude);
 
-    final user = FirebaseAuth.instance.currentUser;
-    final mobileNumber = user!.phoneNumber;
+      final user = FirebaseAuth.instance.currentUser;
+      final mobileNumber = user!.phoneNumber;
 
-    String randomId = DateTime.now().millisecondsSinceEpoch.toString();
+      String randomId = DateTime.now().millisecondsSinceEpoch.toString();
 
-    // Fetch user's complete details
-    DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(mobileNumber)
-        .collection('loginDetails')
-        .doc(mobileNumber)
-        .get();
-    Map<String, dynamic>? userData =
-        userDataSnapshot.data() as Map<String, dynamic>?;
+      // Fetch user's complete details
+      DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(mobileNumber)
+          .collection('loginDetails')
+          .doc(mobileNumber)
+          .get();
+      Map<String, dynamic>? userData =
+          userDataSnapshot.data() as Map<String, dynamic>?;
 
-    // Print user's complete details in the terminal
-    print('User Details:');
-    print('Name: ${userData?['name']}');
-    print('Email: ${userData?['email']}');
-    print('Emergency Contact: ${userData?['emergencyContact']}');
+      // Print user's complete details in the terminal
+      print('User Details:');
+      print('Name: ${userData?['name']}');
+      print('Email: ${userData?['email']}');
+      print('Emergency Contact: ${userData?['emergencyContact']}');
 
-    // Upload data to Firestore for the user
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(mobileNumber)
-        .collection('logs')
-        .doc(randomId)
-        .set({
-      'mediaLink': url,
-      'address': address,
-      'type': 'audio',
-      'call To': '100',
-      'duration_seconds': _getRecordingDuration(),
-      // Include user's details in Firestore document
-      'user_details': userData,
-    });
+      // Upload data to Firestore for the user
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(mobileNumber)
+          .collection('logs')
+          .doc(randomId)
+          .set({
+        'mediaLink': url,
+        'address': address,
+        'type': 'audio',
+        'call To': '100',
+        'duration_seconds': _getRecordingDuration(),
+        // Include user's details in Firestore document
+        'user_details': userData,
+      });
 
-    // Fetch emergency contact's details
-    String emergencyContact = userData?['emergencyContact'] ?? '';
-    DocumentSnapshot emergencyContactDataSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(emergencyContact) // Use emergency contact as the document ID
-        .collection('loginDetails')
-        .doc(emergencyContact)
-        .get();
-    Map<String, dynamic>? emergencyContactData =
-        emergencyContactDataSnapshot.data() as Map<String, dynamic>?;
+      // Fetch emergency contact's details
+      String emergencyContact = userData?['emergencyContact'] ?? '';
+      DocumentSnapshot emergencyContactDataSnapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(emergencyContact) // Use emergency contact as the document ID
+          .collection('loginDetails')
+          .doc(emergencyContact)
+          .get();
+      Map<String, dynamic>? emergencyContactData =
+          emergencyContactDataSnapshot.data() as Map<String, dynamic>?;
 
-    // Upload data to Firestore for the emergency contact
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(emergencyContact)
-        .collection('logsForEmergencyContact')
-        .doc(randomId)
-        .set({
-      'mediaLink': url,
-      'address': address,
-      'type': 'audio',
-      'call To': '100',
-      'duration_seconds': _getRecordingDuration(),
-      // Include user's details in Firestore document
-      'user_details': userData,
-    });
+      // Upload data to Firestore for the emergency contact
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(emergencyContact)
+          .collection('logsForEmergencyContact')
+          .doc(randomId)
+          .set({
+        'mediaLink': url,
+        'address': address,
+        'type': 'audio',
+        'call To': '100',
+        'duration_seconds': _getRecordingDuration(),
+        // Include user's details in Firestore document
+        'user_details': userData,
+      });
 
-    Navigator.pop(context);
+      Navigator.pop(context);
 
-    String phoneNumber = '100';
-    if (await canLaunch(phoneNumber)) {
-      await launch(phoneNumber);
-    } else {
-      throw 'Could not launch $phoneNumber';
+      String phoneNumber = '100';
+      if (await canLaunch(phoneNumber)) {
+        await launch(phoneNumber);
+      } else {
+        throw 'Could not launch $phoneNumber';
+      }
+    } catch (e) {
+      print("Error uploading data to Firestore: $e");
     }
-  } catch (e) {
-    print("Error uploading data to Firestore: $e");
   }
-}
-
 
   Future<Position> _getCurrentLocation() async {
     return await Geolocator.getCurrentPosition(
@@ -220,9 +230,13 @@ class _SoundRecorderPageState extends State<SoundRecorderPage> {
     int currentTime = DateTime.now().millisecondsSinceEpoch;
     int durationInSeconds =
         ((currentTime - _startRecordingTime) / 1000).round();
-    int minutes = durationInSeconds ~/ 60;
-    int seconds = durationInSeconds % 60;
-    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+    return _formatDuration(durationInSeconds);
+  }
+
+  String _formatDuration(int seconds) {
+    int minutes = seconds ~/ 60;
+    int remainingSeconds = seconds % 60;
+    return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -235,7 +249,7 @@ class _SoundRecorderPageState extends State<SoundRecorderPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_isRecording) Text('Recording...'),
+            if (_isRecording) Text('Recording... Duration: ${_formatDuration(_elapsedSeconds)}'),
             if (_filePath != null) Text('Recording saved at: $_filePath'),
             ElevatedButton(
               onPressed: _isRecording ? _stopRecording : _startRecording,
