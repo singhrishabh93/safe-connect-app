@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:safe_connect/screens/Story/storyFeed.dart';
 
 class FirstCard extends StatelessWidget {
   const FirstCard({super.key});
@@ -46,7 +49,9 @@ class FirstCard extends StatelessWidget {
           SizedBox(
             height: 30,
             child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(()=> StoryFeedPage());
+                },
                 child: Text(
                   "Get Started",
                   style: TextStyle(

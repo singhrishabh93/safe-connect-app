@@ -398,7 +398,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                                   }
                                 },
                                 child: const Text(
-                                  'Click to downlaod QR',
+                                  'Click to download QR',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16),
                                 ),
