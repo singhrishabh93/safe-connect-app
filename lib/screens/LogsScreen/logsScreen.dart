@@ -82,8 +82,7 @@ class LogScreenBody extends StatelessWidget {
                   snapshot.data!.docs[index].data() as Map<String, dynamic>?;
 
               if (log == null) {
-                // Handle the case where log is null
-                return const SizedBox.shrink(); // or any other fallback widget
+                return const SizedBox.shrink();
               }
 
               var mediaUrl = log['mediaLink'] as String?;
@@ -147,61 +146,65 @@ class VideoWidget extends StatefulWidget {
 class _VideoWidgetState extends State<VideoWidget> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
+  bool _isPlaying = false;
 
   @override
   void initState() {
     super.initState();
     _controller = VideoPlayerController.network(widget.videoUrl);
     _initializeVideoPlayerFuture = _controller.initialize();
+    _controller.addListener(_videoListener);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              content: FutureBuilder(
-                future: _initializeVideoPlayerFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error loading video');
-                  } else {
-                    return AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    );
-                  }
-                },
-              ),
-            );
-          },
-        );
-      },
+      onTap: () => _togglePlayPause(),
       child: Stack(
         alignment: Alignment.center,
         children: [
           AspectRatio(
-            aspectRatio: 16 / 9, // or set as per your video aspect ratio
+            aspectRatio: 16 / 9,
             child: VideoPlayer(_controller),
           ),
-          const Icon(
-            Icons.play_circle_filled,
-            size: 50,
-            color: Colors.black,
-          ),
+          if (!_isPlaying)
+            const Icon(
+              Icons.play_circle_filled,
+              size: 50,
+              color: Colors.black,
+            ),
         ],
       ),
     );
   }
 
+  void _togglePlayPause() {
+    if (_isPlaying) {
+      _controller.pause();
+    } else {
+      _controller.play();
+    }
+    setState(() {
+      _isPlaying = !_isPlaying;
+    });
+  }
+
   @override
   void dispose() {
+    _controller.removeListener(_videoListener);
     _controller.dispose();
     super.dispose();
+  }
+
+  void _videoListener() {
+    if (_controller.value.isPlaying && !_isPlaying) {
+      setState(() {
+        _isPlaying = true;
+      });
+    } else if (!_controller.value.isPlaying && _isPlaying) {
+      setState(() {
+        _isPlaying = false;
+      });
+    }
   }
 }
