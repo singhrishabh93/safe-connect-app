@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:safe_connect/screens/LogsScreen/logsScreen.dart';
-import 'package:safe_connect/screens/QrInfoScreen/car.dart';
+import 'package:safe_connect/screens/QrInfoScreen/carinfo.dart';
+import 'package:safe_connect/screens/QrInfoScreen/childinfo.dart';
+import 'package:safe_connect/screens/QrInfoScreen/petinfo.dart';
+import 'package:safe_connect/screens/QrInfoScreen/qrwallpaperinfo.dart';
 import 'package:safe_connect/screens/QrRegistrationScreen/ChildRegistration.dart';
 import 'package:safe_connect/screens/QrRegistrationScreen/PetRegistration.dart';
 import 'package:safe_connect/screens/QrRegistrationScreen/qrWallpaper.dart';
@@ -83,7 +86,7 @@ class newSecondChild extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () {
-                            Get.to(() => ChildRegistration());
+                            Get.to(() => childinfo());
                           },
                           child: Container(
                             width: 50,
@@ -120,7 +123,7 @@ class newSecondChild extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () {
-                            Get.to(() => PetRegistration());
+                            Get.to(() => petinfo());
                           },
                           child: Container(
                             width: 50,
@@ -155,7 +158,7 @@ class newSecondChild extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        Get.to(() => QRWallpaper());
+                        Get.to(() => qrwallpaperinfo());
                       },
                       child: Column(
                         children: [
