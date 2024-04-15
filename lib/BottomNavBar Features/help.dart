@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:safe_connect/BottomNavBar%20Features/helplinePopUp.dart';
 import 'package:safe_connect/BottomNavBar%20Features/soundRecorder.dart';
 import 'package:safe_connect/BottomNavBar%20Features/videoRecorder.dart';
 
-class SOSPopup extends StatelessWidget {
-  const SOSPopup({super.key});
+class HelpPopup extends StatelessWidget {
+  const HelpPopup({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +26,17 @@ class SOSPopup extends StatelessWidget {
                   style: TextStyle(fontFamily: "gilroy", fontSize: 40),
                   children: <TextSpan>[
                     TextSpan(
-                        text: 'S', style: TextStyle(color: Color(0xffFFFFFf))),
+                        text: 'HELP',
+                        style: TextStyle(color: Color(0xffFFB13D))),
                     TextSpan(
-                        text: 'O', style: TextStyle(color: Color(0xffFFB13D))),
-                    TextSpan(
-                        text: 'S', style: TextStyle(color: Color(0xffFFFFFf))),
+                        text: 'LINE',
+                        style: TextStyle(color: Color(0xffFFFFFf))),
                   ],
                 ),
               ),
               const SizedBox(height: 30),
               Text(
-                "Select option for SOS",
+                "Select option for helpline",
                 style: TextStyle(
                     color: Color(0xffffffff),
                     fontFamily: "gilroy",
@@ -55,7 +56,7 @@ class SOSPopup extends StatelessWidget {
               const SizedBox(height: 50),
               InkWell(
                 onTap: () {
-                  Get.to(() => SoundRecorderPage());
+                  Get.to(() => HelpLineScreen());
                 },
                 child: Container(
                   height: 50,
@@ -64,7 +65,7 @@ class SOSPopup extends StatelessWidget {
                       color: Color(0xffFFB13D),
                       borderRadius: BorderRadius.circular(10)),
                   child: Center(
-                    child: Text("Audio",
+                    child: Text("Self",
                         style: TextStyle(
                             color: Color(0xff000000),
                             fontFamily: "Cirka",
@@ -75,7 +76,7 @@ class SOSPopup extends StatelessWidget {
               const SizedBox(height: 30),
               InkWell(
                 onTap: () {
-                  Get.to(() => VideoRecorderPage());
+                  Get.to(() => HelpLineScreen());
                 },
                 child: Container(
                   height: 50,
@@ -84,7 +85,7 @@ class SOSPopup extends StatelessWidget {
                       color: Color(0xffFFB13D),
                       borderRadius: BorderRadius.circular(10)),
                   child: Center(
-                    child: Text("Video",
+                    child: Text("Others",
                         style: TextStyle(
                             color: Color(0xff000000),
                             fontFamily: "Cirka",
