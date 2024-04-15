@@ -76,10 +76,6 @@ class StoryFeedPage extends StatelessWidget {
                           color: Colors.grey,
                         ),
                       ),
-                     /* trailing: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.more_horiz),
-                      ),*/
                     ), 
                     SizedBox(
                       height: 8.0,
@@ -94,34 +90,12 @@ class StoryFeedPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: 8.0,
+                      height: 10.0,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                print('Upvote');
-                              },
-                              icon: Icon(
-                                Icons.arrow_upward_rounded,
-                                color: Color(0xFFFFB13D),
-                                size: 20,
-                              ),
-                            ),
-                            SizedBox(width: 3,),
-                            Container(
-                              child: Text('upvote',style: TextStyle(
-                                fontFamily: 'Gilroy',
-                                fontSize:18.0,
-                                color: Color(0xFFFFB13D),
-                              ),),
-                            ),
-
-                          ],
-                        ),
+                        UpvoteButton(), 
                       ],
                     ),
                     Padding(
@@ -159,6 +133,55 @@ class StoryFeedPage extends StatelessWidget {
         child: Icon(Icons.add),
       ),
       backgroundColor: Colors.black,
+    );
+  }
+}
+
+class UpvoteButton extends StatefulWidget {
+  @override
+  _UpvoteButtonState createState() => _UpvoteButtonState();
+}
+
+class _UpvoteButtonState extends State<UpvoteButton> {
+  bool isUpvoted = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isUpvoted = !isUpvoted;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10,top: 7),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), // Adjust padding
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0), // Adjust border radius
+            color: isUpvoted ? Color(0xFFFFB13D) : Colors.grey.withOpacity(0.3),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min, // Adjust main axis size
+            children: [
+              Icon(
+                Icons.arrow_upward_rounded,
+                color: isUpvoted ? Colors.black : Colors.white,
+                size: 18, 
+              ),
+              SizedBox(width: 2), 
+              Text(
+                'Upvote',
+                style: TextStyle(
+                  fontFamily: 'Gilroy',
+                  fontSize: 12.0, 
+                  color: isUpvoted ? Colors.black : Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
