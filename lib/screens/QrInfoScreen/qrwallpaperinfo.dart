@@ -6,9 +6,10 @@ import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/QrRegistrationScreen/PetRegistration.dart';
 import 'package:safe_connect/screens/QrRegistrationScreen/qrCar.dart';
 import 'package:lottie/lottie.dart';
+import 'package:safe_connect/screens/QrRegistrationScreen/qrWallpaper.dart';
 
 class qrwallpaperinfo extends StatelessWidget {
-  const qrwallpaperinfo ({super.key});
+  const qrwallpaperinfo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class qrwallpaperinfo extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width*0.8,
+                width: MediaQuery.of(context).size.width * 0.8,
                 height: 400,
                 child: Lottie.asset('assets/images/wallpaperanimation.json'),
               ),
@@ -107,7 +108,7 @@ class qrwallpaperinfo extends StatelessWidget {
         width: MediaQuery.of(context).size.width - 40,
         child: FloatingActionButton.extended(
           onPressed: () {
-            Get.to(() => const PetRegistration());
+            Get.to(() => const QRWallpaper());
           },
           label: Text(
             "Add your QR in Wallpaper",

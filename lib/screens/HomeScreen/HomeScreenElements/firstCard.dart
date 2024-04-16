@@ -50,10 +50,10 @@ class FirstCard extends StatelessWidget {
             height: 30,
             child: ElevatedButton(
                 onPressed: () {
-                  Get.to(()=> StoryFeedPage());
+                  Get.to(() => StoryFeedPage());
                 },
                 child: Text(
-                  "Get Started",
+                  "What people says",
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: "gilroy",
