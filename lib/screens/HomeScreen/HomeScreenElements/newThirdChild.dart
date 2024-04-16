@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:safe_connect/screens/QrInfoScreen/car.dart';
+import 'package:safe_connect/screens/QrInfoScreen/carinfo.dart';
 import 'package:safe_connect/screens/Story/storyFeed.dart';
 import 'package:safe_connect/screens/Story/uploadStory.dart';
 

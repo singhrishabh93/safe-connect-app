@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:safe_connect/bottomNavBar.dart';
 
 class StoryUploadPage extends StatefulWidget {
   @override
@@ -79,8 +82,21 @@ class _StoryUploadPageState extends State<StoryUploadPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('Upload Story'),
+        leading: IconButton(
+            onPressed: () {
+              Get.to(() => bottomNavigationBar());
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.white,
+            )),
+        backgroundColor: Colors.black,
+        title: Text(
+          'Upload Story',
+          style: TextStyle(fontFamily: 'Gilroy', color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -91,14 +107,14 @@ class _StoryUploadPageState extends State<StoryUploadPage> {
               // Image Upload Option
               GestureDetector(
                 onTap: () {
-                  _showImageSourceDialog(); // Show dialog to select image source
+                  _showImageSourceDialog();
                 },
                 child: _image == null
                     ? IconButton(
                         icon: Icon(Icons.camera_alt),
                         iconSize: 50,
                         onPressed: () {
-                          _showImageSourceDialog(); // Show dialog when icon tapped
+                          _showImageSourceDialog();
                         },
                       )
                     : Image.file(_image!),
@@ -109,27 +125,52 @@ class _StoryUploadPageState extends State<StoryUploadPage> {
                 children: [
                   Text(
                     'Add Image',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontFamily: 'Gilroy'),
                   ),
                 ],
               ),
               SizedBox(height: 20),
               // Name Field
               TextField(
+                cursorColor: Colors.white,
                 controller: _nameController,
                 decoration: InputDecoration(
                   labelText: 'Name',
+                  labelStyle: TextStyle(
+                    fontFamily: 'Gilroy',
+                    color: Colors.white,
+                  ),
                   border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
                 ),
               ),
               SizedBox(height: 20),
               // Comment Field
               TextField(
+                cursorColor: Colors.white,
                 controller: _commentController,
                 maxLines: 3,
                 decoration: InputDecoration(
                   labelText: 'Comment',
+                  labelStyle: TextStyle(
+                    fontFamily: 'Gilroy',
+                    color: Colors.white,
+                  ),
                   border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
                 ),
               ),
               SizedBox(height: 20),
@@ -138,7 +179,7 @@ class _StoryUploadPageState extends State<StoryUploadPage> {
                 children: [
                   Text(
                     'Rating:',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16,color: Colors.white,fontFamily:'Gilroy'),
                   ),
                   SizedBox(width: 10),
                   // Implement Rating Stars here
@@ -160,58 +201,63 @@ class _StoryUploadPageState extends State<StoryUploadPage> {
                 ],
               ),
               SizedBox(height: 20),
-              // Upload Button
-              ElevatedButton(
-                onPressed: () async {
-                  String mobileNumber =
-                      FirebaseAuth.instance.currentUser!.phoneNumber!;
-                  String name = _nameController.text;
-                  String comment = _commentController.text;
 
-                  // Upload image to Firebase Storage
-                  String imagePath =
-                      'story/$mobileNumber/${DateTime.now().millisecondsSinceEpoch}.jpg';
-                  TaskSnapshot imageSnapshot = await FirebaseStorage.instance
-                      .ref(imagePath)
-                      .putFile(_image!);
-                  String imageUrl = await imageSnapshot.ref.getDownloadURL();
-
-                  // Upload story data to Firestore under user's document
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(mobileNumber)
-                      .collection('story')
-                      .add({
-                    'name': name,
-                    'comment': comment,
-                    'rating': _rating,
-                    'imageUrl': imageUrl,
-                    'timestamp': FieldValue
-                        .serverTimestamp(), // Add timestamp for sorting
-                  });
-
-                  // Upload story data to Firestore under 'story' collection
-                  await FirebaseFirestore.instance
-                      .collection('story')
-                      .doc(DateTime.now().millisecondsSinceEpoch.toString())
-                      .set({
-                    'name': name,
-                    'comment': comment,
-                    'rating': _rating,
-                    'imageUrl': imageUrl,
-                    'timestamp': FieldValue
-                        .serverTimestamp(), // Add timestamp for sorting
-                  });
-
-                  // Reset the fields after upload
-                  _nameController.clear();
-                  _commentController.clear();
-                  setState(() {
-                    _rating = 0;
-                    _image = null;
-                  });
-                },
-                child: Text('Upload'),
+              Container(
+                  width: MediaQuery.of(context).size.width - 45,
+                  height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFFFB13D),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  onPressed: () async {
+                    String mobileNumber =
+                        FirebaseAuth.instance.currentUser!.phoneNumber!;
+                    String name = _nameController.text;
+                    String comment = _commentController.text;
+                
+                    // Upload image to Firebase Storage
+                    String imagePath =
+                        'story/$mobileNumber/${DateTime.now().millisecondsSinceEpoch}.jpg';
+                    TaskSnapshot imageSnapshot = await FirebaseStorage.instance
+                        .ref(imagePath)
+                        .putFile(_image!);
+                    String imageUrl = await imageSnapshot.ref.getDownloadURL();
+                
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(mobileNumber)
+                        .collection('story')
+                        .add({
+                      'name': name,
+                      'comment': comment,
+                      'rating': _rating,
+                      'imageUrl': imageUrl,
+                      'timestamp': FieldValue.serverTimestamp(),
+                    });
+                
+                    await FirebaseFirestore.instance
+                        .collection('story')
+                        .doc(DateTime.now().millisecondsSinceEpoch.toString())
+                        .set({
+                      'name': name,
+                      'comment': comment,
+                      'rating': _rating,
+                      'imageUrl': imageUrl,
+                      'timestamp': FieldValue.serverTimestamp(),
+                    });
+                
+                    _nameController.clear();
+                    _commentController.clear();
+                    setState(() {
+                      _rating = 0;
+                      _image = null;
+                    });
+                  },
+                  child: Text('Upload',style: TextStyle(fontFamily: 'Gilroy',color: Colors.black),),
+                ),
               ),
             ],
           ),
