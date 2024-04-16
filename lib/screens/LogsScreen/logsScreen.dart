@@ -117,6 +117,19 @@ class LogScreenBody extends StatelessWidget {
                   mediaUrl != null &&
                   mediaUrl.isNotEmpty) {
                 mediaWidget = VideoWidget(videoUrl: mediaUrl);
+              } else if (type == 'audio' &&
+                  mediaUrl != null &&
+                  mediaUrl.isNotEmpty) {
+                mediaWidget = GestureDetector(
+                  onTap: () {
+                    // Add functionality to play audio if needed
+                  },
+                  child: Icon(
+                    Icons.mic,
+                    size: 50,
+                    color: Colors.black,
+                  ),
+                );
               } else {
                 mediaWidget = SizedBox.shrink();
               }
@@ -159,12 +172,12 @@ class _VideoWidgetState extends State<VideoWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _togglePlayPause(),
+      onTap: () => _openVideoDialog(context),
       child: Stack(
         alignment: Alignment.center,
         children: [
           AspectRatio(
-            aspectRatio: 16 / 9,
+            aspectRatio: 1 / 1,
             child: VideoPlayer(_controller),
           ),
           if (!_isPlaying)
@@ -175,6 +188,52 @@ class _VideoWidgetState extends State<VideoWidget> {
             ),
         ],
       ),
+    );
+  }
+
+  void _openVideoDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: GestureDetector(
+            onTap: () => _togglePlayPause(),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                AspectRatio(
+                  aspectRatio: 3 / 4,
+                  child: VideoPlayer(_controller),
+                ),
+                if (!_controller.value.isPlaying && !_isPlaying)
+                  const Icon(
+                    Icons.play_circle_filled,
+                    size: 50,
+                    color: Colors.black,
+                  ),
+                if (_controller.value.isPlaying || _isPlaying)
+                  Center(
+                    child: IconButton(
+                      icon: _isPlaying
+                          ? Icon(Icons.pause)
+                          : Icon(Icons.play_arrow),
+                      onPressed: () {
+                        if (_isPlaying) {
+                          _controller.pause();
+                        } else {
+                          _controller.play();
+                        }
+                        setState(() {
+                          _isPlaying = !_isPlaying;
+                        });
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
