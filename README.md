@@ -5,3 +5,5 @@ At SafeConnect, we bridge the gap between loss and reunion, transforming moments
 Beyond just a product, we're committed to cultivating a global community centered on responsibility, empathy, and collective support. Each successful use of the SafeConnect app reinforces our belief in the inherent goodness of humanity and the strength found in collaborative efforts.
 
 Join us at SafeConnect to be part of a mission-driven team dedicated to making a positive impact in the world. Together, we're building safer, more connected, and more compassionate communities.
+
+link: 
