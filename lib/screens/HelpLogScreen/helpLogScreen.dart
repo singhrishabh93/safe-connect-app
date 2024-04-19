@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:safe_connect/main.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class HelpRecords extends StatelessWidget {
   @override
@@ -38,10 +42,63 @@ class HelpRecords extends StatelessWidget {
   }
 }
 
-class LogScreenBody extends StatelessWidget {
+class LogScreenBody extends StatefulWidget {
   final String phoneNumber;
 
   const LogScreenBody({Key? key, required this.phoneNumber}) : super(key: key);
+
+  @override
+  _LogScreenBodyState createState() => _LogScreenBodyState();
+}
+
+class _LogScreenBodyState extends State<LogScreenBody> {
+  late StreamSubscription<QuerySnapshot> _streamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize stream subscription
+    _streamSubscription = FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.phoneNumber)
+        .collection('logsForEmergencyContact')
+        .snapshots()
+        .listen((QuerySnapshot event) {
+      if (event.docChanges.isNotEmpty) {
+        // New document added, show notification
+        _showNotification();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription.cancel(); // Cancel subscription to prevent memory leaks
+    super.dispose();
+  }
+
+  // Function to show notification
+ Future<void> _showNotification() async {
+  print('Showing notification');
+  try {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'channel_ID', 'channel name', 'channel description',
+            importance: Importance.max, priority: Priority.high);
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'New Notification',
+      'Notification message',
+      platformChannelSpecifics,
+    );
+    print('Notification shown successfully');
+  } catch (e) {
+    print('Error showing notification: $e');
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +109,7 @@ class LogScreenBody extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .doc(phoneNumber)
+            .doc(widget.phoneNumber)
             .collection('logsForEmergencyContact')
             .snapshots(),
         builder: (context, snapshot) {
@@ -205,3 +262,4 @@ class _VideoWidgetState extends State<VideoWidget> {
     super.dispose();
   }
 }
+

@@ -53,7 +53,7 @@ class FirstCard extends StatelessWidget {
                   Get.to(() => StoryFeedPage());
                 },
                 child: Text(
-                  "What people says",
+                  "What people say?",
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: "gilroy",
