@@ -78,27 +78,33 @@ class _LogScreenBodyState extends State<LogScreenBody> {
   }
 
   // Function to show notification
- Future<void> _showNotification() async {
-  print('Showing notification');
-  try {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-            'channel_ID', 'channel name', 'channel description',
-            importance: Importance.max, priority: Priority.high);
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'New Notification',
-      'Notification message',
-      platformChannelSpecifics,
-    );
-    print('Notification shown successfully');
-  } catch (e) {
-    print('Error showing notification: $e');
+  Future<void> _showNotification() async {
+    print('//////////////////////////Showing notification ///////////////////////////////////////////////');
+    try {
+      const AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails(
+        'channel_ID',
+        'channel name',
+        'channel description',
+        importance: Importance.max,
+        priority: Priority.high,
+      );
+      const NotificationDetails platformChannelSpecifics =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.periodicallyShow(
+        0,
+        'New Notification',
+        'Notification message',
+        RepeatInterval
+            .everyMinute, // Use RepeatInterval.minute for repeating every minute
+        platformChannelSpecifics,
+        payload: 'New Notification', // Add payload if needed
+      );
+      print('Notification shown successfully');
+    } catch (e) {
+      print('Error showing notification: $e');
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -262,4 +268,3 @@ class _VideoWidgetState extends State<VideoWidget> {
     super.dispose();
   }
 }
-
