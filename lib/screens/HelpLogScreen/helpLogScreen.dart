@@ -86,6 +86,8 @@ class _LogScreenBodyState extends State<LogScreenBody> {
         'channel_ID',
         'channel name',
         'channel description',
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound('notification'),
         importance: Importance.max,
         priority: Priority.high,
       );
