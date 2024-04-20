@@ -12,7 +12,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 
-
 class HelpLineScreen extends StatefulWidget {
   const HelpLineScreen({Key? key});
 
@@ -195,57 +194,66 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   void _toggleRecording() async {
-    if (!_isRecording) {
+  if (!_isRecording) {
+    setState(() {
+      _isRecording = true;
+      _isUploading = true;
+    });
+
+    try {
+      // Start video recording without expecting a return value
+      await widget.cameraController.startVideoRecording();
+
+      // Start the timer when recording begins
+      _startTimer();
+
+      // Update UI to indicate recording
       setState(() {
-        _isRecording = true;
-        _isUploading = true;
+        _isUploading = false;
       });
-
-      try {
-        // Start video recording without expecting a return value
-        await widget.cameraController.startVideoRecording();
-
-        // Update UI to indicate recording
-        setState(() {
-          _isUploading = false;
-        });
-      } catch (e) {
-        print("Error recording video: $e");
-        setState(() {
-          _isRecording = false;
-          _isUploading = false;
-        });
-      }
-    } else {
+    } catch (e) {
+      print("Error recording video: $e");
       setState(() {
         _isRecording = false;
         _isUploading = false;
       });
-      XFile? videoFile = await widget.cameraController.stopVideoRecording();
-
-      if (videoFile != null) {
-        Position position = await _getCurrentLocation();
-        String videoUrl = await _uploadVideoToStorage(File(videoFile.path));
-        String address = await _getAddressFromCoordinates(
-            position.latitude, position.longitude);
-
-        await _uploadDataToFirestore(videoUrl, position, address);
-
-        setState(() {
-          _videoDurationSeconds = 0; // Reset video duration after uploading
-        });
-      }
     }
-  }
+  } else {
+    setState(() {
+      _isRecording = false;
+      _isUploading = false;
+    });
+    XFile? videoFile = await widget.cameraController.stopVideoRecording();
 
-  Future<void> _startTimer() async {
-    while (_isRecording) {
-      await Future.delayed(const Duration(seconds: 1));
+    if (videoFile != null) {
+      Position position = await _getCurrentLocation();
+      String videoUrl = await _uploadVideoToStorage(File(videoFile.path));
+      String address = await _getAddressFromCoordinates(
+          position.latitude, position.longitude);
+
+      await _uploadDataToFirestore(videoUrl, position, address);
+
       setState(() {
-        _videoDurationSeconds++;
+        _videoDurationSeconds = 0; // Reset video duration after uploading
       });
     }
   }
+}
+
+
+Future<void> _startTimer() async {
+  while (_isRecording) {
+    await Future.delayed(const Duration(seconds: 1));
+    if (_isRecording) {
+      setState(() {
+        _videoDurationSeconds++;
+      });
+    } else {
+      break; 
+    }
+  }
+}
+
 
   Future<Position> _getCurrentLocation() async {
     return await Geolocator.getCurrentPosition(
@@ -285,8 +293,12 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> _uploadDataToFirestore(
-    String mediaUrl, Position position, String address) async {
-  try {
+      String mediaUrl, Position position, String address) async {
+    try {
+      // Code inside the try block
+    } catch (e) {
+      // Handle the exception here
+    }
     final user = FirebaseAuth.instance.currentUser;
     final mobileNumber = user!.phoneNumber;
 
@@ -316,18 +328,19 @@ class _CameraScreenState extends State<CameraScreen> {
       // Include user's details in Firestore document
       'user_details': userData,
       // Include Google Maps URL
-      'google_maps_url': 'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}',
+      'google_maps_url':
+          'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}',
     });
 
     // Fetch emergency contact's details
     String emergencyContact = userData?['emergencyContact'] ?? '';
-    DocumentSnapshot emergencyContactDataSnapshot = await FirebaseFirestore
-        .instance
-        .collection('users')
-        .doc(emergencyContact) // Use emergency contact as the document ID
-        .collection('loginDetails')
-        .doc(emergencyContact)
-        .get();
+    DocumentSnapshot emergencyContactDataSnapshot =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(emergencyContact) // Use emergency contact as the document ID
+            .collection('loginDetails')
+            .doc(emergencyContact)
+            .get();
     Map<String, dynamic>? emergencyContactData =
         emergencyContactDataSnapshot.data() as Map<String, dynamic>?;
 
@@ -345,7 +358,8 @@ class _CameraScreenState extends State<CameraScreen> {
       // Include user's details in Firestore document
       'user_details': userData,
       // Include Google Maps URL
-      'google_maps_url': 'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}',
+      'google_maps_url':
+          'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}',
     });
 
     // Send a text message to the emergency contact
@@ -353,48 +367,43 @@ class _CameraScreenState extends State<CameraScreen> {
     String formattedMediaUrl = mediaUrl + '?alt=media&token=$token';
     print('Formatted Media URL: $formattedMediaUrl');
     print('Address: $address');
-    print('Google Maps URL: https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}');
-
-
-    // Send a text message to the emergency contact
-   String message =
-    "Help! I need assistance. Here's the link to the media: ${Uri.encodeQueryComponent(formattedMediaUrl)}. My current location: $address. Google Maps Location: https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}";
-
+    print(
+        'Google Maps URL: https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}');
 
     String phoneNumber = emergencyContact;
     if (phoneNumber.isNotEmpty) {
-      final uri = 'sms:$phoneNumber?body=${Uri.encodeQueryComponent(message)}';
-      try {
-        await launch(uri);
-      } catch (e) {
-        print("Error launching SMS: $e");
-        throw 'Could not launch SMS';
-      }
+      String message =
+          "Help! I need assistance. Here's the link to the media: $formattedMediaUrl. My current location: $address. Google Maps Location: https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}";
+      await _sendSMS(phoneNumber, message);
     } else {
       throw 'Emergency contact number is invalid';
     }
-
-    Navigator.pop(context);
-  } catch (e) {
-    print("Error uploading data to Firestore: $e");
   }
 }
 
+Future<void> _sendSMS(String phoneNumber, String message) async {
+  final uri = 'sms:$phoneNumber?body=${Uri.encodeQueryComponent(message)}';
+  try {
+    await launch(uri);
+  } catch (e) {
+    print("Error launching SMS: $e");
+    throw 'Could not launch SMS';
+  }
+}
 
-  Future<String> _getAddressFromCoordinates(
-      double latitude, double longitude) async {
-    try {
-      List<geo.Placemark> placemarks =
-          await geo.placemarkFromCoordinates(latitude, longitude);
-      if (placemarks.isNotEmpty) {
-        final geo.Placemark placemark = placemarks.first;
-        return '${placemark.street}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country} - ${placemark.postalCode ?? ''}';
-      } else {
-        return 'Unknown location';
-      }
-    } catch (e) {
-      print('Error fetching location: $e');
+Future<String> _getAddressFromCoordinates(
+    double latitude, double longitude) async {
+  try {
+    List<geo.Placemark> placemarks =
+        await geo.placemarkFromCoordinates(latitude, longitude);
+    if (placemarks.isNotEmpty) {
+      final geo.Placemark placemark = placemarks.first;
+      return '${placemark.street}, ${placemark.subLocality}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.country} - ${placemark.postalCode ?? ''}';
+    } else {
       return 'Unknown location';
     }
+  } catch (e) {
+    print('Error fetching location: $e');
+    return 'Unknown location';
   }
 }
