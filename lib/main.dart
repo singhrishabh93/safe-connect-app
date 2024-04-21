@@ -5,6 +5,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:safe_connect/firebase_options.dart';
 import 'package:safe_connect/screens/SplashScreen/splashScreen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +14,20 @@ void main() async {
   await GetStorage.init();
   // Initialize notifications
   await initNotifications();
+  
+
+  // Firebase Messaging setup
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // Get the token
+  String? token = await FirebaseMessaging.instance.getToken();
+  print("Firebase Messaging Token: $token");
+
   runApp(const MyApp());
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
 }
 
 // Initialize notification plugin
@@ -44,4 +58,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
