@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lottie/lottie.dart';
 import 'package:safe_connect/bottomNavBar.dart';
 import 'package:safe_connect/screens/SignUpScreen/signUpScreen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class OtpScreen extends StatefulWidget {
   final String mobileNumber;
@@ -40,6 +41,18 @@ class _OtpScreenState extends State<OtpScreen> {
           await FirebaseAuth.instance.signInWithCredential(credential);
 
       if (userCredential.user != null) {
+        // Get Firebase Messaging token
+        String? token = await FirebaseMessaging.instance.getToken();
+        print("Firebase Messaging Token: $token");
+
+        // Update Firestore with token
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.mobileNumber)
+            .collection('deviceToken')
+            .doc(widget.mobileNumber)
+            .set({'token': token});
+
         // Check if the user's mobile number is already registered
         final userSnapshot = await FirebaseFirestore.instance
             .collection('users')
