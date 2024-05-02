@@ -69,6 +69,9 @@ class _LogScreenBodyState extends State<LogScreenBody> {
         _showNotification();
       }
     });
+
+    // Fetch and print device token
+    _fetchAndPrintDeviceToken();
   }
 
   @override
@@ -105,6 +108,31 @@ class _LogScreenBodyState extends State<LogScreenBody> {
       print('Notification shown successfully');
     } catch (e) {
       print('Error showing notification: $e');
+    }
+  }
+
+  // Function to fetch and print device token
+  Future<void> _fetchAndPrintDeviceToken() async {
+    try {
+      final deviceTokenSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.phoneNumber)
+          .collection('deviceToken')
+          .doc(widget.phoneNumber)
+          .get();
+
+      if (deviceTokenSnapshot.exists) {
+        final deviceToken = deviceTokenSnapshot.data()?['token'];
+        if (deviceToken != null) {
+          print('Device token printed: $deviceToken');
+        } else {
+          print('Device token not found.');
+        }
+      } else {
+        print('Device token document does not exist.');
+      }
+    } catch (e) {
+      print('Error fetching device token: $e');
     }
   }
 
