@@ -1,17 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:safe_connect/bottomNavBar.dart';
-import 'package:safe_connect/screens/HomeScreen/homeScreen.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class QRGenerator extends StatefulWidget {
   const QRGenerator({Key? key}) : super(key: key);
@@ -39,10 +36,7 @@ class _QRGeneratorState extends State<QRGenerator> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => bottomNavigationBar()),
-            );
+            Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
         ),
@@ -471,6 +465,33 @@ class _QRGeneratorState extends State<QRGenerator> {
           _qrData =
               'Name: ${vehicleData['name']}, Vehicle Brand & Name: ${vehicleData['vehicleName']}, Vehicle No.: ${vehicleData['vehicleNumber']}, Email: ${vehicleData['email']}, Contact No.: ${vehicleData['contactNumber']}, Emergency Contact No.: ${vehicleData['emergencyContact']}, Blood Type: ${medicalData['bloodType']}, Blood Pressure: ${medicalData['bloodPressure']}, Allergies: ${medicalData['allergies']}, Medications: ${medicalData['medications']}, Organ Donor: ${medicalData['isOrganDonor']}, Medical Notes: ${medicalData['medicalNotes']}, Disease: ${medicalData['disease']}, Immunizations: ${medicalData['immunizations']}, QRCategory: Motor';
         });
+
+        // Save data to Firebase Storage in JSON format
+        final jsonData = {
+          'name': vehicleData['name'],
+          'vehicleName': vehicleData['vehicleName'],
+          'vehicleNumber': vehicleData['vehicleNumber'],
+          'email': vehicleData['email'],
+          'contactNumber': vehicleData['contactNumber'],
+          'emergencyContact': vehicleData['emergencyContact'],
+          'bloodType': medicalData['bloodType'],
+          'bloodPressure': medicalData['bloodPressure'],
+          'allergies': medicalData['allergies'],
+          'medications': medicalData['medications'],
+          'isOrganDonor': medicalData['isOrganDonor'],
+          'medicalNotes': medicalData['medicalNotes'],
+          'disease': medicalData['disease'],
+          'immunizations': medicalData['immunizations'],
+          'QRCategory': 'Motor',
+        };
+
+        final storageRef = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child('registeredVehicles')
+            .child(carNumber + '.json');
+
+        final jsonStr = json.encode(jsonData);
+        await storageRef.putString(jsonStr);
       }
     } catch (e) {
       print(e.toString());
