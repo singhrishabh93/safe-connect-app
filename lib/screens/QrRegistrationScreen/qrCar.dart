@@ -9,6 +9,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 
 class QRGenerator extends StatefulWidget {
   const QRGenerator({Key? key}) : super(key: key);
@@ -117,7 +118,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                       ),
                     ),
                     value: _selectedVehicleType,
-                    items: ['Two Wheeler', 'Four Wheeler', 'Other']
+                    items: ['Car', 'Electric Car', 'Other']
                         .map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -415,6 +416,7 @@ class _QRGeneratorState extends State<QRGenerator> {
     if (_formKey.currentState!.validate()) {
       await _saveDataToFirestore(); // Save data to Firestore
       await _generateQRFromFirestoreData(); // Generate QR code from Firestore data
+      await _sendPostRequest(); // Send POST request
       setState(() {
         _showQRData = true; // Set _showQRData to true when QR data is generated
       });
@@ -582,6 +584,34 @@ class _QRGeneratorState extends State<QRGenerator> {
     }
   }
 
+  Future<void> _sendPostRequest() async {
+    try {
+      final url =
+          'https://safeconnect-e81248c2d86f.herokuapp.com/vehicle/post_vehicle_data';
+
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'owner_name': _nameController.text,
+          'vehicle_type': _selectedVehicleType,
+          'vehicle_brand': _vehicleNameController.text,
+          'vehicle_no': _vehicleNoController.text,
+          'email': _emailController.text,
+          'contact_number': _contactNoController.text,
+          'emergency_number': _emergencyContactNoController.text,
+        }),
+      );
+
+      final responseData = jsonDecode(response.body);
+      print(responseData);
+    } catch (e) {
+      print('Error sending POST request: $e');
+    }
+  }
+
   Future<void> _saveQrImage() async {
     try {
       final image = await QrPainter(
@@ -663,4 +693,3 @@ class _QRGeneratorState extends State<QRGenerator> {
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 }
-
