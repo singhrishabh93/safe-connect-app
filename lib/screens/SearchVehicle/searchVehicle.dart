@@ -159,7 +159,7 @@ class VehicleDataScreen extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () => _launchCaller(vehicleData['contact_number']),
-                style: ElevatedButton.styleFrom(primary: Colors.green),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 child: Text('Call'),
               ),
             ),
@@ -168,7 +168,7 @@ class VehicleDataScreen extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () => _launchCaller(vehicleData['emergency_number']),
-                style: ElevatedButton.styleFrom(primary: Colors.red),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 child: Text('SOS'),
               ),
             ),
