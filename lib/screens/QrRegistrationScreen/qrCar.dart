@@ -119,8 +119,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                       ),
                     ),
                     value: _selectedVehicleType,
-                    items: ['Car', 'Electric Car', 'Other']
-                        .map((String value) {
+                    items: ['Car', 'Electric Car', 'Other'].map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(
@@ -347,12 +346,13 @@ class _QRGeneratorState extends State<QRGenerator> {
                             child: Center(
                               child: Container(
                                 padding: const EdgeInsets.all(0.0),
-                                child: QrImageView(
-                                  data: _qrData,
-                                  version: QrVersions.auto,
-                                  size: 120.0,
-                                  backgroundColor: Colors.white,
-                                ),
+                                child: _qrCodeUrl != null
+                                    ? Image.network(
+                                        _qrCodeUrl!, // Use the stored URL
+                                        height: 120,
+                                        width: 120,
+                                      )
+                                    : SizedBox(),
                               ),
                             ),
                           ),
@@ -407,12 +407,6 @@ class _QRGeneratorState extends State<QRGenerator> {
                         height: 20,
                       ),
                       // Display QR Code Image from URL
-                      if (_qrCodeUrl != null)
-                        Image.network(
-                          _qrCodeUrl!, // Use the stored URL
-                          height: 120,
-                          width: 120,
-                        ),
                     ],
                   ),
               ],
