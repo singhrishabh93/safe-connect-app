@@ -30,6 +30,7 @@ class _QRGeneratorState extends State<QRGenerator> {
   String _qrData = '';
   bool _showQRData = false;
   String? _selectedVehicleType;
+  String? _qrCodeUrl; // Added to store the QR code URL
 
   @override
   Widget build(BuildContext context) {
@@ -402,6 +403,16 @@ class _QRGeneratorState extends State<QRGenerator> {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      // Display QR Code Image from URL
+                      if (_qrCodeUrl != null)
+                        Image.network(
+                          _qrCodeUrl!, // Use the stored URL
+                          height: 120,
+                          width: 120,
+                        ),
                     ],
                   ),
               ],
@@ -607,6 +618,13 @@ class _QRGeneratorState extends State<QRGenerator> {
 
       final responseData = jsonDecode(response.body);
       print(responseData);
+
+      // Retrieve the QR code URL from the response body
+      final qrcodeUrl = responseData['data']['qrcode_url'];
+
+      setState(() {
+        _qrCodeUrl = qrcodeUrl; // Store the QR code URL
+      });
     } catch (e) {
       print('Error sending POST request: $e');
     }
