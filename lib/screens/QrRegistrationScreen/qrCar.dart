@@ -388,11 +388,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                                   ),
                                   backgroundColor: const Color(0xffFF3D3D),
                                 ),
-                                onPressed: () async {
-                                  if (_qrData.isNotEmpty) {
-                                    await _saveQrImage();
-                                  }
-                                },
+                                onPressed: _onDownloadQrPressed,
                                 child: const Text(
                                   'Click to download QR',
                                   style: TextStyle(
@@ -698,6 +694,12 @@ class _QRGeneratorState extends State<QRGenerator> {
     _contactNoController.dispose();
     _emergencyContactNoController.dispose();
     super.dispose();
+  }
+
+  Future<void> _onDownloadQrPressed() async {
+    if (_qrData.isNotEmpty) {
+      await _saveQrImage();
+    }
   }
 
   bool _isValidEmailFormat(String email) {
