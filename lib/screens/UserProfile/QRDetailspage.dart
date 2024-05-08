@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:safe_connect/screens/UserProfile/editqrdetailpage.dart';
 
 class QRDetailsPage extends StatelessWidget {
@@ -143,8 +145,8 @@ class _EditQRDetailsPageState extends State<EditQRDetailsPage> {
         TextEditingController(text: widget.details['name'].toString());
     emailController =
         TextEditingController(text: widget.details['email'].toString());
-    contactNumberController =
-        TextEditingController(text: widget.details['contactNumber'].toString());
+    contactNumberController = TextEditingController(
+        text: widget.details['contactNumber'].toString());
     emergencyContactController = TextEditingController(
         text: widget.details['emergencyContact'].toString());
   }
@@ -169,6 +171,35 @@ class _EditQRDetailsPageState extends State<EditQRDetailsPage> {
       });
 
       print('Data updated successfully!');
+
+      // Prepare data for API endpoint
+      Map<String, dynamic> requestData = {
+        'owner_name': name,
+        'vehicle_type': 'Electric Car',
+        'vehicle_brand': widget.details['vehicleName'],
+        'vehicle_no': widget.docId,
+        'email': email,
+        'contact_number': contactNumber,
+        'emergency_number': emergencyContact,
+      };
+
+      // Convert data to JSON
+      String jsonBody = jsonEncode(requestData);
+
+      // Make PUT request to the endpoint
+      http.Response response = await http.put(
+        Uri.parse('https://safeconnect-e81248c2d86f.herokuapp.com/vehicle/update_vehicle_data/${widget.docId}'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonBody,
+      );
+
+      if (response.statusCode == 200) {
+        print('Updated data sent to API successfully!');
+        print('Updated Details:');
+        print(requestData);
+      } else {
+        print('Failed to send updated data to API. Status code: ${response.statusCode}');
+      }
     } catch (error) {
       print('Error updating data: $error');
     }
