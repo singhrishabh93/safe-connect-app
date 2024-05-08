@@ -320,7 +320,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            QRDetailsPage(registeredQrDetails: registeredQrDetails),
+            QRDetailsPage(registeredQrDetails: registeredQrDetails, mobileNumber: mobileNumber,),
       ),
     );
   }
