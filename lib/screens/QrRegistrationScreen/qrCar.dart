@@ -119,8 +119,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                       ),
                     ),
                     value: _selectedVehicleType,
-                    items: ['Car', 'Electric Car', 'Other']
-                        .map((String value) {
+                    items: ['Car', 'Electric Car', 'Other'].map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(
@@ -347,12 +346,13 @@ class _QRGeneratorState extends State<QRGenerator> {
                             child: Center(
                               child: Container(
                                 padding: const EdgeInsets.all(0.0),
-                                child: QrImageView(
-                                  data: _qrData,
-                                  version: QrVersions.auto,
-                                  size: 120.0,
-                                  backgroundColor: Colors.white,
-                                ),
+                                child: _qrCodeUrl != null
+                                    ? Image.network(
+                                        _qrCodeUrl!, // Use the stored URL
+                                        height: 120,
+                                        width: 120,
+                                      )
+                                    : SizedBox(),
                               ),
                             ),
                           ),
@@ -388,11 +388,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                                   ),
                                   backgroundColor: const Color(0xffFF3D3D),
                                 ),
-                                onPressed: () async {
-                                  if (_qrData.isNotEmpty) {
-                                    await _saveQrImage();
-                                  }
-                                },
+                                onPressed: _onDownloadQrPressed,
                                 child: const Text(
                                   'Click to download QR',
                                   style: TextStyle(
@@ -407,12 +403,6 @@ class _QRGeneratorState extends State<QRGenerator> {
                         height: 20,
                       ),
                       // Display QR Code Image from URL
-                      if (_qrCodeUrl != null)
-                        Image.network(
-                          _qrCodeUrl!, // Use the stored URL
-                          height: 120,
-                          width: 120,
-                        ),
                     ],
                   ),
               ],
@@ -596,39 +586,43 @@ class _QRGeneratorState extends State<QRGenerator> {
   }
 
   Future<void> _sendPostRequest() async {
-    try {
-      final url =
-          'https://safeconnect-e81248c2d86f.herokuapp.com/vehicle/post_vehicle_data';
+  try {
+    final url =
+        'https://safeconnect-e81248c2d86f.herokuapp.com/vehicle/post_vehicle_data';
 
-      final response = await http.post(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'owner_name': _nameController.text,
-          'vehicle_type': _selectedVehicleType,
-          'vehicle_brand': _vehicleNameController.text,
-          'vehicle_no': _vehicleNoController.text,
-          'email': _emailController.text,
-          'contact_number': _contactNoController.text,
-          'emergency_number': _emergencyContactNoController.text,
-        }),
-      );
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'owner_name': _nameController.text,
+        'vehicle_type': _selectedVehicleType,
+        'vehicle_brand': _vehicleNameController.text,
+        'vehicle_no': _vehicleNoController.text,
+        'email': _emailController.text,
+        'contact_number': _contactNoController.text,
+        'emergency_number': _emergencyContactNoController.text,
+      }),
+    );
 
-      final responseData = jsonDecode(response.body);
-      print(responseData);
+    // Print the status code
+    print('Status Code: ${response.statusCode}');
 
-      // Retrieve the QR code URL from the response body
-      final qrcodeUrl = responseData['data']['qrcode_url'];
+    // Parse the response body
+    final responseData = jsonDecode(response.body);
+    print('Response Data: $responseData');
 
-      setState(() {
-        _qrCodeUrl = qrcodeUrl; // Store the QR code URL
-      });
-    } catch (e) {
-      print('Error sending POST request: $e');
-    }
+    // Retrieve the QR code URL from the response body
+    final qrcodeUrl = responseData['data']['qrcode_url'];
+
+    setState(() {
+      _qrCodeUrl = qrcodeUrl; // Store the QR code URL
+    });
+  } catch (e) {
+    print('Error sending POST request: $e');
   }
+}
 
   Future<void> _saveQrImage() async {
     try {
@@ -704,6 +698,12 @@ class _QRGeneratorState extends State<QRGenerator> {
     _contactNoController.dispose();
     _emergencyContactNoController.dispose();
     super.dispose();
+  }
+
+  Future<void> _onDownloadQrPressed() async {
+    if (_qrData.isNotEmpty) {
+      await _saveQrImage();
+    }
   }
 
   bool _isValidEmailFormat(String email) {
