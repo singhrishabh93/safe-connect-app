@@ -28,6 +28,7 @@ class _QRGeneratorState extends State<QRGenerator> {
   final TextEditingController _emergencyContactNoController =
       TextEditingController();
   String _qrData = '';
+  
   bool _showQRData = false;
   String? _selectedVehicleType;
   String? _qrCodeUrl; // Added to store the QR code URL
@@ -609,20 +610,32 @@ class _QRGeneratorState extends State<QRGenerator> {
     // Print the status code
     print('Status Code: ${response.statusCode}');
 
-    // Parse the response body
-    final responseData = jsonDecode(response.body);
-    print('Response Data: $responseData');
+    if (response.statusCode == 201) {
+      // Data sent to Firebase Firestore only if status code is 201
+      print('Data sent to Firebase successfully');
 
-    // Retrieve the QR code URL from the response body
-    final qrcodeUrl = responseData['data']['qrcode_url'];
+      // Parse the response body
+      final responseData = jsonDecode(response.body);
+      print('Response Data: $responseData');
 
-    setState(() {
-      _qrCodeUrl = qrcodeUrl; // Store the QR code URL
-    });
+      // Retrieve the QR code URL from the response body
+      final qrcodeUrl = responseData['data']['qrcode_url'];
+
+      setState(() {
+        _qrCodeUrl = qrcodeUrl; // Store the QR code URL
+      });
+
+      // Proceed to save data to Firestore
+      await _saveDataToFirestore();
+    } else {
+      // Data not sent to Firestore if status code is not 201
+      print('Data not sent to Firebase. Status code: ${response.statusCode}');
+    }
   } catch (e) {
     print('Error sending POST request: $e');
   }
 }
+
 
   Future<void> _saveQrImage() async {
     try {
