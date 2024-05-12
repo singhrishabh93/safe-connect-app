@@ -28,10 +28,11 @@ class _QRGeneratorState extends State<QRGenerator> {
   final TextEditingController _emergencyContactNoController =
       TextEditingController();
   String _qrData = '';
-  
+
   bool _showQRData = false;
   String? _selectedVehicleType;
-  String? _qrCodeUrl; // Added to store the QR code URL
+  String? _qrCodeUrl;
+  bool _loading = false; 
 
   @override
   Widget build(BuildContext context) {
@@ -330,12 +331,17 @@ class _QRGeneratorState extends State<QRGenerator> {
                     child: const Text(
                       'Generate QR Code',
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontFamily: 'gilroy'),
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontFamily: 'gilroy',
+                      ),
                     ),
                   ),
                 ),
+                if (_loading) // Show circular progress indicator
+                  Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 if (_showQRData)
                   Column(
                     children: [
@@ -349,7 +355,7 @@ class _QRGeneratorState extends State<QRGenerator> {
                                 padding: const EdgeInsets.all(0.0),
                                 child: _qrCodeUrl != null
                                     ? Image.network(
-                                        _qrCodeUrl!, // Use the stored URL
+                                        _qrCodeUrl!,
                                         height: 120,
                                         width: 120,
                                       )
@@ -393,7 +399,9 @@ class _QRGeneratorState extends State<QRGenerator> {
                                 child: const Text(
                                   'Click to download QR',
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),
@@ -403,7 +411,6 @@ class _QRGeneratorState extends State<QRGenerator> {
                       SizedBox(
                         height: 20,
                       ),
-                      // Display QR Code Image from URL
                     ],
                   ),
               ],
@@ -414,35 +421,53 @@ class _QRGeneratorState extends State<QRGenerator> {
     );
   }
 
-  Future<void> _onGenerateQRPressed() async {
-    if (_formKey.currentState!.validate()) {
-      await _saveDataToFirestore(); // Save data to Firestore
-      await _generateQRFromFirestoreData(); // Generate QR code from Firestore data
-      await _sendPostRequest(); // Send POST request
-      setState(() {
-        _showQRData = true; // Set _showQRData to true when QR data is generated
-      });
-    } else {
-      // Show alert
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Form Error"),
-            content: const Text("Please fill the form correctly."),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
-    }
+ Future<void> _onGenerateQRPressed() async {
+  setState(() {
+    _loading = true; // Show circular progress indicator
+  });
+
+  if (_formKey.currentState!.validate()) {
+    await _saveDataToFirestore();
+    await _generateQRFromFirestoreData();
+    await _sendPostRequest();
+    setState(() {
+      _showQRData = true;
+      _loading = false; // Hide circular progress indicator after QR is generated
+    });
+
+    // Show snackbar message and scroll down
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('QR Code generated successfully. Scroll down to download QR.'),
+      ),
+    );
+    
+
+  } else {
+    setState(() {
+      _loading = false; // Hide circular progress indicator if form validation fails
+    });
+    // Show alert
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Form Error"),
+          content: const Text("Please fill the form correctly."),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
+}
+
 
   Future<void> _generateQRFromFirestoreData() async {
     try {
@@ -587,55 +612,54 @@ class _QRGeneratorState extends State<QRGenerator> {
   }
 
   Future<void> _sendPostRequest() async {
-  try {
-    final url =
-        'https://safeconnect-e81248c2d86f.herokuapp.com/vehicle/post_vehicle_data';
+    try {
+      final url =
+          'https://safeconnect-e81248c2d86f.herokuapp.com/vehicle/post_vehicle_data';
 
-    final response = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'owner_name': _nameController.text,
-        'vehicle_type': _selectedVehicleType,
-        'vehicle_brand': _vehicleNameController.text,
-        'vehicle_no': _vehicleNoController.text,
-        'email': _emailController.text,
-        'contact_number': _contactNoController.text,
-        'emergency_number': _emergencyContactNoController.text,
-      }),
-    );
+      final response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'owner_name': _nameController.text,
+          'vehicle_type': _selectedVehicleType,
+          'vehicle_brand': _vehicleNameController.text,
+          'vehicle_no': _vehicleNoController.text,
+          'email': _emailController.text,
+          'contact_number': _contactNoController.text,
+          'emergency_number': _emergencyContactNoController.text,
+        }),
+      );
 
-    // Print the status code
-    print('Status Code: ${response.statusCode}');
+      // Print the status code
+      print('Status Code: ${response.statusCode}');
 
-    if (response.statusCode == 201) {
-      // Data sent to Firebase Firestore only if status code is 201
-      print('Data sent to Firebase successfully');
+      if (response.statusCode == 201) {
+        // Data sent to Firebase Firestore only if status code is 201
+        print('Data sent to Firebase successfully');
 
-      // Parse the response body
-      final responseData = jsonDecode(response.body);
-      print('Response Data: $responseData');
+        // Parse the response body
+        final responseData = jsonDecode(response.body);
+        print('Response Data: $responseData');
 
-      // Retrieve the QR code URL from the response body
-      final qrcodeUrl = responseData['data']['qrcode_url'];
+        // Retrieve the QR code URL from the response body
+        final qrcodeUrl = responseData['data']['qrcode_url'];
 
-      setState(() {
-        _qrCodeUrl = qrcodeUrl; // Store the QR code URL
-      });
+        setState(() {
+          _qrCodeUrl = qrcodeUrl; // Store the QR code URL
+        });
 
-      // Proceed to save data to Firestore
-      await _saveDataToFirestore();
-    } else {
-      // Data not sent to Firestore if status code is not 201
-      print('Data not sent to Firebase. Status code: ${response.statusCode}');
+        // Proceed to save data to Firestore
+        await _saveDataToFirestore();
+      } else {
+        // Data not sent to Firestore if status code is not 201
+        print('Data not sent to Firebase. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error sending POST request: $e');
     }
-  } catch (e) {
-    print('Error sending POST request: $e');
   }
-}
-
 
   Future<void> _saveQrImage() async {
     try {
