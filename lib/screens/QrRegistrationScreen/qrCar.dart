@@ -421,45 +421,53 @@ class _QRGeneratorState extends State<QRGenerator> {
     );
   }
 
-  Future<void> _onGenerateQRPressed() async {
+ Future<void> _onGenerateQRPressed() async {
+  setState(() {
+    _loading = true; // Show circular progress indicator
+  });
+
+  if (_formKey.currentState!.validate()) {
+    await _saveDataToFirestore();
+    await _generateQRFromFirestoreData();
+    await _sendPostRequest();
     setState(() {
-      _loading = true; // Show circular progress indicator
+      _showQRData = true;
+      _loading = false; // Hide circular progress indicator after QR is generated
     });
 
-    if (_formKey.currentState!.validate()) {
-      await _saveDataToFirestore();
-      await _generateQRFromFirestoreData();
-      await _sendPostRequest();
-      setState(() {
-        _showQRData = true;
-        _loading =
-            false; // Hide circular progress indicator after QR is generated
-      });
-    } else {
-      setState(() {
-        _loading =
-            false; // Hide circular progress indicator if form validation fails
-      });
-      // Show alert
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Form Error"),
-            content: const Text("Please fill the form correctly."),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    // Show snackbar message and scroll down
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('QR Code generated successfully. Scroll down to download QR.'),
+      ),
+    );
+    
+
+  } else {
+    setState(() {
+      _loading = false; // Hide circular progress indicator if form validation fails
+    });
+    // Show alert
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Form Error"),
+          content: const Text("Please fill the form correctly."),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
+}
+
 
   Future<void> _generateQRFromFirestoreData() async {
     try {
