@@ -598,74 +598,74 @@ class _QRGeneratorState extends State<QRGenerator> {
   }
 
   Future<void> _sendPostRequest() async {
-    setState(() {
-      _loading = true;
-    });
+  setState(() {
+    _loading = true;
+  });
 
-    try {
-      final url =
-          'https://safeconnect-e81248c2d86f.herokuapp.com/vehicle/post_vehicle_data';
+  try {
+    final url =
+        'https://safeconnect-e81248c2d86f.herokuapp.com/vehicle/post_vehicle_data';
 
-      final response = await http.post(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'owner_name': _nameController.text,
-          'vehicle_type': _selectedVehicleType,
-          'vehicle_brand': _vehicleNameController.text,
-          'vehicle_no': _vehicleNoController.text,
-          'email': _emailController.text,
-          'contact_number': _contactNoController.text,
-          'emergency_number': _emergencyContactNoController.text,
-        }),
-      );
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'owner_name': _nameController.text,
+        'vehicle_type': _selectedVehicleType,
+        'vehicle_brand': _vehicleNameController.text,
+        'vehicle_no': _vehicleNoController.text,
+        'email': _emailController.text,
+        'contact_number': _contactNoController.text,
+        'emergency_number': _emergencyContactNoController.text,
+      }),
+    );
 
-      print('Status Code: ${response.statusCode}');
+    print('Status Code: ${response.statusCode}');
 
-      if (response.statusCode == 201) {
-        print('Data sent to Firebase successfully');
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      print('Data sent to Firebase successfully');
 
-        final responseData = jsonDecode(response.body);
-        print('Response Data: $responseData');
+      final responseData = jsonDecode(response.body);
+      print('Response Data: $responseData');
 
-        final qrcodeUrl = responseData['data']['qrcode_url'];
+      final qrcodeUrl = responseData['data']['qrcode_url'];
 
-        setState(() {
-          _qrCodeUrl = qrcodeUrl; // Store the QR code URL
-          _isQrCodeAvailable = true; // Indicate QR code is available
-        });
+      setState(() {
+        _qrCodeUrl = qrcodeUrl; // Store the QR code URL
+        _isQrCodeAvailable = true; // Indicate QR code is available
+      });
 
-        await _saveDataToFirestore();
-      } else {
-        setState(() {
-          _isQrCodeAvailable = false; // Indicate QR code is not available
-        });
-        print('Data not sent to Firebase. Status code: ${response.statusCode}');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to generate QR code. Please try again.'),
-          ),
-        );
-      }
-    } catch (e) {
+      await _saveDataToFirestore();
+    } else {
       setState(() {
         _isQrCodeAvailable = false; // Indicate QR code is not available
-        _loading = false;
       });
-      print('Error sending POST request: $e');
+      print('Data not sent to Firebase. Status code: ${response.statusCode}');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error: $e'),
+          content: Text('Failed to generate QR code. Please try again.'),
         ),
       );
-    } finally {
-      setState(() {
-        _loading = false;
-      });
     }
+  } catch (e) {
+    setState(() {
+      _isQrCodeAvailable = false; // Indicate QR code is not available
+      _loading = false;
+    });
+    print('Error sending POST request: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error: $e'),
+      ),
+    );
+  } finally {
+    setState(() {
+      _loading = false;
+    });
   }
+}
 
   Future<void> _saveQrImage() async {
     try {
