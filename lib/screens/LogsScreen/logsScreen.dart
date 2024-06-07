@@ -120,9 +120,26 @@ class LogScreenBody extends StatelessWidget {
                       builder: (BuildContext context) {
                         return Dialog(
                           backgroundColor: Colors.black,
-                          child: Image.network(
-                            mediaUrl,
-                            fit: BoxFit.contain,
+                          insetPadding: EdgeInsets.all(10),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: IconButton(
+                                  icon: Icon(Icons.close, color: Colors.white),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ),
+                              Expanded(
+                                child: Image.network(
+                                  mediaUrl,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       },
@@ -158,9 +175,9 @@ class LogScreenBody extends StatelessWidget {
 
               return ListTile(
                 title:
-                    Text('Type: $type', style: TextStyle(color: Colors.white)),
+                    Text('Type: $type', style: TextStyle(color: Color(0xFFFFB13D),fontFamily: 'gilroy')),
                 subtitle: Text('Address: $address',
-                    style: TextStyle(color: Colors.grey)),
+                    style: TextStyle(color: Colors.grey,fontFamily: 'gilroy')),
                 leading: mediaWidget,
                 tileColor: Colors.black,
                 contentPadding:
@@ -230,41 +247,58 @@ class _VideoWidgetState extends State<VideoWidget> {
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.black,
-          child: GestureDetector(
-            onTap: () => _togglePlayPause(),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                AspectRatio(
-                  aspectRatio: 3 / 4,
-                  child: VideoPlayer(_controller),
+          insetPadding: EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(Icons.close, color: Colors.white),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
-                if (!_controller.value.isPlaying && !_isPlaying)
-                  const Icon(
-                    Icons.play_circle_filled,
-                    size: 50,
-                    color: Colors.white,
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => _togglePlayPause(),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
+                      ),
+                      if (!_controller.value.isPlaying && !_isPlaying)
+                        const Icon(
+                          Icons.play_circle_filled,
+                          size: 50,
+                          color: Colors.white,
+                        ),
+                      if (_controller.value.isPlaying || _isPlaying)
+                        Center(
+                          child: IconButton(
+                            icon: _isPlaying
+                                ? Icon(Icons.pause, color: Colors.white)
+                                : Icon(Icons.play_arrow, color: Colors.white),
+                            onPressed: () {
+                              if (_isPlaying) {
+                                _controller.pause();
+                              } else {
+                                _controller.play();
+                              }
+                              setState(() {
+                                _isPlaying = !_isPlaying;
+                              });
+                            },
+                          ),
+                        ),
+                    ],
                   ),
-                if (_controller.value.isPlaying || _isPlaying)
-                  Center(
-                    child: IconButton(
-                      icon: _isPlaying
-                          ? Icon(Icons.pause, color: Colors.white)
-                          : Icon(Icons.play_arrow, color: Colors.white),
-                      onPressed: () {
-                        if (_isPlaying) {
-                          _controller.pause();
-                        } else {
-                          _controller.play();
-                        }
-                        setState(() {
-                          _isPlaying = !_isPlaying;
-                        });
-                      },
-                    ),
-                  ),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         );
       },
