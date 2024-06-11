@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:safe_connect/bottomNavBar.dart';
 import 'package:video_player/video_player.dart';
 
 class LogScreen extends StatelessWidget {
@@ -46,8 +47,26 @@ class LogScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Logs'),
+        title: const Text(
+          'Logs',
+          style: TextStyle(color: Colors.white, fontFamily: 'gilroy'),
+        ),
+        backgroundColor: Colors.black,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => bottomNavigationBar()));
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.white,
+            )),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -58,7 +77,8 @@ class LogScreenBody extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
-              child: Text('Error: ${snapshot.error}'),
+              child: Text('Error: ${snapshot.error}',
+                  style: TextStyle(color: Colors.white)),
             );
           }
 
@@ -71,7 +91,8 @@ class LogScreenBody extends StatelessWidget {
           final docs = snapshot.data!.docs;
           if (docs.isEmpty) {
             return const Center(
-              child: Text('No logs found.'),
+              child:
+                  Text('No logs found.', style: TextStyle(color: Colors.white)),
             );
           }
 
@@ -98,9 +119,27 @@ class LogScreenBody extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return Dialog(
-                          child: Image.network(
-                            mediaUrl,
-                            fit: BoxFit.contain,
+                          backgroundColor: Colors.black,
+                          insetPadding: EdgeInsets.all(10),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: IconButton(
+                                  icon: Icon(Icons.close, color: Colors.white),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ),
+                              Expanded(
+                                child: Image.network(
+                                  mediaUrl,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       },
@@ -127,7 +166,7 @@ class LogScreenBody extends StatelessWidget {
                   child: Icon(
                     Icons.mic,
                     size: 50,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 );
               } else {
@@ -135,9 +174,17 @@ class LogScreenBody extends StatelessWidget {
               }
 
               return ListTile(
-                title: Text('Type: $type'),
-                subtitle: Text('Address: $address'),
+                title:
+                    Text('Type: $type', style: TextStyle(color: Color(0xFFFFB13D),fontFamily: 'gilroy')),
+                subtitle: Text('Address: $address',
+                    style: TextStyle(color: Colors.grey,fontFamily: 'gilroy')),
                 leading: mediaWidget,
+                tileColor: Colors.black,
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               );
             },
           );
@@ -178,13 +225,16 @@ class _VideoWidgetState extends State<VideoWidget> {
         children: [
           AspectRatio(
             aspectRatio: 1 / 1,
-            child: VideoPlayer(_controller),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: VideoPlayer(_controller),
+            ),
           ),
           if (!_isPlaying)
             const Icon(
               Icons.play_circle_filled,
               size: 50,
-              color: Colors.black,
+              color: Colors.white,
             ),
         ],
       ),
@@ -196,41 +246,59 @@ class _VideoWidgetState extends State<VideoWidget> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          child: GestureDetector(
-            onTap: () => _togglePlayPause(),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                AspectRatio(
-                  aspectRatio: 3 / 4,
-                  child: VideoPlayer(_controller),
+          backgroundColor: Colors.black,
+          insetPadding: EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: Icon(Icons.close, color: Colors.white),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
-                if (!_controller.value.isPlaying && !_isPlaying)
-                  const Icon(
-                    Icons.play_circle_filled,
-                    size: 50,
-                    color: Colors.black,
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => _togglePlayPause(),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
+                      ),
+                      if (!_controller.value.isPlaying && !_isPlaying)
+                        const Icon(
+                          Icons.play_circle_filled,
+                          size: 50,
+                          color: Colors.white,
+                        ),
+                      if (_controller.value.isPlaying || _isPlaying)
+                        Center(
+                          child: IconButton(
+                            icon: _isPlaying
+                                ? Icon(Icons.pause, color: Colors.white)
+                                : Icon(Icons.play_arrow, color: Colors.white),
+                            onPressed: () {
+                              if (_isPlaying) {
+                                _controller.pause();
+                              } else {
+                                _controller.play();
+                              }
+                              setState(() {
+                                _isPlaying = !_isPlaying;
+                              });
+                            },
+                          ),
+                        ),
+                    ],
                   ),
-                if (_controller.value.isPlaying || _isPlaying)
-                  Center(
-                    child: IconButton(
-                      icon: _isPlaying
-                          ? Icon(Icons.pause)
-                          : Icon(Icons.play_arrow),
-                      onPressed: () {
-                        if (_isPlaying) {
-                          _controller.pause();
-                        } else {
-                          _controller.play();
-                        }
-                        setState(() {
-                          _isPlaying = !_isPlaying;
-                        });
-                      },
-                    ),
-                  ),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         );
       },
