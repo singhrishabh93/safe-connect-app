@@ -86,19 +86,12 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           Center(
             child: Image.asset(
-              "assets/images/Background-1.gif",
+              "assets/images/splash.gif",
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
+              repeat: ImageRepeat.noRepeat,
             ),
-          ),
-          const Center(
-            child: Text("SafeConnect",
-                style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFamily: "gilroy")),
           ),
         ],
       ),
