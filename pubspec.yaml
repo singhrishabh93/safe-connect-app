@@ -78,6 +78,7 @@ dependencies:
   flutter_local_notifications: ^9.9.0
   firebase_messaging: ^14.7.19
   firebase_analytics: ^10.8.9
+  flutter_windowmanager: ^0.2.0
 
 
 

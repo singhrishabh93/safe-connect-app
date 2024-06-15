@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:safe_connect/firebase_options.dart';
 import 'package:safe_connect/screens/SplashScreen/splashScreen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +15,6 @@ void main() async {
   await GetStorage.init();
   // Initialize notifications
   await initNotifications();
-  
 
   // Firebase Messaging setup
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -40,6 +40,20 @@ Future<void> initNotifications() async {
   final InitializationSettings initializationSettings =
       InitializationSettings(android: initializationSettingsAndroid);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  await disableScreenshots();
+}
+
+// User Cannot take Screenshot of app
+Future<void> disableScreenshots() async {
+  try {
+    await FlutterWindowManager.addFlags(
+      FlutterWindowManager.FLAG_SECURE
+    );
+    print('Screenshots disabled');
+  } catch (e) {
+    print('Failed to disable screenshots: $e');
+  }
 }
 
 class MyApp extends StatelessWidget {
