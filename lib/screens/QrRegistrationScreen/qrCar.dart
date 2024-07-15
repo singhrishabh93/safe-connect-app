@@ -604,7 +604,7 @@ class _QRGeneratorState extends State<QRGenerator> {
 
   try {
     final url =
-        'https://safeconnect-e81248c2d86f.herokuapp.com/vehicle/post_vehicle_data';
+        'https://safeconnekt-f9f414081a75.herokuapp.com/vehicle/post_vehicle_data';
 
     final response = await http.post(
       Uri.parse(url),
